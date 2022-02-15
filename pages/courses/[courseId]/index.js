@@ -7,13 +7,13 @@ export default function CoursePage() {
     const router = useRouter()
     const [courseData, setCourseData] = useState({})
     useEffect(() => {
-        router.query.id && fetch("http://localhost:3000/api/courses/" + router.query.id)
+        router.query.courseId && fetch("http://localhost:3000/api/courses/" + router.query.courseId)
             .then(res => res.json())
             .then(res => setCourseData(res.course))
 
     }, [router.query.id])
     const handleDelete = () => {
-        fetch("http://localhost:3000/api/courses/" + router.query.id, {
+        fetch("http://localhost:3000/api/courses/" + router.query.courseId, {
             method: "delete"
         }).catch(e => {})
         router.push("/courses")
@@ -23,7 +23,7 @@ export default function CoursePage() {
             <h2>Страница курса</h2>
             <div className="flex space-x-4 items-center">
                 <>
-                    <Link href={`/courses/${router.query.id}/edit`}>
+                    <Link href={`/courses/${router.query.courseId}/edit`}>
                         <button className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
                             Редактировать курс
                         </button>
