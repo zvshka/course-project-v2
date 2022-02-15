@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const Navbar = () => {
     return <header className="bg-gray-200">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-8">
             <div className="flex justify-between">
                 <div className="flex">
                     <div className="py-4 mr-4 text-xl font-bold">
@@ -22,9 +22,9 @@ export const Navbar = () => {
                             </Link>
                         </NavItem>
                         <NavItem>
-                            <Link href={"/courses/create"}>
+                            <Link href={"/courses/"}>
                                 <a>
-                                    Редактировать курсы
+                                    Курсы
                                 </a>
                             </Link>
                         </NavItem>
