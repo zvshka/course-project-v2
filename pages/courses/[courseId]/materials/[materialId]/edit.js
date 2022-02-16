@@ -1,5 +1,4 @@
-import {Layout} from "../../../../../components/Layout";
-
+import {Layout} from "@components/Layout";
 export default function Material() {
     return <Layout>
         <div className="w-full">

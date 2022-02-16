@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const Navbar = () => {
     return <header className="bg-gray-200">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-7xl mx-auto px-2">
             <div className="flex justify-between">
                 <div className="flex">
                     <div className="py-4 mr-4 text-xl font-bold">
