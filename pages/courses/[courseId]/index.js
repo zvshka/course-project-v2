@@ -22,7 +22,7 @@ export default function CoursePage() {
     return <Layout>
         <div className="w-full">
             <h2>Страница курса</h2>
-            <div className="flex space-x-4 items-center">
+            <div className="flex md:space-x-4 md:items-center flex-col md:flex-row md:space-y-0 space-y-2">
                 <Link href={`/courses/${router.query.courseId}/edit`}>
                     <button
                         className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
@@ -39,7 +39,6 @@ export default function CoursePage() {
                         className="bg-red-700 text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-red-600 hover:shadow-2xl transition ease-in">
                     Удалить курс
                 </button>
-
             </div>
             <h2>Название курса</h2>
             <p>{courseData.title}</p>

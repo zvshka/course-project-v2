@@ -13,17 +13,24 @@ datasource db {
 model User {
   id             Int     @id @default(autoincrement())
   nickname       String
+  firstname      String?
+  lastname       String?
   email          String
-  email_verified Boolean
+  email_verified Boolean @default(false)
   password       String
+  avatar         String?
+
+  created_courses Course[]
 }
 
 model Course {
-  id          Int    @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   description String
+  author      User?      @relation(fields: [userId], references: [id])
+  materials   Material[]
 
-  materials Material[]
+  userId Int?
 }
 
 model Material {

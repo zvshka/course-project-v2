@@ -12,7 +12,11 @@ const apiRoute = nextConnect({
 })
 
 apiRoute.get(async (req, res) => {
-    const courses = await prisma.course.findMany({})
+    const courses = await prisma.course.findMany({
+        include: {
+            author: true
+        }
+    })
     res.status(200).json({courses})
 })
 

@@ -32,11 +32,9 @@ export default function Material() {
         <div className="w-full">
             <h2>Добавление материалов курса</h2>
             <div className="space-y-2">
-                <div className="flex space-x-4">
-                    <button onClick={saveMaterial} className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
-                        Сохранить
-                    </button>
-                </div>
+                <button onClick={saveMaterial} className="w-full bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
+                    Сохранить
+                </button>
                 <input placeholder="Заголовок"
                        value={materialTitle}
                        onChange={(e) => setMaterialTitle(e.target.value)}
