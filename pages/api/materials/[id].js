@@ -21,8 +21,15 @@ apiRoute.get(async (req, res) => {
     res.status(200).json({material})
 })
 
-apiRoute.patch(async (req, res) => {
+apiRoute.put(async (req, res) => {
     const id = parseInt(req.query.id)
+    const data = JSON.parse(req.body)
+    await prisma.material.update({
+        where: {
+            id
+        },
+        data
+    })
     res.status(200)
 })
 
@@ -34,10 +41,6 @@ apiRoute.delete(async (req, res) => {
         }
     })
     res.status(200)
-})
-
-apiRoute.post(async (req, res) => {
-
 })
 
 export default apiRoute
