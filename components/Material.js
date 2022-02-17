@@ -2,7 +2,7 @@ import Link from "next/link";
 export const Material = ({index, href, title, remove, edit}) => {
     return <Link href={href}>
         <div className="border-l-2 mt-10">
-            <div className="cursor-pointer ml-10 relative flex items-center
+            <div className="cursor-pointer ml-10 relative flex md:items-center
                         px-6 py-4 bg-secondary text-white rounded mb-10 flex-col
                         md:flex-row space-y-4 md:space-y-0">
                 <div className="w-5 h-5 bg-secondary absolute -left-10 transform

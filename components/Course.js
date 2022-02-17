@@ -23,7 +23,7 @@ export const Course = ({course, progress = false}) => {
                         {/*</div>*/}
                         <div className={`flex items-center mt-2 ${progress ? "border-b-2 pb-2" : ""}`}>
                             <img className='w-10 h-10 object-cover rounded-full' alt='User avatar'
-                                 src={course.author.avatar}/>
+                                 src={course.author.avatar || "https://benimadimcocuk.com/wp-content/uploads/2016/06/default-310x310.png"}/>
 
                             <div className="pl-3">
                                 <div className="font-medium">
@@ -36,7 +36,7 @@ export const Course = ({course, progress = false}) => {
                         </div>
                         {progress && <div className="flex flex-col my-2">
                             <div className="text-xs mb-2">
-                                0/12 Выполнено
+                                0/{course.materials.length} Выполнено
                             </div>
                             <div className="w-full bg-gray-400 p-0">
                                 <div className="w-0 bg-secondary h-1"/>
