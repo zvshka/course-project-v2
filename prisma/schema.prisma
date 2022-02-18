@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id             Int     @id @default(autoincrement())
+  id             String  @id @default(cuid())
   nickname       String
   firstname      String?
   lastname       String?
@@ -24,22 +24,22 @@ model User {
 }
 
 model Course {
-  id          Int        @id @default(autoincrement())
+  id          String     @id @default(cuid())
   title       String
   description String
   author      User?      @relation(fields: [userId], references: [id])
   materials   Material[]
 
-  userId Int?
+  userId String?
 }
 
 model Material {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(cuid())
   title String
   text  String
 
   course   Course @relation(fields: [courseId], references: [id])
-  courseId Int
+  courseId String
 }
 
 model Images {

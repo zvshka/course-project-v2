@@ -12,7 +12,7 @@ const apiRoute = nextConnect({
 })
 
 apiRoute.get(async (req, res) => {
-    const id = parseInt(req.query.id)
+    const id = req.query.id
     const material = await prisma.material.findUnique({
         where: {
             id
@@ -22,7 +22,7 @@ apiRoute.get(async (req, res) => {
 })
 
 apiRoute.put(async (req, res) => {
-    const id = parseInt(req.query.id)
+    const id = req.query.id
     const data = JSON.parse(req.body)
     await prisma.material.update({
         where: {
@@ -34,7 +34,7 @@ apiRoute.put(async (req, res) => {
 })
 
 apiRoute.delete(async (req, res) => {
-    const id = parseInt(req.query.id)
+    const id = req.query.id
     await prisma.material.delete({
         where: {
             id

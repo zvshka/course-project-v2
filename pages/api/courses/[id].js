@@ -12,7 +12,7 @@ const apiRoute = nextConnect({
 })
 
 apiRoute.get(async (req, res) => {
-    const id = parseInt(req.query.id)
+    const id = req.query.id
     const course = await prisma.course.findUnique({
         where: {
             id
@@ -25,12 +25,12 @@ apiRoute.get(async (req, res) => {
 })
 
 apiRoute.patch(async (req, res) => {
-    const id = parseInt(req.query.id)
+    const id = req.query.id
     res.status(200)
 })
 
 apiRoute.delete(async (req, res) => {
-    const id = parseInt(req.query.id)
+    const id = req.query.id
     await prisma.course.delete({
         where: {
             id

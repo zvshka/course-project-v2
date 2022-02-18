@@ -4,6 +4,8 @@ import {useEffect, useRef, useState} from "react";
 import Prism from "../../../../../lib/prism";
 import parse from "html-react-parser";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+
 
 const Editor = dynamic(() => import("@components/Editor"), {ssr: false})
 export default function Material() {
@@ -45,6 +47,11 @@ export default function Material() {
             <h2>Редактирование материалов курса</h2>
             <div className="space-y-2">
                 <div className="flex space-x-4">
+                    <Link href={"/courses/" + router.query.courseId}>
+                        <button className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
+                            Назад к курсу
+                        </button>
+                    </Link>
                     <button onClick={saveMaterial} className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
                         Сохранить
                     </button>
