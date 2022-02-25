@@ -1,16 +1,20 @@
 import {Layout} from "@components/Layout";
 import {useRouter} from "next/router";
 import {useEffect, useRef, useState} from "react";
-import Prism from "../../../../../lib/prism";
+import Prism from "@lib/prism"
 import parse from "html-react-parser";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
+interface materialData {
+    text: string
+    title: string
+}
 
 const Editor = dynamic(() => import("@components/Editor"), {ssr: false})
 export default function Material() {
     const router = useRouter()
-    const [materialData, setMaterialData] = useState({})
+    const [materialData, setMaterialData] = useState<materialData>({text: "", title: ""})
     const [materialTitle, setMaterialTitle] = useState("")
     const [materialText, setMaterialText] = useState("")
 
@@ -18,7 +22,7 @@ export default function Material() {
         router.query.materialId && fetch("http://localhost:3000/api/materials/" + router.query.materialId)
             .then(res => res.json())
             .then(res => setMaterialData(res.material))
-    }, [ router.query.materialId])
+    }, [router.query.materialId])
 
     useEffect(() => {
         materialData.text && setMaterialText(materialData.text)
@@ -32,7 +36,6 @@ export default function Material() {
 
     const saveMaterial = (e) => {
         e.preventDefault()
-        console.log(materialText)
         fetch("http://localhost:3000/api/materials/" + router.query.materialId, {
             method: "put",
             body: JSON.stringify({
@@ -48,11 +51,13 @@ export default function Material() {
             <div className="space-y-2">
                 <div className="flex space-x-4">
                     <Link href={"/courses/" + router.query.courseId}>
-                        <button className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
+                        <button
+                            className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
                             Назад к курсу
                         </button>
                     </Link>
-                    <button onClick={saveMaterial} className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
+                    <button onClick={saveMaterial}
+                            className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
                         Сохранить
                     </button>
                 </div>

@@ -22,7 +22,7 @@
 // }
 import nextConnect from 'next-connect';
 import multer from 'multer';
-import imagesService from "@services/images"
+import {imagesService} from "@services/images"
 import {NextApiRequest, NextApiResponse} from "next";
 
 const oneMegabyteInBytes = 1000000;

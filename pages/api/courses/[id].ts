@@ -15,7 +15,7 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 apiRoute.get(async (req, res) => {
     const id = req.query.id
     const course = await coursesService.findOneById(id)
-    res.status(200).json({course})
+    res.status(200).json({...course})
 })
 
 apiRoute.patch(async (req, res) => {

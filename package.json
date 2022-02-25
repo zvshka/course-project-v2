@@ -7,6 +7,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@ckeditor/ckeditor5-react": "^4.0.0",
@@ -21,7 +22,8 @@
     "nodemailer": "^6.7.2",
     "prismjs": "^1.26.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "swr": "^1.2.2"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

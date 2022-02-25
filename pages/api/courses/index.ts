@@ -14,7 +14,7 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 
 apiRoute.get(async (req, res) => {
     const courses = await coursesService.getAll()
-    res.status(200).json({courses})
+    res.status(200).json(courses)
 })
 
 apiRoute.post(async (req, res) => {

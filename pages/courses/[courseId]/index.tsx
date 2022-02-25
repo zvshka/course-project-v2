@@ -1,18 +1,16 @@
 import {Layout} from "@components/Layout";
 import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
 import Link from "next/link";
 import {Material} from "@components/Material";
-
+import useCourse from "../../../hooks/useCourse";
 export default function CoursePage() {
     const router = useRouter()
-    const [courseData, setCourseData] = useState({})
-    useEffect(() => {
-        router.query.courseId && fetch("http://localhost:3000/api/courses/" + router.query.courseId)
-            .then(res => res.json())
-            .then(res => setCourseData(res.course))
+    const {courseId} = router.query
 
-    }, [router.query.courseId])
+    const {course: courseData, isLoading, isError} = useCourse(courseId)
+    if (isError) return <div>failed to load</div>
+    if (isLoading) return <div>loading...</div>
+
     const handleDelete = () => {
         fetch("http://localhost:3000/api/courses/" + router.query.courseId, {
             method: "delete"
@@ -46,7 +44,8 @@ export default function CoursePage() {
             <p>{courseData.description}</p>
             <h2>Материалы курса</h2>
             {courseData.materials && courseData.materials.map((m, i) => <>
-                <Material href={`/courses/${router.query.courseId}/materials/${m.id}`} index={i} title={m.title}/>
+                <Material href={`/courses/${router.query.courseId}/materials/${m.id}`} index={i} title={m.title}
+                          remove={undefined} edit={undefined}/>
             </>)}
         </div>
     </Layout>

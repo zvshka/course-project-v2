@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect';
 import fs from "fs";
 import {NextApiRequest, NextApiResponse} from "next";
-import imagesService from "@services/images"
+import {imagesService} from "@services/images"
 
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {

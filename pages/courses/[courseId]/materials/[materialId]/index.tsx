@@ -2,12 +2,17 @@ import {Layout} from "@components/Layout";
 import {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
 import parse from "html-react-parser";
-import Prism from "../../../../../lib/prism";
+import Prism from "@lib/prism"
 import Link from "next/link";
+
+interface materialData {
+    text: string
+    title: string
+}
 
 export default function Material() {
     const router = useRouter()
-    const [materialData, setMaterialData] = useState({})
+    const [materialData, setMaterialData] = useState<materialData>({text: "", title: ""})
     const contentRef = useRef(null)
     useEffect(() => {
         contentRef.current && Prism.highlightAllUnder(contentRef.current)

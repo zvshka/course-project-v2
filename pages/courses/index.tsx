@@ -1,15 +1,12 @@
 import {Layout} from "@components/Layout";
 import {Course} from "@components/Course";
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import useCourses from "../../hooks/useCourses";
 
 export default function Courses() {
-    const [courses, setCourses] = useState([])
-    useEffect(() => {
-        fetch("http://localhost:3000/api/courses")
-            .then(res => res.json())
-            .then(res => setCourses(res.courses))
-    }, [])
+    const {courses, isLoading, isError} = useCourses()
+    if (isError) return <div>failed to load</div>
+    if (isLoading) return <div>loading...</div>
     return <Layout>
         <div className="w-full">
             <h2>Доступные курсы</h2>

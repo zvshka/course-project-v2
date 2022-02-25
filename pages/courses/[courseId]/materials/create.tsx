@@ -2,7 +2,7 @@ import {Layout} from "@components/Layout";
 import dynamic from "next/dynamic";
 import {useEffect, useRef, useState} from "react";
 import parse from "html-react-parser"
-import Prism from "../../../../lib/prism";
+import Prism from "@lib/prism"
 import {useRouter} from "next/router";
 import Link from "next/link";
 

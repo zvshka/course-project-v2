@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import {useState} from "react";
 import {Layout} from "@components/Layout";
 
-const Editor = dynamic(() => import("../../components/Editor"), {ssr: false})
+const Editor = dynamic(() => import("@components/Editor"), {ssr: false})
 export default function Create() {
     const [courseTitle, setCourseTitle] = useState("")
     const [courseDescription, setCourseDescription] = useState("")
