@@ -1,6 +1,5 @@
 import nextConnect from 'next-connect';
-import prisma from "../../../lib/prisma";
-import coursesService from "@services/courses";
+import {coursesService} from "@services/courses";
 import {NextApiRequest, NextApiResponse} from "next";
 
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
@@ -26,11 +25,7 @@ apiRoute.patch(async (req, res) => {
 
 apiRoute.delete(async (req, res) => {
     const id = req.query.id
-    await prisma.course.delete({
-        where: {
-            id
-        }
-    })
+    await coursesService.deleteOneById(id)
     res.status(200)
 })
 

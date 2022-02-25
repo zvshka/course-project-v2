@@ -1,7 +1,8 @@
 import nextConnect from 'next-connect';
-import prisma from "../../../lib/prisma";
+import {NextApiRequest, NextApiResponse} from "next";
+import {materialsService} from "@services/materials";
 
-const apiRoute = nextConnect({
+const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
         console.error(error)
         res.status(501).json({error: `Sorry something Happened! ${error.message}`});
@@ -12,11 +13,7 @@ const apiRoute = nextConnect({
 })
 
 apiRoute.post(async (req, res) => {
-    await prisma.material.create({
-        data: JSON.parse(req.body)
-    }).catch(e => {
-        res.status(400).json({error: e.message})
-    })
+
 })
 
 export default apiRoute

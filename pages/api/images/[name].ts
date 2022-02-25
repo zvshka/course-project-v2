@@ -1,9 +1,9 @@
 import nextConnect from 'next-connect';
-import * as path from "path";
 import fs from "fs";
-import prisma from "../../../lib/prisma";
+import {NextApiRequest, NextApiResponse} from "next";
+import imagesService from "@services/images"
 
-const apiRoute = nextConnect({
+const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
         console.error(error)
         res.status(501).json({error: `Sorry something Happened! ${error.message}`});
@@ -15,11 +15,7 @@ const apiRoute = nextConnect({
 
 apiRoute.get(async (req, res) => {
     const name = req.query.name
-    const result = await prisma.images.findUnique({
-        where: {
-            filename: name
-        }
-    })
+    const result = await imagesService.getImage(name)
     if (result) {
         try {
             const imageBuffer = fs.readFileSync(result.filepath);

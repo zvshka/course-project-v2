@@ -22,7 +22,8 @@
 // }
 import nextConnect from 'next-connect';
 import multer from 'multer';
-import prisma from "../../../lib/prisma";
+import imagesService from "@services/images"
+import {NextApiRequest, NextApiResponse} from "next";
 
 const oneMegabyteInBytes = 1000000;
 const outputFolderName = './public/uploads';
@@ -30,7 +31,7 @@ const outputFolderName = './public/uploads';
 const upload = multer({
     // limits: { fileSize: oneMegabyteInBytes * 2 },
     storage: multer.diskStorage({
-        destination: './public/uploads',
+        destination: outputFolderName,
         filename: (req, file, cb) => cb(null, file.originalname),
     }),
     /*fileFilter: (req, file, cb) => {
@@ -39,7 +40,7 @@ const upload = multer({
     },*/
 });
 
-const apiRoute = nextConnect({
+const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
         console.error(error)
         res.status(501).json({error: `Sorry something Happened! ${error.message}`});
@@ -51,27 +52,9 @@ const apiRoute = nextConnect({
 
 apiRoute.use(upload.single("upload"));
 
-apiRoute.post(async (req, res) => {
+apiRoute.post(async (req: NextApiResponse & { file: any }, res) => {
     const {filename, mimetype, size, path: filepath} = req.file;
-    const candidate = await prisma.images.findUnique({
-        where: {
-            filename
-        }
-    })
-
-    if (candidate) return res.status(200).json({url: "http://localhost:3000/api/images/" + filename});
-
-    const result = await prisma.images.create({
-        data: {
-            filepath,
-            filename,
-            mimetype,
-            size
-        }
-    }).catch(e => {
-        console.error(e)
-        return null
-    })
+    const result = await imagesService.upload({filename, mimetype, size, filepath})
     if (result) {
         res.status(200).json({url: "http://localhost:3000/api/images/" + filename});
     } else {

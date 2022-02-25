@@ -1,7 +1,8 @@
 import nextConnect from 'next-connect';
-import prisma from "../../../lib/prisma";
+import {NextApiRequest, NextApiResponse} from "next";
+import {materialsService} from "@services/materials";
 
-const apiRoute = nextConnect({
+const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
         console.error(error)
         res.status(501).json({error: `Sorry something Happened! ${error.message}`});
@@ -13,33 +14,20 @@ const apiRoute = nextConnect({
 
 apiRoute.get(async (req, res) => {
     const id = req.query.id
-    const material = await prisma.material.findUnique({
-        where: {
-            id
-        }
-    })
-    res.status(200).json({material})
+
+    res.status(200)
 })
 
 apiRoute.put(async (req, res) => {
     const id = req.query.id
     const data = JSON.parse(req.body)
-    await prisma.material.update({
-        where: {
-            id
-        },
-        data
-    })
+
     res.status(200)
 })
 
 apiRoute.delete(async (req, res) => {
     const id = req.query.id
-    await prisma.material.delete({
-        where: {
-            id
-        }
-    })
+
     res.status(200)
 })
 

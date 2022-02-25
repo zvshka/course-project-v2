@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect';
-import coursesService from "@services/courses";
+import {coursesService} from "@services/courses";
 import {NextApiRequest, NextApiResponse} from "next";
 
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({

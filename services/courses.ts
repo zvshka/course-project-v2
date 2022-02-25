@@ -1,4 +1,4 @@
-import prisma from "../lib/prisma";
+import prisma from "@lib/prisma";
 
 class CoursesService {
     async getAll() {
@@ -26,6 +26,14 @@ class CoursesService {
             }
         })
     }
+
+    async deleteOneById(id) {
+        return await prisma.course.delete({
+            where: {
+                id
+            }
+        })
+    }
 }
 
-export default new CoursesService()
+export const coursesService = new CoursesService()
