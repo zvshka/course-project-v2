@@ -1,7 +1,9 @@
 import nextConnect from 'next-connect';
 import prisma from "../../../lib/prisma";
+import coursesService from "@services/courses";
+import {NextApiRequest, NextApiResponse} from "next";
 
-const apiRoute = nextConnect({
+const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
         console.error(error)
         res.status(501).json({error: `Sorry something Happened! ${error.message}`});
@@ -13,14 +15,7 @@ const apiRoute = nextConnect({
 
 apiRoute.get(async (req, res) => {
     const id = req.query.id
-    const course = await prisma.course.findUnique({
-        where: {
-            id
-        },
-        include: {
-            materials: true
-        }
-    })
+    const course = await coursesService.findOneById(id)
     res.status(200).json({course})
 })
 
