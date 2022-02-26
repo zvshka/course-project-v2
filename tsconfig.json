@@ -5,6 +5,12 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
+      "@hooks": [
+        "hooks",
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
       "@lib": [
         "lib"
       ],

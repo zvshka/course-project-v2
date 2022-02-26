@@ -4,7 +4,7 @@ class CoursesService {
     async getAll() {
         return await prisma.course.findMany({
             include: {
-                author: true,
+                // author: true,
                 materials: true
             }
         })

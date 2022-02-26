@@ -13,7 +13,8 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 })
 
 apiRoute.post(async (req, res) => {
-
+    const result = await materialsService.create(JSON.parse(req.body))
+    res.status(200).json(result)
 })
 
 export default apiRoute

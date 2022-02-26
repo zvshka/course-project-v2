@@ -5,34 +5,25 @@ import Prism from "@lib/prism"
 import parse from "html-react-parser";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-
-interface materialData {
-    text: string
-    title: string
-}
+import useMaterial from "@hooks/useMaterial";
 
 const Editor = dynamic(() => import("@components/Editor"), {ssr: false})
 export default function Material() {
     const router = useRouter()
-    const [materialData, setMaterialData] = useState<materialData>({text: "", title: ""})
+    const contentRef = useRef(null)
+    const {material: materialData, isLoading, isError} = useMaterial(router.query.materialId)
     const [materialTitle, setMaterialTitle] = useState("")
     const [materialText, setMaterialText] = useState("")
-
-    useEffect(() => {
-        router.query.materialId && fetch("http://localhost:3000/api/materials/" + router.query.materialId)
-            .then(res => res.json())
-            .then(res => setMaterialData(res.material))
-    }, [router.query.materialId])
-
     useEffect(() => {
         materialData.text && setMaterialText(materialData.text)
         materialData.title && setMaterialTitle(materialData.title)
     }, [materialData.text, materialData.title])
-
-    const contentRef = useRef(null)
     useEffect(() => {
         contentRef.current && Prism.highlightAllUnder(contentRef.current)
-    }, [materialData])
+    }, [materialText])
+
+    if (isError) return <div>failed to load</div>
+    if (isLoading) return <div>loading...</div>
 
     const saveMaterial = (e) => {
         e.preventDefault()

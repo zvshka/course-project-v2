@@ -14,8 +14,8 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 
 apiRoute.get(async (req, res) => {
     const id = req.query.id
-
-    res.status(200)
+    const result = await materialsService.findOneById(id)
+    res.status(200).json(result)
 })
 
 apiRoute.put(async (req, res) => {

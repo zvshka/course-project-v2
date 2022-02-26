@@ -4,24 +4,18 @@ import {useRouter} from "next/router";
 import parse from "html-react-parser";
 import Prism from "@lib/prism"
 import Link from "next/link";
-
-interface materialData {
-    text: string
-    title: string
-}
+import useMaterial from "../../../../../hooks/useMaterial";
 
 export default function Material() {
     const router = useRouter()
-    const [materialData, setMaterialData] = useState<materialData>({text: "", title: ""})
     const contentRef = useRef(null)
+    const {material: materialData, isLoading, isError} = useMaterial(router.query.materialId)
     useEffect(() => {
         contentRef.current && Prism.highlightAllUnder(contentRef.current)
     }, [materialData])
-    useEffect(() => {
-        router.query.materialId && fetch("http://localhost:3000/api/materials/" + router.query.materialId)
-            .then(res => res.json())
-            .then(res => setMaterialData(res.material))
-    }, [ router.query.materialId])
+
+    if (isError) return <div>failed to load</div>
+    if (isLoading) return <div>loading...</div>
 
     const handleDelete = (e) => {
         e.preventDefault()
