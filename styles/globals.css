@@ -1,6 +1,6 @@
 @tailwind utilities;
 @tailwind components;
-/*@tailwind base;*/
+@tailwind base;
 
 html,
 body {
