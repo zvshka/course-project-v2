@@ -34,6 +34,14 @@ class CoursesService {
             }
         })
     }
+
+    async deleteById(id) {
+        return await prisma.course.delete({
+            where: {
+                id
+            }
+        })
+    }
 }
 
 export const coursesService = new CoursesService()

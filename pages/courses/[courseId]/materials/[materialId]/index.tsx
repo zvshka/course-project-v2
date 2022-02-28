@@ -4,8 +4,7 @@ import {useRouter} from "next/router";
 import parse from "html-react-parser";
 import Prism from "@lib/prism"
 import Link from "next/link";
-import useMaterial from "../../../../../hooks/useMaterial";
-
+import useMaterial from "@hooks/useMaterial";
 export default function Material() {
     const router = useRouter()
     const contentRef = useRef(null)
@@ -28,7 +27,7 @@ export default function Material() {
     return <Layout>
         <div className="w-full">
             <div className="flex md:space-x-4 flex-col md:flex-row mb-4 md:mb-0">
-                <h1>{materialData.title}</h1>
+                <h2>{materialData.title}</h2>
                 <div className="flex md:items-center md:space-x-4 md:space-y-0 space-y-2 flex-col md:flex-row">
                     <Link href={`/courses/${router.query.courseId}/materials/${router.query.materialId}/edit`}>
                         <button
