@@ -16,8 +16,10 @@
     "@ckeditor/ckeditor5-react": "^4.0.0",
     "@next-auth/prisma-adapter": "^1.0.1",
     "@prisma/client": "^3.9.2",
+    "bcrypt": "^5.0.1",
     "ckeditor5-custom-build": "github:zvshka/ckeditor5-custom-build",
     "html-react-parser": "^1.4.8",
+    "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.4",
     "next": "12.0.10",
     "next-auth": "^4.2.1",
@@ -29,7 +31,9 @@
     "swr": "^1.2.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/jest": "^27.4.1",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/multer": "^1.4.7",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.39",

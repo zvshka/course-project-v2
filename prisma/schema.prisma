@@ -29,19 +29,29 @@ model Material {
 model User {
   id String @id @default(cuid())
 
-  username String
+  username String @unique
   password String
 
   firstname String?
   lastname  String?
 
-  email          String
+  email          String    @unique
   email_verified DateTime?
 
   image String?
+  role  Role?   @default(USER)
+
+  accessToken String?
+  //  refreshToken String?
   //  accounts        Account[]
-  sessions Session[]
+  //  sessions Session[]
   //  created_courses Course[]
+  //  Session Session[]
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 //model Account {
@@ -79,11 +89,11 @@ model Images {
   size     Int
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  expires      DateTime
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+//model Session {
+//  id           String   @id @default(cuid())
+//  sessionToken String   @unique
+//  expires      DateTime
+//
+//  userId String
+//  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+//}
