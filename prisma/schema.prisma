@@ -41,7 +41,7 @@ model User {
   image String?
   role  Role?   @default(USER)
 
-  accessToken String?
+  //  accessToken String?
   //  refreshToken String?
   //  accounts        Account[]
   //  sessions Session[]
