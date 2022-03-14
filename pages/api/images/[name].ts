@@ -1,17 +1,9 @@
-import nextConnect from 'next-connect';
 import fs from "fs";
-import {NextApiRequest, NextApiResponse} from "next";
 import {imagesService} from "@services/images"
 
-const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
-    onError(error, req, res) {
-        console.error(error)
-        res.status(501).json({error: `Sorry something Happened! ${error.message}`});
-    },
-    onNoMatch(req, res) {
-        res.status(405).json({error: `Method '${req.method}' Not Allowed`});
-    },
-});
+import {apiRouter} from "@lib/apiRouter";
+
+const apiRoute = apiRouter()
 
 apiRoute.get(async (req, res) => {
     const name = req.query.name

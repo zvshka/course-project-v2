@@ -19,11 +19,10 @@
 //             handlePost(req, res)
 //             break
 //     }
-// }
-import nextConnect from 'next-connect';
+import {apiRouter} from "@lib/apiRouter";
 import multer from 'multer';
 import {imagesService} from "@services/images"
-import {NextApiRequest, NextApiResponse} from "next";
+import {NextApiResponse} from "next";
 
 const oneMegabyteInBytes = 1000000;
 const outputFolderName = './public/uploads';
@@ -40,15 +39,7 @@ const upload = multer({
     },*/
 });
 
-const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
-    onError(error, req, res) {
-        console.error(error)
-        res.status(501).json({error: `Sorry something Happened! ${error.message}`});
-    },
-    onNoMatch(req, res) {
-        res.status(405).json({error: `Method '${req.method}' Not Allowed`});
-    },
-});
+const apiRoute = apiRouter()
 
 apiRoute.use(upload.single("upload"));
 

@@ -20,22 +20,21 @@ class AuthorizationService {
             }
         })
         const accessToken = signToken({id: user.id, role: user.role})
-        await prisma.user.update({
-            where: {id: user.id},
-            data: {accessToken}
-        })
         return {accessToken}
     }
 
     async login(loginDTO) {
+        console.log(loginDTO)
         const {email, password} = loginDTO
-        const {password: candidatePassword, ...candidate} = await prisma.user.findUnique({
+        const candidate = await prisma.user.findUnique({
             where: {email}
         })
         if (!candidate) throw new Error("No user with that email")
-        const passwordEquals = await bcrypt.compare(password, candidatePassword)
+        const passwordEquals = await bcrypt.compare(password, candidate.password)
         if (!passwordEquals) throw new Error("Passwords did not match")
-
+        const accessToken = signToken({id: candidate.id, role: candidate.role})
+        console.log(accessToken)
+        return {accessToken}
     }
 }
 

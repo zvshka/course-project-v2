@@ -1,9 +1,12 @@
 import {NavItem} from "./NavItem";
 import Link from "next/link";
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {SessionContext} from "@components/SessionProvider";
 
 export const Navbar = () => {
     const [show, setShow] = useState(false)
+    const user = useContext(SessionContext)
+    console.log(user)
     return <header className="bg-gray-200">
         <div className="max-w-7xl mx-auto px-2">
             <div className="flex justify-between">

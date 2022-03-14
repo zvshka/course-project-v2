@@ -1,10 +1,27 @@
 import Link from "next/link";
 import {useState} from "react";
+import {useRouter} from "next/router";
 
 export default function Register() {
+    const router = useRouter()
     const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [passwordAgain, setPasswordAgain] = useState("")
+    const register = () => {
+        if (password !== passwordAgain) return
+        fetch("/api/auth/register", {
+            method: "POST",
+            body: JSON.stringify({
+                email,
+                username,
+                password
+            })
+        }).then(res => res.json()).then(res => {
+            localStorage.setItem("accessToken", res.accessToken)
+            router.push("/")
+        }).catch(console.error)
+    }
     return <div className="min-h-screen bg-gradient-to-tl from-secondary to-indigo-900 w-full py-16 px-4">
         <div className="flex flex-col items-center justify-center">
 
@@ -66,6 +83,13 @@ export default function Register() {
                     Email
                 </label>
                 <input aria-labelledby="email" type="email"
+                       onChange={e => setEmail(e.target.value)}
+                       className="bg-gray-200 border rounded  text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"/>
+                <label id="username" className="text-sm font-medium leading-none text-gray-800">
+                    Имя пользователя
+                </label>
+                <input aria-labelledby="username" type="username"
+                       onChange={e => setUsername(e.target.value)}
                        className="bg-gray-200 border rounded  text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"/>
                 <div className="mt-6 w-full">
                     <label htmlFor="pass" className="text-sm font-medium leading-none text-gray-800">
@@ -73,6 +97,7 @@ export default function Register() {
                     </label>
                     <div className="relative flex items-center justify-center">
                         <input id="pass" type="password"
+                               onChange={e => setPassword(e.target.value)}
                                className="bg-gray-200 border rounded  text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"/>
                         <div className="absolute right-0 mt-2 mr-3 cursor-pointer">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -91,6 +116,7 @@ export default function Register() {
                     </label>
                     <div className="relative flex items-center justify-center">
                         <input id="pass" type="password"
+                               onChange={e => setPasswordAgain(e.target.value)}
                                className="bg-gray-200 border rounded  text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2"/>
                         <div className="absolute right-0 mt-2 mr-3 cursor-pointer">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -105,6 +131,7 @@ export default function Register() {
                 </div>
                 <div className="mt-8">
                     <button role="button"
+                            onClick={register}
                             className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold
                             leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">Регистрация
                     </button>
