@@ -10,6 +10,9 @@ export default function Create() {
         e.preventDefault()
         fetch("http://localhost:3000/api/courses", {
             method: "post",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("accessToken")
+            },
             body: JSON.stringify({
                 title: courseTitle,
                 description: courseDescription
