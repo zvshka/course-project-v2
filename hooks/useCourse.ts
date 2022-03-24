@@ -1,5 +1,4 @@
-import useSWR from "swr";
-import {fetcher} from "@lib/fetcher";
+import {useQuery, useQueryClient} from "react-query";
 
 interface ICourseData {
     title: string
@@ -13,11 +12,17 @@ interface IUseCourseResponse {
     isError: boolean
 }
 
-export default function useCourse(id): IUseCourseResponse {
-    const {data, error} = useSWR(id ? "/api/courses/" + id : null, fetcher)
+export default function useCourse(id) {
+    const queryClient = useQueryClient()
+    const {data, isSuccess, isLoading, isError} = useQuery(['courseData', id], () =>
+            fetch("/api/courses/" + id).then(res => res.json()),
+        {enabled: !!id}
+    )
+
     return {
         course: data,
-        isLoading: !error && !data,
-        isError: error
+        isSuccess,
+        isLoading,
+        isError
     }
 }

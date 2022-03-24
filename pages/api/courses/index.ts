@@ -14,6 +14,7 @@ apiRoute.post(processjwt, adminOnly, async (req, res) => {
     await coursesService.create(JSON.parse(req.body)).catch(e => {
         res.status(400).json({error: e})
     })
+    res.status(200).json({message: "Success"})
 })
 
 export default apiRoute

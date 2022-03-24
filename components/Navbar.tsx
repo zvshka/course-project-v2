@@ -1,12 +1,11 @@
 import {NavItem} from "./NavItem";
 import Link from "next/link";
-import {useContext, useState} from "react";
-import {SessionContext} from "@components/SessionProvider";
+import {useState} from "react";
+import useUser from "@hooks/useUser";
 
 export const Navbar = () => {
     const [show, setShow] = useState(false)
-    const user = useContext(SessionContext)
-    console.log(user)
+    const userData = useUser()
     return <header className="bg-gray-200">
         <div className="max-w-7xl mx-auto px-2">
             <div className="flex justify-between">
@@ -37,10 +36,12 @@ export const Navbar = () => {
                 </div>
                 <div className="md:flex hidden items-center">
                     <div className="space-x-4">
-                        <button
-                            className="px-4 py-2 bg-secondary border-0 outline-0 text-white font-bold text-sm rounded-lg">
-                            Войти
-                        </button>
+                        {!userData.isSuccess ? <Link href={"/auth/login"}>
+                            <button
+                                className="px-4 py-2 bg-secondary border-0 outline-0 text-white font-bold text-sm rounded-lg">
+                                Войти
+                            </button>
+                        </Link> : userData.user.username}
                     </div>
                 </div>
                 <div className="md:hidden flex items-center">
