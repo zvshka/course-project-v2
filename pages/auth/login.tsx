@@ -14,6 +14,7 @@ export default function Login() {
                 email, password
             })
         }).then(res => res.json()).then(res => {
+            if (res.error) return console.log("Invalid password or login")
             localStorage.setItem("accessToken", res.accessToken)
             router.push("/")
         }).catch(console.error)

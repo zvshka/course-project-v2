@@ -1,28 +1,18 @@
-// import useSWR from "swr";
-// import {fetcher} from "@lib/fetcher";
-//
-// export default function useMaterial(id) {
-//     const {data, error} = useSWR(id ? "/api/materials/" + id : null, fetcher)
-//     return {
-//         material: data,
-//         isLoading: !error && !data,
-//         isError: error
-//     }
-// }
-
-import {useQuery, useQueryClient} from "react-query";
+import {useQuery} from "react-query";
+import axios from "axios";
 
 export default function useMaterial(id) {
-    const queryClient = useQueryClient()
     // Queries
-    const {data, isSuccess, isLoading, isError} = useQuery(['materialData', id], () =>
-        fetch("/api/materials/" + id).then(res =>
-            res.json()
+    const {data, isSuccess, isLoading, isError, error} = useQuery(['materialData', id], () =>
+        axios("/api/materials/" + id).then(res =>
+            res.data
         ), {enabled: !!id})
+
     return {
         material: data,
         isSuccess,
         isLoading,
-        isError
+        isError,
+        error
     }
 }

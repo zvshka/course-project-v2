@@ -5,6 +5,7 @@ import parse from "html-react-parser"
 import Prism from "@lib/prism"
 import {useRouter} from "next/router";
 import Link from "next/link";
+import axios from "axios";
 
 const Editor = dynamic(() => import("@components/Editor"), {ssr: false})
 export default function Material() {
@@ -19,13 +20,17 @@ export default function Material() {
 
     const saveMaterial = (e) => {
         e.preventDefault()
-        fetch("http://localhost:3000/api/materials", {
-            method: "post",
-            body: JSON.stringify({
+        axios("http://localhost:3000/api/materials", {
+            method: "POST",
+            data: {
                 title: materialTitle,
                 text: materialText,
                 courseId: router.query.courseId
-            })
+            },
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("accessToken"),
+                "Content-Type": "application/json"
+            }
         }).catch(console.error)
     }
 

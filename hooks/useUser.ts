@@ -1,45 +1,20 @@
-// import useSWR from "swr";
-// import {fetcher} from "@lib/fetcher";
-// import {useEffect, useState} from "react";
-//
-// export default function useUser() {
-//     const [token, setToken] = useState(null)
-//     useEffect(() =>{
-//         setToken(localStorage.accessToken)
-//     }, [])
-//     const {
-//         data,
-//         error
-//     } = useSWR(token ? "/api/auth/aboutMe" : null, (...args) => fetcher(...args, {
-//         headers: {
-//             "Authorization": `Bearer ${token}`
-//         }
-//     }))
-//     return {
-//         user: data,
-//         isLoading: !error && !data,
-//         isError: error
-//     }
-// }
-
-import {useQuery, useQueryClient} from "react-query";
+import {useQuery} from "react-query";
+import axios from "axios";
 
 export default function useUser() {
-    const queryClient = useQueryClient()
-    // Queries
-    const { data: user, isSuccess, isLoading, isError } = useQuery('userData', () =>
-        fetch("/api/auth/aboutMe", {
+    const {data: user, isSuccess, isLoading, isError, error} = useQuery('userData', () =>
+        axios("/api/auth/aboutMe", {
+            method: "GET",
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("accessToken")
             }
-        }).then(res =>
-            res.json()
-        ))
+        }).then(res => res.data))
 
     return {
         user,
         isSuccess,
         isLoading,
-        isError
+        isError,
+        error
     }
 }

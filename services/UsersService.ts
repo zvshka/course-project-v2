@@ -1,4 +1,3 @@
-import {verifyToken} from "@lib/tokens";
 import prisma from "@lib/prisma";
 
 class UsersService {
@@ -9,16 +8,14 @@ class UsersService {
         })
     }
 
-    async aboutMe(accessToken) {
-        const {id} = verifyToken(accessToken)
-        const {password: _, ...candidate} = await prisma.user.findUnique({
+    async findOneById(id) {
+        const {password, ...candidate} = await prisma.user.findUnique({
             where: {id},
+            include: {
+                doneMaterials: true
+            }
         })
         return candidate
-    }
-
-    async editProfile() {
-
     }
 }
 

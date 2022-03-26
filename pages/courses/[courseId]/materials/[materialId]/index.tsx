@@ -26,7 +26,6 @@ export default function Material() {
     }, [courseData.isSuccess, router.query.materialId])
 
     useEffect(() => {
-        console.log(indexOfMaterial)
         setNext(courseData.isSuccess ? indexOfMaterial >= courseData.course.materials.length - 1 ?
             '/courses' :
             `/courses/${router.query.courseId}/materials/${mapToIds(courseData.course.materials)[indexOfMaterial + 1]}` : "")

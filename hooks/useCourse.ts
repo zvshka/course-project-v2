@@ -1,21 +1,9 @@
-import {useQuery, useQueryClient} from "react-query";
-
-interface ICourseData {
-    title: string
-    description: string
-    materials: any[]
-}
-
-interface IUseCourseResponse {
-    course: ICourseData,
-    isLoading: boolean
-    isError: boolean
-}
+import {useQuery} from "react-query";
+import axios from "axios";
 
 export default function useCourse(id) {
-    const queryClient = useQueryClient()
-    const {data, isSuccess, isLoading, isError} = useQuery(['courseData', id], () =>
-            fetch("/api/courses/" + id).then(res => res.json()),
+    const {data, isSuccess, isLoading, isError, error} = useQuery(['courseData', id], () =>
+            axios("/api/courses/" + id).then(res => res.data),
         {enabled: !!id}
     )
 
@@ -23,6 +11,7 @@ export default function useCourse(id) {
         course: data,
         isSuccess,
         isLoading,
-        isError
+        isError,
+        error
     }
 }

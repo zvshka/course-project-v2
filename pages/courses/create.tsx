@@ -1,50 +1,103 @@
-import dynamic from "next/dynamic";
 import {useState} from "react";
 import {Layout} from "@components/Layout";
+import {
+    Box,
+    Button,
+    Grid,
+    Group,
+    Input,
+    MantineTheme,
+    Text,
+    Textarea,
+    TextInput,
+    Title,
+    useMantineTheme
+} from '@mantine/core';
+import {Icon as TablerIcon, Photo, Upload, X} from 'tabler-icons-react';
+import {Dropzone, DropzoneStatus, IMAGE_MIME_TYPE} from '@mantine/dropzone';
+import {useForm} from "@mantine/form";
 
-const Editor = dynamic(() => import("@components/Editor"), {ssr: false})
+function getIconColor(status: DropzoneStatus, theme: MantineTheme) {
+    return status.accepted
+        ? theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]
+        : status.rejected
+            ? theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]
+            : theme.colorScheme === 'dark'
+                ? theme.colors.dark[0]
+                : theme.colors.gray[7];
+}
+
+function ImageUploadIcon({
+                             status,
+                             ...props
+                         }: React.ComponentProps<TablerIcon> & { status: DropzoneStatus }) {
+    if (status.accepted) {
+        return <Upload {...props} />;
+    }
+
+    if (status.rejected) {
+        return <X {...props} />;
+    }
+
+    return <Photo {...props} />;
+}
+
+export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme) => (
+    <Group position="center" spacing="xl" style={{maxWidth: 100, pointerEvents: 'none'}}>
+        <ImageUploadIcon status={status} style={{color: getIconColor(status, theme)}} size={80}/>
+    </Group>
+);
 export default function Create() {
+    const theme = useMantineTheme();
     const [courseTitle, setCourseTitle] = useState("")
     const [courseDescription, setCourseDescription] = useState("")
-    const saveCourse = (e) => {
-        e.preventDefault()
-        fetch("http://localhost:3000/api/courses", {
-            method: "post",
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("accessToken")
-            },
-            body: JSON.stringify({
-                title: courseTitle,
-                description: courseDescription
-            })
-        }).then((res) => res.json()).then(res => {
-            console.error(res)
-            setCourseTitle("")
-            setCourseDescription("")
-        }).catch(e => console.error(e))
-    }
+    const form = useForm({
+        initialValues: {
+            title: "",
+            description: "",
+            icon: null
+        }
+    });
 
     return (
         <Layout>
-            <div className="w-full">
-                <h2>Создание курса</h2>
-                <div className="space-y-2">
-                    <input placeholder="Заголовок"
-                           value={courseTitle}
-                           onChange={(e) => setCourseTitle(e.target.value)}
-                           className="text-black placeholder-gray-600 w-full px-4 py-2.5 text-base outline-gray-400
-                               transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200"/>
-                    <input placeholder="Описание"
-                           value={courseDescription}
-                           onChange={(e) => setCourseDescription(e.target.value)}
-                           className="text-black placeholder-gray-600 w-full px-4 py-2.5 text-base outline-gray-400
-                                transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200"/>
-                </div>
-                <hr/>
-                <button onClick={saveCourse} className="bg-secondary text-white border-0 outline-0 px-4 py-2 rounded-lg text-lg hover:bg-blue-600 hover:shadow-2xl transition ease-in">
-                    Сохранить
-                </button>
-            </div>
+            <Title order={2} sx={{textAlign: "center"}}>
+                Создание нового курса
+            </Title>
+            <Box sx={{maxWidth: "50rem"}}  mx="auto">
+                <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                    <Group grow>
+                        <Group direction={"column"} grow>
+                            <TextInput
+                                required
+                                label="Название курса"
+                                placeholder="Курс Абракадабры"
+                                {...form.getInputProps('title')}
+                            />
+
+                            <Textarea
+                                required
+                                label="Описание курса"
+                                placeholder="Курс Абракадабры"
+                                {...form.getInputProps('description')}
+                            />
+                        </Group>
+
+                        <Dropzone
+                            onDrop={(files) => console.log('accepted files', files)}
+                            onReject={(files) => console.log('rejected files', files)}
+                            maxSize={3 * 1024 ** 2}
+                            accept={IMAGE_MIME_TYPE}
+                        >
+                            {(status) => dropzoneChildren(status, theme)}
+                        </Dropzone>
+                    </Group>
+
+                    <Group position="right" mt="md">
+                        <Button type="submit">Отправить</Button>
+                    </Group>
+                </form>
+            </Box>
         </Layout>
     )
 }

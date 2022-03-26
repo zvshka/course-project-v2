@@ -1,13 +1,12 @@
-import useSWR from "swr";
-import {fetcher} from "@lib/fetcher";
 import {useQuery, useQueryClient} from "react-query";
+import axios from "axios";
+import {useNotifications} from "@mantine/notifications";
 
 export default function useCourses() {
-    const queryClient = useQueryClient()
     // Queries
-    const { data, isSuccess, isLoading, isError } = useQuery('coursesData', () =>
-        fetch("/api/courses/").then(res =>
-            res.json()
+    const { data, isSuccess, isLoading, isError, error } = useQuery('coursesData', () =>
+        axios("/api/courses/").then(res =>
+            res.data
         )
     )
 
@@ -15,6 +14,7 @@ export default function useCourses() {
         courses: data,
         isSuccess,
         isLoading,
-        isError
+        isError,
+        error
     }
 }

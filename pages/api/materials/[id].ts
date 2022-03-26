@@ -1,20 +1,11 @@
-import nextConnect from 'next-connect';
-import {NextApiRequest, NextApiResponse} from "next";
-import {materialsService} from "@services/materials";
+import {apiRouter} from "@lib/utils";
+import MaterialsService from "@services/MaterialsService";
 
-const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
-    onError(error, req, res) {
-        console.error(error)
-        res.status(501).json({error: `Sorry something Happened! ${error.message}`});
-    },
-    onNoMatch(req, res) {
-        res.status(405).json({error: `Method '${req.method}' Not Allowed`});
-    },
-})
+const apiRoute = apiRouter()
 
 apiRoute.get(async (req, res) => {
     const id = req.query.id
-    const result = await materialsService.findOneById(id)
+    const result = await MaterialsService.findOneById(id)
     res.status(200).json(result)
 })
 

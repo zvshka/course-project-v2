@@ -1,11 +1,10 @@
-import {apiRouter} from "@lib/apiRouter";
-import authorization from "@services/authorization";
+import AuthService from "@services/AuthService";
+import {apiRouter} from "@lib/utils";
 
 const apiRoute = apiRouter()
 
 apiRoute.post(async (req, res) => {
-    const body = JSON.parse(req.body)
-    const data = await authorization.login(body)
+    const data = await AuthService.login(req.body)
     res.json(data)
 })
 

@@ -2,8 +2,19 @@ import prisma from "@lib/prisma";
 
 class MaterialsService {
     async create(materialDTO) {
+        const last = await prisma.material.findFirst({
+            where: {
+                courseId: materialDTO.courseId
+            },
+            orderBy: {
+                position: "desc"
+            }
+        })
         return await prisma.material.create({
-            data: materialDTO
+            data: {
+                ...materialDTO,
+                position: last?.position + 1 || 1
+            }
         })
     }
 
@@ -31,4 +42,4 @@ class MaterialsService {
     }
 }
 
-export const materialsService = new MaterialsService()
+export default new MaterialsService()

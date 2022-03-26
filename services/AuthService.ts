@@ -1,8 +1,9 @@
 import prisma from "@lib/prisma";
 import bcrypt from "bcrypt";
-import {signToken} from "@lib/tokens";
+import {signToken} from "@lib/utils";
 
-class AuthorizationService {
+
+class AuthService {
 
     async register(registerDTO) {
         const {email, username, password} = registerDTO
@@ -33,9 +34,8 @@ class AuthorizationService {
         const passwordEquals = await bcrypt.compare(password, candidate.password)
         if (!passwordEquals) throw new Error("Passwords did not match")
         const accessToken = signToken({id: candidate.id, role: candidate.role})
-        console.log(accessToken)
         return {accessToken}
     }
 }
 
-export default new AuthorizationService()
+export default new AuthService()

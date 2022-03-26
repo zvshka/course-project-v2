@@ -30,4 +30,4 @@ class ImagesService {
     }
 }
 
-export const imagesService = new ImagesService()
+export default new ImagesService()

@@ -1,19 +1,10 @@
-import nextConnect from 'next-connect';
-import {NextApiRequest, NextApiResponse} from "next";
-import {materialsService} from "@services/materials";
+import {apiRouter, AuthGuard} from "@lib/utils";
+import MaterialsService from "@services/MaterialsService";
 
-const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
-    onError(error, req, res) {
-        console.error(error)
-        res.status(501).json({error: `Sorry something Happened! ${error.message}`});
-    },
-    onNoMatch(req, res) {
-        res.status(405).json({error: `Method '${req.method}' Not Allowed`});
-    },
-})
+const apiRoute = apiRouter()
 
-apiRoute.post(async (req, res) => {
-    const result = await materialsService.create(JSON.parse(req.body))
+apiRoute.post(AuthGuard("ADMIN"), async (req, res) => {
+    const result = await MaterialsService.create(req.body)
     res.status(200).json(result)
 })
 

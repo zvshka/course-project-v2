@@ -44,4 +44,4 @@ class CoursesService {
     }
 }
 
-export const coursesService = new CoursesService()
+export default new CoursesService()

@@ -1,23 +1,25 @@
-import {apiRouter} from "@lib/apiRouter";
-import {adminOnly, processjwt} from "@lib/authGuard";
-import {coursesService} from "@services/courses";
+import CoursesService from "@services/CoursesService";
+import {apiRouter, AuthGuard} from "@lib/utils";
 
 const apiRoute = apiRouter()
 
 apiRoute.get(async (req, res) => {
     const id = req.query.id
-    const course = await coursesService.findOneById(id)
+    if (!req.query.id) return res.status(400).json({error: "No id provided"})
+    const course = await CoursesService.findOneById(id)
     res.status(200).json({...course})
 })
 
-apiRoute.patch(processjwt, adminOnly, async (req, res) => {
+apiRoute.patch(AuthGuard("ADMIN"), async (req, res) => {
     const id = req.query.id
+    if (!req.query.id) return res.status(400).json({error: "No id provided"})
     res.status(200)
 })
 
-apiRoute.delete(processjwt, adminOnly, async (req, res) => {
+apiRoute.delete(AuthGuard("ADMIN"), async (req, res) => {
     const id = req.query.id
-    await coursesService.deleteOneById(id)
+    if (!req.query.id) return res.status(400).json({error: "No id provided"})
+    await CoursesService.deleteOneById(id)
     res.status(200)
 })
 
