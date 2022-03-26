@@ -3,9 +3,10 @@ import Link from "next/link";
 import {useQueryClient} from "react-query";
 import useUser from "@hooks/useUser";
 import useCourses from "@hooks/useCourses";
-import {Button} from "@mantine/core";
+import {Button, Title} from "@mantine/core";
 import {useNotifications} from "@mantine/notifications";
 import {useEffect} from "react";
+import {Shell} from "@components/Shell";
 export default function Courses() {
     // Access the client
     const queryClient = useQueryClient()
@@ -23,6 +24,9 @@ export default function Courses() {
         })
     }, [isError])
 
-    return <Layout>
-    </Layout>
+    return <Shell>
+        <Title order={2}>
+            Курсы
+        </Title>
+    </Shell>
 }

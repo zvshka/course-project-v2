@@ -3,10 +3,10 @@ import {Layout} from "@components/Layout";
 import {
     Box,
     Button,
-    Grid,
+    Container, Grid,
     Group,
-    Input,
     MantineTheme,
+    SimpleGrid, Skeleton,
     Text,
     Textarea,
     TextInput,
@@ -16,6 +16,7 @@ import {
 import {Icon as TablerIcon, Photo, Upload, X} from 'tabler-icons-react';
 import {Dropzone, DropzoneStatus, IMAGE_MIME_TYPE} from '@mantine/dropzone';
 import {useForm} from "@mantine/form";
+import {Shell} from "@components/Shell";
 
 function getIconColor(status: DropzoneStatus, theme: MantineTheme) {
     return status.accepted
@@ -43,8 +44,17 @@ function ImageUploadIcon({
 }
 
 export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme) => (
-    <Group position="center" spacing="xl" style={{maxWidth: 100, pointerEvents: 'none'}}>
-        <ImageUploadIcon status={status} style={{color: getIconColor(status, theme)}} size={80}/>
+    <Group position="center" spacing="xl" style={{ pointerEvents: 'none' }}>
+        <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
+
+        <Group position={"center"}>
+            <Text size="xl" inline>
+                Drag images here or click to select files
+            </Text>
+            <Text size="sm" color="dimmed" inline mt={7}>
+                Only 1 image file
+            </Text>
+        </Group>
     </Group>
 );
 export default function Create() {
@@ -60,29 +70,26 @@ export default function Create() {
     });
 
     return (
-        <Layout>
+        <Shell>
             <Title order={2} sx={{textAlign: "center"}}>
                 Создание нового курса
             </Title>
-            <Box sx={{maxWidth: "50rem"}}  mx="auto">
+            <Box mx="auto" sx={{maxWidth: "30rem"}}>
                 <form onSubmit={form.onSubmit((values) => console.log(values))}>
-                    <Group grow>
-                        <Group direction={"column"} grow>
-                            <TextInput
-                                required
-                                label="Название курса"
-                                placeholder="Курс Абракадабры"
-                                {...form.getInputProps('title')}
-                            />
+                    <TextInput
+                        required
+                        label="Название курса"
+                        placeholder="Курс Абракадабры"
+                        {...form.getInputProps('title')}
+                    />
 
-                            <Textarea
-                                required
-                                label="Описание курса"
-                                placeholder="Курс Абракадабры"
-                                {...form.getInputProps('description')}
-                            />
-                        </Group>
-
+                    <Textarea
+                        required
+                        label="Описание курса"
+                        placeholder="Курс Абракадабры"
+                        {...form.getInputProps('description')}
+                    />
+                    <Box my={"md"}>
                         <Dropzone
                             onDrop={(files) => console.log('accepted files', files)}
                             onReject={(files) => console.log('rejected files', files)}
@@ -91,13 +98,12 @@ export default function Create() {
                         >
                             {(status) => dropzoneChildren(status, theme)}
                         </Dropzone>
-                    </Group>
-
+                    </Box>
                     <Group position="right" mt="md">
                         <Button type="submit">Отправить</Button>
                     </Group>
                 </form>
             </Box>
-        </Layout>
+        </Shell>
     )
 }
