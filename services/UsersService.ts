@@ -3,19 +3,16 @@ import prisma from "@lib/prisma";
 class UsersService {
     async getAllUsers() {
         return (await prisma.user.findMany()).map(user => {
-            const {password: _, ...userData} = user
+            const {password, ...userData} = user
             return userData
         })
     }
 
     async findOneById(id) {
-        const {password, ...candidate} = await prisma.user.findUnique({
-            where: {id},
-            include: {
-                doneMaterials: true
-            }
+        const {password, ...userData} = await prisma.user.findUnique({
+            where: {id}
         })
-        return candidate
+        return userData
     }
 }
 

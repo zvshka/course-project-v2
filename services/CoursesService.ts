@@ -3,10 +3,6 @@ import prisma from "@lib/prisma";
 class CoursesService {
     async getAll() {
         return await prisma.course.findMany({
-            include: {
-                // author: true,
-                materials: true
-            }
         })
     }
 
@@ -21,9 +17,7 @@ class CoursesService {
             where: {
                 id
             },
-            include: {
-                materials: true
-            }
+
         })
     }
 

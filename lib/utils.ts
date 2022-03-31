@@ -33,6 +33,7 @@ export const AuthGuard = (requiredRole = "USER") => async (req, res, next) => {
             req.user = userData
             return next()
     } catch (e) {
+        console.error(e)
         res.status(401).json({error: "Invalid Token"})
     }
 }

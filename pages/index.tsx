@@ -1,4 +1,4 @@
-import {Shell} from "@components/Shell";
+import {Shell} from "@components/Layout/Shell";
 import {Title} from "@mantine/core";
 
 export default function Home() {

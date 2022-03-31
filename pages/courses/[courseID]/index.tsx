@@ -1,4 +1,4 @@
-import {Layout} from "@components/Layout";
+import {Layout} from "@components/Layout/Layout";
 import {useRouter} from "next/router";
 import Link from "next/link";
 import useCourse from "../../../hooks/useCourse";
@@ -81,8 +81,6 @@ export default function CoursePage() {
             )}
         </Draggable>
     ));
-
-    console.log(items)
 
     const handleDelete = () => {
         fetch("http://localhost:3000/api/courses/" + router.query.courseId, {

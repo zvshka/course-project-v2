@@ -15,24 +15,22 @@ model Course {
 
   title       String
   description String
-  icon        Image  @relation(fields: [imageFilename], references: [filename])
+  iconURL     String?
 
   stages Stage[]
-
-  imageFilename String
 }
 
 model Stage {
   id String @id @default(cuid())
 
   title String
-  icon  Image? @relation(fields: [imageFilename], references: [filename])
+  iconURL String?
+  position Int
 
   lessons Lesson[]
   course  Course   @relation(fields: [courseId], references: [id])
 
   courseId      String
-  imageFilename String?
 }
 
 model Lesson {
@@ -49,18 +47,17 @@ model Lesson {
 model User {
   id String @id @default(cuid())
 
+  email          String    @unique
+  email_verified DateTime?
+
   username String @unique
   password String
 
   firstname String?
   lastname  String?
 
-  email          String    @unique
-  email_verified DateTime?
-
-  avatar        Image?  @relation(fields: [imageFilename], references: [filename])
+  avatarURL     String?
   role          Role?   @default(USER)
-  imageFilename String?
 }
 
 enum Role {
@@ -73,8 +70,4 @@ model Image {
   filepath String
   mimetype String
   size     Int
-
-  Course Course[]
-  Stage  Stage[]
-  User   User[]
 }
