@@ -23,6 +23,7 @@ const apiRoute = apiRouter()
 apiRoute.use(upload.single("upload"));
 
 apiRoute.post(async (req: NextApiResponse & { file: any }, res) => {
+    console.log(req.file)
     const {filename, mimetype, size, path: filepath} = req.file;
     const result = await ImagesService.upload({filename, mimetype, size, filepath})
     if (result) {

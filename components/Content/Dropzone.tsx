@@ -1,6 +1,6 @@
 import {Icon as TablerIcon, Photo, Upload, X} from "tabler-icons-react";
 import {DropzoneStatus} from "@mantine/dropzone";
-import {Group, MantineTheme, Text} from "@mantine/core";
+import {Group, Image, MantineTheme, Text} from "@mantine/core";
 
 function getIconColor(status: DropzoneStatus, theme: MantineTheme) {
     return status.accepted
@@ -27,17 +27,21 @@ function ImageUploadIcon({
     return <Photo {...props} />;
 }
 
-export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme) => (
+export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, image: string = null) => (
     <Group position="center" spacing="xl" style={{ pointerEvents: 'none' }}>
-        <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
+        {image && image.length > 0 ? <Image src={image}/> : <>
 
-        <Group position={"center"}>
-            <Text size="xl" inline>
-                Drag images here or click to select files
-            </Text>
-            <Text size="sm" color="dimmed" inline mt={7}>
-                Only 1 image file
-            </Text>
-        </Group>
+            <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
+
+            <Group position={"center"}>
+                <Text size="xl" inline>
+                    Drag images here or click to select files
+                </Text>
+                <Text size="sm" color="dimmed" inline mt={7}>
+                    Only 1 image file
+                </Text>
+            </Group>
+
+        </>}
     </Group>
 );

@@ -17,7 +17,9 @@ class CoursesService {
             where: {
                 id
             },
-
+            include: {
+                stages: true
+            }
         })
     }
 

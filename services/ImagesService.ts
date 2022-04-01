@@ -2,13 +2,13 @@ import prisma from "@lib/prisma";
 
 class ImagesService {
     async upload({filename, filepath, mimetype, size}) {
-        const candidate = await prisma.images.findUnique({
+        const candidate = await prisma.image.findUnique({
             where: {
                 filename
             }
         })
         if (candidate) return candidate
-        return await prisma.images.create({
+        return await prisma.image.create({
             data: {
                 filepath,
                 filename,
@@ -22,7 +22,7 @@ class ImagesService {
     }
 
     async getImage(name) {
-        return await prisma.images.findUnique({
+        return await prisma.image.findUnique({
             where: {
                 filename: name
             }
