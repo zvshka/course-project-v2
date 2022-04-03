@@ -1,15 +1,27 @@
-import {useQueryClient} from "react-query";
 import useUser from "@hooks/useUser";
 import useCourses from "@hooks/useCourses";
-import {Button, Container, SimpleGrid, Title} from "@mantine/core";
+import {Button, Group, SimpleGrid, Title} from "@mantine/core";
 import {useNotifications} from "@mantine/notifications";
 import {useEffect} from "react";
 import {Shell} from "@components/Layout/Shell";
-import {CourseCard} from "@components/Content/CourseCard";
+import {useModals} from "@mantine/modals";
+import {CourseCreationForm} from "@components/Content/CourseCreationForm";
+import {Course} from "@components/Content/Course";
+
 export default function Courses() {
     const notifications = useNotifications()
+    const modals = useModals()
     const userData = useUser()
     const {courses, isSuccess, isError} = useCourses()
+
+    const openCreatingModal = () => {
+        const id = modals.openModal({
+            title: "Создание курса",
+            children: <>
+                <CourseCreationForm/>
+            </>
+        })
+    }
 
     useEffect(() => {
         isError && notifications.showNotification({
@@ -20,15 +32,20 @@ export default function Courses() {
     }, [isError])
 
     return <Shell>
-        <Title order={2}>
-            Курсы
-        </Title>
-        <SimpleGrid cols={3} mt={"1rem"}>
-            <CourseCard link={""} image={"https://deadlylaugh.ru/group/id-111111163/photo/w/5dffa45fdb931e050b89894e830204fe.jpg"} title={"Основы JS"} author={"admin"} views={500} comments={500}/>
-            <CourseCard link={""} image={"https://yt3.ggpht.com/a/AATXAJyg6EVZEB7Bs7ZJ_oaWCumiqSBXjYM64yi3pg=s900-c-k-c0xffffffff-no-rj-mo"} title={"Основы JS"} author={"admin"} views={500} comments={500}/>
-            <CourseCard link={""} image={"https://avatars.mds.yandex.net/get-zen_doc/3413519/pub_5ff887b2fe4e686f6ae6ba3f_5ff887d7f906b16872a69755/scale_1200"} title={"Основы JS"} author={"admin"} views={500} comments={500}/>
-            <CourseCard link={""} image={"https://avatars.mds.yandex.net/get-zen_doc/3413519/pub_5ff887b2fe4e686f6ae6ba3f_5ff887d7f906b16872a69755/scale_1200"} title={"Основы JS"} author={"admin"} views={500} comments={500}/>
-            <CourseCard link={""} image={"https://avatars.mds.yandex.net/get-zen_doc/3413519/pub_5ff887b2fe4e686f6ae6ba3f_5ff887d7f906b16872a69755/scale_1200"} title={"Основы JS"} author={"admin"} views={500} comments={500}/>
+        <Group position={"apart"}>
+            <Title order={2}>
+                Курсы
+            </Title>
+            {userData.isSuccess && userData.user.role === "ADMIN" && <Button onClick={openCreatingModal}>
+                Создать курс
+            </Button>}
+        </Group>
+        <SimpleGrid cols={2} mt={"md"} breakpoints={[{minWidth: 'md', cols: 4}]}>
+            {isSuccess && courses.map((c, i) => (
+                <Course key={i} course={c}>
+                    {c.title}
+                </Course>
+            ))}
         </SimpleGrid>
     </Shell>
 }

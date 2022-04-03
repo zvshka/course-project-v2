@@ -2,8 +2,7 @@ import prisma from "@lib/prisma";
 
 class CoursesService {
     async getAll() {
-        return await prisma.course.findMany({
-        })
+        return await prisma.course.findMany({})
     }
 
     async create(courseDTO) {
