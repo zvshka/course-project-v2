@@ -1,6 +1,6 @@
 import {Title} from '@mantine/core';
 import {Shell} from "@components/Layout/Shell";
-import {CourseCreationForm} from "@components/Content/CourseCreationForm";
+import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
 
 export default function Create() {
     return (

@@ -5,7 +5,7 @@ import {useNotifications} from "@mantine/notifications";
 import {useEffect} from "react";
 import {Shell} from "@components/Layout/Shell";
 import {useModals} from "@mantine/modals";
-import {CourseCreationForm} from "@components/Content/CourseCreationForm";
+import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
 import {Course} from "@components/Content/Course";
 
 export default function Courses() {

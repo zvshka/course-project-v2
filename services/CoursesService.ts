@@ -17,7 +17,11 @@ class CoursesService {
                 id
             },
             include: {
-                stages: true
+                stages: {
+                    include: {
+                        lessons: true
+                    }
+                }
             }
         })
     }
