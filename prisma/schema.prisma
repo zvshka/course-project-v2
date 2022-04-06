@@ -38,6 +38,7 @@ model Lesson {
 
   title       String
   description String
+  text        String?
   position    Int
 
   stage   Stage  @relation(fields: [stageId], references: [id])
