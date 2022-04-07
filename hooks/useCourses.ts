@@ -4,17 +4,9 @@ import {useNotifications} from "@mantine/notifications";
 
 export default function useCourses() {
     // Queries
-    const { data, isSuccess, isLoading, isError, error } = useQuery('coursesData', () =>
+    return useQuery('courses', () =>
         axios("/api/courses/").then(res =>
             res.data
         )
     )
-
-    return {
-        courses: data,
-        isSuccess,
-        isLoading,
-        isError,
-        error
-    }
 }

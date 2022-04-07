@@ -97,7 +97,6 @@ export default function Register() {
             }
         }).then(res => {
             const accessToken = res.data.accessToken
-            console.log(res.data)
             if (!accessToken) return form.setErrors(() => ({
                 username: true,
                 email: true,

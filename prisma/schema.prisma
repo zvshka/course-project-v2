@@ -24,11 +24,10 @@ model Stage {
   id String @id @default(cuid())
 
   title String
-  iconURL String?
   position Int
 
   lessons Lesson[]
-  course  Course   @relation(fields: [courseId], references: [id])
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   courseId      String
 }
@@ -39,9 +38,10 @@ model Lesson {
   title       String
   description String
   text        String?
+
   position    Int
 
-  stage   Stage  @relation(fields: [stageId], references: [id])
+  stage   Stage  @relation(fields: [stageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stageId String
 }
 

@@ -23,7 +23,15 @@ class StagesService {
         return await prisma.stage.findUnique({
             where: {id},
             include: {
-                lessons: true
+                lessons: {
+                    include: {
+                        stage: {
+                            select: {
+                                courseId: true
+                            }
+                        }
+                    }
+                }
             }
         })
     }

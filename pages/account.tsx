@@ -3,26 +3,26 @@ import {Avatar, Title, Text, Group, Box} from "@mantine/core";
 import useUser from "@hooks/useUser";
 
 export default function Account() {
-    const userData = useUser()
+    const userQuery = useUser()
     return (
         <Shell>
             <Title order={2}>
                 Ваш профиль
             </Title>
-            {userData.isSuccess ? <>
+            {userQuery.isSuccess ? <>
                 <Group>
-                    <Avatar size={"xl"} src={userData.user.avatarURL}/>
+                    <Avatar size={"xl"} src={userQuery.data.avatarURL}/>
                     <Box>
-                        <Text>Имя: {userData.user.firstname || ""}</Text>
-                        <Text>Фамилия: {userData.user.lastname || ""}</Text>
+                        <Text>Имя: {userQuery.data.firstname || ""}</Text>
+                        <Text>Фамилия: {userQuery.data.lastname || ""}</Text>
                     </Box>
                     <Box>
-                        <Text>Email: {userData.user.email}</Text>
-                        <Text>Email подтвержден: {userData.user.email_verified}</Text>
+                        <Text>Email: {userQuery.data.email}</Text>
+                        <Text>Email подтвержден: {userQuery.data.email_verified}</Text>
                     </Box>
                     <Box>
-                        <Text>Имя пользователя: {userData.user.username}</Text>
-                        <Text>Роль: {userData.user.role}</Text>
+                        <Text>Имя пользователя: {userQuery.data.username}</Text>
+                        <Text>Роль: {userQuery.data.role}</Text>
                     </Box>
                 </Group>
             </> : <>

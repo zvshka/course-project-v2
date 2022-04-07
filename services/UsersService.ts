@@ -9,9 +9,13 @@ class UsersService {
     }
 
     async findOneById(id) {
-        const {password, ...userData} = await prisma.user.findUnique({
+        const userData = await prisma.user.findUnique({
             where: {id}
         })
+        if (userData) {
+            const {password, ...user} = userData
+            return user
+        }
         return userData
     }
 }

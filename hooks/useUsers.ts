@@ -3,22 +3,14 @@ import axios from "axios";
 import useUser from "@hooks/useUser";
 
 export default function useUsers() {
-    const userData = useUser()
-    const {data: users, isSuccess, isLoading, isError, error} = useQuery('usersData', () =>
+    const user = useUser()
+    return useQuery('users', () =>
         axios("/api/users", {
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("accessToken")
             }
         }).then(res => res.data), {
-        enabled: userData.isSuccess && userData.user && userData.user.role === "ADMIN"
+        enabled: user.isSuccess && user.data.role && user.data.role === "ADMIN"
     })
-
-    return {
-        users,
-        isSuccess,
-        isLoading,
-        isError,
-        error
-    }
 }

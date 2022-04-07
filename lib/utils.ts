@@ -39,6 +39,7 @@ export const AuthGuard = (requiredRole = "USER") => async (req, res, next) => {
     try {
         const {id, role} = verifyToken(token)
         const userData = await UsersService.findOneById(id)
+        if (!userData) return res.status(401)
         if (userData && (userData.role === requiredRole || userData.role === "ADMIN"))
             req.user = userData
         return next()

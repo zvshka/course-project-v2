@@ -1,9 +1,11 @@
 import {Shell} from "@components/Layout/Shell";
-import {Accordion, Button, createStyles, Group, SimpleGrid, Text, ThemeIcon, Title} from "@mantine/core";
+import {Accordion, Button, createStyles, Group, SimpleGrid, Text, Title} from "@mantine/core";
 import useCourse from "@hooks/useCourse";
 import {useRouter} from "next/router";
 import {Lesson} from "@components/Content/Lesson";
-import {Palette} from "tabler-icons-react";
+import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
+import {useModals} from "@mantine/modals";
+import StageCreationForm from "@components/Content/Forms/StageCreationForm";
 
 const useStyles = createStyles((theme) => ({
     accordionItem: {
@@ -32,15 +34,30 @@ const useStyles = createStyles((theme) => ({
 const AccordionLabel = ({label}) => {
     return <Group position={"apart"}>
         <Text>{label}</Text>
-        <Button>Добавить урок</Button>
+        <Group spacing={'md'}>
+            {/*<Button>Изменить этап</Button>*/}
+            <Button>Добавить урок</Button>
+            <Button color={"red"}>Удалить этап</Button>
+        </Group>
     </Group>
 }
 
 export default function CoursePage() {
     const {classes} = useStyles()
     const router = useRouter()
-    const courseData = useCourse(router.query.courseID)
-    const stages = courseData.course?.stages.map((stage, index) => (
+    const modals = useModals()
+    const courseQuery = useCourse(router.query.courseID)
+
+    const openCreatingModal = () => {
+        const id = modals.openModal({
+            title: "Создание этапа",
+            children: <>
+                <StageCreationForm courseId={router.query.courseID}/>
+            </>
+        })
+    }
+
+    const stages = courseQuery.data?.stages.map((stage, index) => (
         <Accordion.Item
             // icon={<ThemeIcon color="violet" variant="light" size={'lg'}>
             //     <Palette size={24}/>
@@ -59,7 +76,7 @@ export default function CoursePage() {
             <Title order={2}>
                 Страница курса
             </Title>
-            <Button>
+            <Button onClick={openCreatingModal}>
                 Создать этап
             </Button>
         </Group>

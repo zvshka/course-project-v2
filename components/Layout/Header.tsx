@@ -37,21 +37,6 @@ const adminLinks = [
         "link": '/admin/users',
         "label": "Пользователи",
         "icon": Users
-    },
-    {
-        "link": '/admin/courses/create',
-        "label": "Создать курса",
-        "icon": Pencil
-    },
-    {
-        "link": '/admin/stages/create',
-        "label": "Создать этап",
-        "icon": Pencil
-    },
-    {
-        "link": '/admin/lessons/create',
-        "label": "Создать урок",
-        "icon": Pencil
     }
 ]
 
@@ -123,7 +108,7 @@ const useStyles = createStyles((theme) => ({
         },
     },
 
-    user: {
+    userQuery: {
         color: theme.black,
         padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
         borderRadius: theme.radius.sm,
@@ -143,7 +128,7 @@ export function DoubleHeader() {
     const [opened, toggleOpened] = useBooleanToggle(false);
     const {classes, cx} = useStyles();
     const router = useRouter()
-    const userData = useUser()
+    const userQuery = useUser()
     const theme = useMantineTheme()
     const queryClient = useQueryClient()
     const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -180,7 +165,7 @@ export function DoubleHeader() {
                 <Title order={2}>Fantastic Waffle</Title>
                 <div className={classes.links}>
                     <Group position="right">
-                        {!userData.isSuccess && <>
+                        {!userQuery.isSuccess && <>
                             <Link href={"/auth/login"}>
                                 <Anchor<'a'>
                                     href={"/auth/login"}
@@ -198,7 +183,7 @@ export function DoubleHeader() {
                                 </Anchor>
                             </Link>
                         </>}
-                        {userData.isSuccess && <>
+                        {userQuery.isSuccess && <>
                             <Menu
                                 size={260}
                                 placement="end"
@@ -208,16 +193,16 @@ export function DoubleHeader() {
                                 onOpen={() => setUserMenuOpened(true)}
                                 control={
                                     <Group spacing={7}>
-                                        <Avatar src={userData.user.avatarURL} alt={userData.user.username} radius="xl"
+                                        <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"
                                                 size={26}/>
                                         <Text weight={500} sx={{lineHeight: 1, color: theme.black}} mr={3}>
-                                            {userData.user.username}
+                                            {userQuery.data.username}
                                         </Text>
                                         {/*<ChevronDown size={12}/>*/}
                                     </Group>
                                 }
                             >
-                                {userData.user.role === "ADMIN" && <>
+                                {userQuery.data.role === "ADMIN" && <>
                                     <Menu.Label>Админситратор</Menu.Label>
                                     {adminItems}
                                 </>}

@@ -7,7 +7,7 @@ apiRoute.get(async (req, res) => {
     const id = req.query.id
     if (!req.query.id) return res.status(400).json({error: "No id provided"})
     const course = await CoursesService.findOneById(id)
-    res.status(200).json({...course})
+    res.status(200).json(course)
 })
 
 apiRoute.patch(AuthGuard("ADMIN"), async (req, res) => {
