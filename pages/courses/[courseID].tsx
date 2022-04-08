@@ -1,65 +1,18 @@
 import {Shell} from "@components/Layout/Shell";
-import {Button, createStyles, Divider, Group, Menu, Text, Title} from "@mantine/core";
+import {Button, Group, Title} from "@mantine/core";
 import useCourse from "@hooks/useCourse";
 import {useRouter} from "next/router";
 import {useModals} from "@mantine/modals";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
-import {ArrowsLeftRight, MessageCircle, Photo, Search, Settings, Trash} from "tabler-icons-react";
 import {Stage} from "@components/Content/Stage";
-
-const useStyles = createStyles((theme) => ({
-    accordionItem: {
-        marginTop: theme.spacing.xl,
-        backgroundColor: theme.white,
-        borderBottom: 0,
-        borderRadius: theme.radius.md,
-        boxShadow: theme.shadows.lg,
-    },
-    control: {
-        fontSize: theme.fontSizes.lg,
-        padding: `${theme.spacing.lg}px ${theme.spacing.xl}px`,
-        color: theme.black,
-
-        '&:hover': {
-            backgroundColor: 'transparent',
-        },
-    },
-    content: {
-        paddingLeft: theme.spacing.xl,
-        lineHeight: 1.6,
-        color: theme.black,
-    },
-}))
-
-const AccordionLabel = ({label}) => {
-    return <Group position={"apart"}>
-        <Text>{label}</Text>
-        <Menu>
-            <Menu.Label>Application</Menu.Label>
-            <Menu.Item icon={<Settings size={14}/>}>Settings</Menu.Item>
-            <Menu.Item icon={<MessageCircle size={14}/>}>Messages</Menu.Item>
-            <Menu.Item icon={<Photo size={14}/>}>Gallery</Menu.Item>
-            <Menu.Item
-                icon={<Search size={14}/>}
-                rightSection={<Text size="xs" color="dimmed">⌘K</Text>}
-            >
-                Search
-            </Menu.Item>
-
-            <Divider/>
-
-            <Menu.Label>Danger zone</Menu.Label>
-            <Menu.Item icon={<ArrowsLeftRight size={14}/>}>Transfer my data</Menu.Item>,
-            <Menu.Item color="red" icon={<Trash size={14}/>}>Delete my account</Menu.Item>
-        </Menu>
-    </Group>
-}
+import {DragDropContext, Droppable} from "react-beautiful-dnd";
+import {useListState, useToggle} from "@mantine/hooks";
 
 export default function CoursePage() {
-    const {classes} = useStyles()
     const router = useRouter()
     const modals = useModals()
     const courseQuery = useCourse(router.query.courseID)
+    const [draggable, toggleDraging] = useToggle(false, [true, false])
 
     const openCreatingModal = () => {
         const id = modals.openModal({
@@ -75,12 +28,30 @@ export default function CoursePage() {
             <Title order={2}>
                 Страница курса
             </Title>
-            <Button onClick={openCreatingModal}>
-                Создать этап
-            </Button>
+            <Group>
+                <Button onClick={openCreatingModal}>
+                    Создать этап
+                </Button>
+                <Button onClick={() => toggleDraging()}>
+                    Изменить порядок
+                </Button>
+            </Group>
         </Group>
-        {courseQuery.data && courseQuery.data.stages.map((stage, index) => (
-            <Stage key={stage.id} stage={stage}/>
-        ))}
+        <DragDropContext
+            onDragEnd={({ destination, source }) =>
+                console.log(destination, source)
+            }
+        >
+            <Droppable droppableId="dnd-list" direction="vertical">
+                {(provided) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                        {courseQuery.data && courseQuery.data.stages.map((stage, index) => (
+                            <Stage key={stage.id} stage={stage} draggable={draggable}/>
+                        ))}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
+        </DragDropContext>
     </Shell>
 }
