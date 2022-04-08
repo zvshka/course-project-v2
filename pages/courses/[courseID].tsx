@@ -1,11 +1,11 @@
 import {Shell} from "@components/Layout/Shell";
-import {Accordion, Button, createStyles, Group, SimpleGrid, Text, Title} from "@mantine/core";
+import {Button, createStyles, Divider, Group, Menu, Text, Title} from "@mantine/core";
 import useCourse from "@hooks/useCourse";
 import {useRouter} from "next/router";
-import {Lesson} from "@components/Content/Lesson";
-import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
 import {useModals} from "@mantine/modals";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
+import {ArrowsLeftRight, MessageCircle, Photo, Search, Settings, Trash} from "tabler-icons-react";
+import {Stage} from "@components/Content/Stage";
 
 const useStyles = createStyles((theme) => ({
     accordionItem: {
@@ -34,11 +34,24 @@ const useStyles = createStyles((theme) => ({
 const AccordionLabel = ({label}) => {
     return <Group position={"apart"}>
         <Text>{label}</Text>
-        <Group spacing={'md'}>
-            {/*<Button>Изменить этап</Button>*/}
-            <Button>Добавить урок</Button>
-            <Button color={"red"}>Удалить этап</Button>
-        </Group>
+        <Menu>
+            <Menu.Label>Application</Menu.Label>
+            <Menu.Item icon={<Settings size={14}/>}>Settings</Menu.Item>
+            <Menu.Item icon={<MessageCircle size={14}/>}>Messages</Menu.Item>
+            <Menu.Item icon={<Photo size={14}/>}>Gallery</Menu.Item>
+            <Menu.Item
+                icon={<Search size={14}/>}
+                rightSection={<Text size="xs" color="dimmed">⌘K</Text>}
+            >
+                Search
+            </Menu.Item>
+
+            <Divider/>
+
+            <Menu.Label>Danger zone</Menu.Label>
+            <Menu.Item icon={<ArrowsLeftRight size={14}/>}>Transfer my data</Menu.Item>,
+            <Menu.Item color="red" icon={<Trash size={14}/>}>Delete my account</Menu.Item>
+        </Menu>
     </Group>
 }
 
@@ -57,20 +70,6 @@ export default function CoursePage() {
         })
     }
 
-    const stages = courseQuery.data?.stages.map((stage, index) => (
-        <Accordion.Item
-            // icon={<ThemeIcon color="violet" variant="light" size={'lg'}>
-            //     <Palette size={24}/>
-            // </ThemeIcon>}
-            key={index}
-            label={<AccordionLabel label={stage.title}/>}>
-            <SimpleGrid cols={4}>
-                {stage.lessons.map((lesson, index) => (
-                    <Lesson lesson={lesson} key={index}/>
-                ))}
-            </SimpleGrid>
-        </Accordion.Item>
-    ))
     return <Shell>
         <Group position={"apart"}>
             <Title order={2}>
@@ -80,14 +79,8 @@ export default function CoursePage() {
                 Создать этап
             </Button>
         </Group>
-        <Accordion
-            classNames={{
-                item: classes.accordionItem,
-                control: classes.control,
-                contentInner: classes.content,
-            }}
-            iconPosition="left">
-            {stages}
-        </Accordion>
+        {courseQuery.data && courseQuery.data.stages.map((stage, index) => (
+            <Stage key={stage.id} stage={stage}/>
+        ))}
     </Shell>
 }

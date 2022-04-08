@@ -1,6 +1,5 @@
 import {Box, createStyles, Text} from "@mantine/core";
 import Link from "next/link"
-import {useRouter} from "next/router";
 
 const useStyles = createStyles((theme) => ({
     box: {
@@ -16,8 +15,7 @@ const useStyles = createStyles((theme) => ({
     },
     boxContent: {
         position: 'absolute',
-        paddingLeft: theme.spacing.sm,
-        paddingTop: theme.spacing.sm,
+        padding: theme.spacing.sm,
         top: 0,
         bottom: 0,
         right: 0,
@@ -31,7 +29,7 @@ const useStyles = createStyles((theme) => ({
 export function Lesson({lesson}) {
     const {classes, theme} = useStyles();
     return <Box className={classes.box}>
-        <Link href={`/courses/${lesson.stage.courseId}/${lesson.id}`} passHref>
+        <Link href={`/lessons/${lesson.id}`} passHref>
             <Box className={classes.boxContent} component={'a'}>
                 <Text sx={{fontWeight: 600}}>
                     {lesson.title}

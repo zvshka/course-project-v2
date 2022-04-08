@@ -1,9 +1,9 @@
 import {CKEditor} from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "ckeditor5-custom-build"
+import Ckeditor from "ckeditor5-custom-build"
 
 const Editor = ({data, setData}) => {
     return <CKEditor
-        editor={ClassicEditor}
+        editor={Ckeditor}
         config={
             {
                 simpleUpload: {
