@@ -4,15 +4,24 @@ import useCourse from "@hooks/useCourse";
 import {useRouter} from "next/router";
 import {useModals} from "@mantine/modals";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
-import {Stage} from "@components/Content/Stage";
-import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import {useListState, useToggle} from "@mantine/hooks";
+import {useEffect} from "react";
+import dynamic from "next/dynamic";
 
+
+const Stages = dynamic(import('@components/Layout/Stages'), {
+    ssr: false
+})
 export default function CoursePage() {
     const router = useRouter()
     const modals = useModals()
     const courseQuery = useCourse(router.query.courseID)
-    const [draggable, toggleDraging] = useToggle(false, [true, false])
+    const [draggable, toggleDragging] = useToggle(false, [true, false])
+    const [stages, stagesHandlers] = useListState([])
+
+    useEffect(() => {
+        courseQuery.isSuccess && stagesHandlers.setState(courseQuery.data.stages)
+    }, [courseQuery.isLoading, courseQuery.isSuccess])
 
     const openCreatingModal = () => {
         const id = modals.openModal({
@@ -32,26 +41,11 @@ export default function CoursePage() {
                 <Button onClick={openCreatingModal}>
                     Создать этап
                 </Button>
-                <Button onClick={() => toggleDraging()}>
+                <Button onClick={() => toggleDragging()}>
                     Изменить порядок
                 </Button>
             </Group>
         </Group>
-        <DragDropContext
-            onDragEnd={({ destination, source }) =>
-                console.log(destination, source)
-            }
-        >
-            <Droppable droppableId="dnd-list" direction="vertical">
-                {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {courseQuery.data && courseQuery.data.stages.map((stage, index) => (
-                            <Stage key={stage.id} stage={stage} draggable={draggable}/>
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext>
+        <Stages stages={stages} stagesHandlers={stagesHandlers} draggable={draggable}/>
     </Shell>
 }

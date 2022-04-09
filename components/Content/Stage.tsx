@@ -37,10 +37,10 @@ const useStyles = createStyles((theme) => ({
     },
 }))
 
-export const Stage = ({stage, draggable}) => {
+export const Stage = ({stage, draggable, index}) => {
     const {classes, cx} = useStyles()
     const [opened, setOpened] = useState(false)
-    return <Draggable draggableId={stage.id} index={stage.position} isDragDisabled={!draggable}>
+    return <Draggable draggableId={stage.id} index={index} isDragDisabled={!draggable}>
         {(provided, snapshot) => (
             <Box ref={provided.innerRef}
                  {...provided.draggableProps}

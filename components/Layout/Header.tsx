@@ -135,7 +135,7 @@ export function DoubleHeader() {
     const handleLogout = (e) => {
         e.preventDefault()
         localStorage.setItem("accessToken", null)
-        queryClient.removeQueries("userData")
+        queryClient.removeQueries("user")
     }
 
     const mainItems = mainLinks.map((item, index) => (

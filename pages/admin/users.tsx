@@ -13,12 +13,12 @@ const roleColors = {
 
 export default function Users() {
     const theme = useMantineTheme()
-    const userData = useUser()
-    const usersData = useUsers()
+    const userQuery = useUser()
+    const usersQuery = useUsers()
     const router = useRouter()
     const [rows, setRows] = useState([])
     useEffect(() => {
-        usersData.isSuccess && setRows(usersData.users.map((item) => (
+        usersQuery.isSuccess && setRows(usersQuery.data.map((item) => (
             <tr key={item.name}>
                 <td>
                     <Group spacing="sm">
@@ -71,10 +71,10 @@ export default function Users() {
                 </td>
             </tr>
         )))
-    }, [usersData.isSuccess])
+    }, [usersQuery.isSuccess])
     return (
         <Shell>
-            {userData.user && !userData.isLoading ? <>
+            {userQuery.data && !userQuery.isLoading ? <>
                 <Title order={2}>
                     Все пользователи
                 </Title>
