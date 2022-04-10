@@ -5,13 +5,14 @@ import {useRouter} from "next/router";
 import {useModals} from "@mantine/modals";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
 import {useListState, useToggle} from "@mantine/hooks";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import dynamic from "next/dynamic";
 
 
 const Stages = dynamic(import('@components/Layout/Stages'), {
     ssr: false
 })
+
 export default function CoursePage() {
     const router = useRouter()
     const modals = useModals()

@@ -1,7 +1,6 @@
 import {Collapse, createStyles, Group, Menu, SimpleGrid, Text, Box} from "@mantine/core";
 import {useState} from "react";
 import {Lesson} from "@components/Content/Lesson";
-import {Draggable} from "react-beautiful-dnd";
 import {GripVertical} from "tabler-icons-react";
 
 const useStyles = createStyles((theme) => ({
@@ -37,34 +36,28 @@ const useStyles = createStyles((theme) => ({
     },
 }))
 
-export const Stage = ({stage, draggable, index}) => {
-    const {classes, cx} = useStyles()
+export const Stage = ({stage, draggable}) => {
+    const {classes} = useStyles()
     const [opened, setOpened] = useState(false)
-    return <Draggable draggableId={stage.id} index={index} isDragDisabled={!draggable}>
-        {(provided, snapshot) => (
-            <Box ref={provided.innerRef}
-                 {...provided.draggableProps}
-                 className={classes.item}
-                 onClick={(e) => setOpened(!opened)}>
-                <Group position={"apart"} className={classes.control}>
-                    <Group>
-                        {draggable && <div {...provided.dragHandleProps} className={classes.dragHandle}>
-                            <GripVertical size={18}/>
-                        </div>}
-                        <Text>{stage.title}</Text>
-                    </Group>
-                    <Menu onClick={(e) => e.stopPropagation()}>
-                        <Menu.Label>Application</Menu.Label>
-                    </Menu>
-                </Group>
-                <Collapse in={opened} transitionDuration={300}>
-                    <Box className={classes.contentInner}>
-                        <SimpleGrid cols={4}>
-                            {stage.lessons.map((lesson, index) => <Lesson lesson={lesson} key={lesson.id}/>)}
-                        </SimpleGrid>
-                    </Box>
-                </Collapse>
+    return <Box className={classes.item}
+                onClick={(e) => setOpened(!opened)}>
+        <Group position={"apart"} className={classes.control}>
+            <Group>
+                {draggable && <div className={classes.dragHandle}>
+                    <GripVertical size={18}/>
+                </div>}
+                <Text>{stage.title}</Text>
+            </Group>
+            <Menu onClick={(e) => e.stopPropagation()}>
+                <Menu.Label>Application</Menu.Label>
+            </Menu>
+        </Group>
+        {!draggable && <Collapse in={opened} transitionDuration={300}>
+            <Box className={classes.contentInner}>
+                <SimpleGrid cols={4}>
+                    {stage.lessons.map((lesson, index) => <Lesson lesson={lesson} key={lesson.id}/>)}
+                </SimpleGrid>
             </Box>
-        )}
-    </Draggable>
+        </Collapse>}
+    </Box>
 }
