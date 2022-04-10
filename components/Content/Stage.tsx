@@ -1,7 +1,9 @@
-import {Collapse, createStyles, Group, Menu, SimpleGrid, Text, Box} from "@mantine/core";
+import {Box, Collapse, createStyles, Group, Menu, SimpleGrid, Text} from "@mantine/core";
 import {useState} from "react";
 import {Lesson} from "@components/Content/Lesson";
-import {GripVertical} from "tabler-icons-react";
+import {GripVertical, Trash} from "tabler-icons-react";
+import {useSortable} from "@dnd-kit/sortable";
+import {CSS} from "@dnd-kit/utilities";
 
 const useStyles = createStyles((theme) => ({
     item: {
@@ -39,25 +41,47 @@ const useStyles = createStyles((theme) => ({
 export const Stage = ({stage, draggable}) => {
     const {classes} = useStyles()
     const [opened, setOpened] = useState(false)
-    return <Box className={classes.item}
-                onClick={(e) => setOpened(!opened)}>
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({id: stage.id});
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
+    return <Box
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        className={classes.item}
+        onClick={(e) => setOpened(!opened)}>
         <Group position={"apart"} className={classes.control}>
             <Group>
-                {draggable && <div className={classes.dragHandle}>
+                {draggable && <div {...listeners} className={classes.dragHandle}>
                     <GripVertical size={18}/>
                 </div>}
                 <Text>{stage.title}</Text>
             </Group>
             <Menu onClick={(e) => e.stopPropagation()}>
-                <Menu.Label>Application</Menu.Label>
+                <Menu.Item>
+                    Создать урок
+                </Menu.Item>
+                <Menu.Label>Опасное</Menu.Label>
+                <Menu.Item color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
             </Menu>
         </Group>
-        {!draggable && <Collapse in={opened} transitionDuration={300}>
+        <Collapse in={opened} transitionDuration={300}>
             <Box className={classes.contentInner}>
                 <SimpleGrid cols={4}>
                     {stage.lessons.map((lesson, index) => <Lesson lesson={lesson} key={lesson.id}/>)}
                 </SimpleGrid>
             </Box>
-        </Collapse>}
+        </Collapse>
     </Box>
 }

@@ -1,7 +1,6 @@
 import {Stage} from "@components/Content/Stage";
 import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
-import {arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy} from "@dnd-kit/sortable";
-import {Draggable} from "@components/Layout/Draggable";
+import {SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy} from "@dnd-kit/sortable";
 
 const Stages = ({stages, stagesHandlers, draggable}) => {
 
@@ -30,15 +29,7 @@ const Stages = ({stages, stagesHandlers, draggable}) => {
             items={stages}
             strategy={verticalListSortingStrategy}
         >
-            {stages.map((stage) => {
-                if (draggable) {
-                    return <Draggable key={stage.id} id={stage.id}>
-                        <Stage stage={stage} draggable={draggable}/>
-                    </Draggable>
-                } else {
-                    return <Stage key={stage.id} stage={stage} draggable={draggable}/>
-                }
-            })}
+            {stages.map((stage) => <Stage key={stage.id} stage={stage} draggable={draggable}/>)}
         </SortableContext>
     </DndContext>
 }
