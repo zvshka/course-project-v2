@@ -4,6 +4,11 @@ import {Lesson} from "@components/Content/Lesson";
 import {GripVertical, Trash} from "tabler-icons-react";
 import {useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
+import {useModals} from "@mantine/modals";
+import axios from "axios";
+import {useNotifications} from "@mantine/notifications";
+import {CheckIcon} from "@modulz/radix-icons";
+import {useQueryClient} from "react-query";
 
 const useStyles = createStyles((theme) => ({
     item: {
@@ -34,13 +39,54 @@ const useStyles = createStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
+        paddingTop: '3px',
+        paddingBottom: '3px',
+        borderRadius: theme.radius.sm,
         color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[6],
+        '&:hover': {
+            backgroundColor: theme.colors.gray[2]
+        }
     },
 }))
 
 export const Stage = ({stage, draggable}) => {
     const {classes} = useStyles()
+    const modals = useModals()
+    const notifications = useNotifications()
+    const queryClient = useQueryClient()
     const [opened, setOpened] = useState(false)
+
+    const openConfirmModal = () => modals.openConfirmModal({
+        title: 'Пожалуйста, подтвердите удаление',
+        children: (
+            <Text size="sm">
+                Данное действие нельзя отменить, продолжить?
+            </Text>
+        ),
+        labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
+        onCancel: () => console.log('Cancel'),
+        onConfirm: () => {
+            axios.delete('/api/stages/' + stage.id, {
+                headers: {
+                    authorization: 'Bearer ' + localStorage.getItem('accessToken')
+                }
+            }).then(res => {
+                notifications.showNotification({
+                    title: "Успех",
+                    message: res.data.message,
+                    color: "green",
+                    icon: <CheckIcon/>
+                })
+                queryClient.invalidateQueries(['course', stage.courseId])
+            }).catch(e => {
+                notifications.showNotification({
+                    title: "Ошибка",
+                    message: "При удалении этапа произошла ошибка",
+                    color: "red"
+                })
+            })
+        },
+    });
 
     const {
         attributes,
@@ -54,6 +100,11 @@ export const Stage = ({stage, draggable}) => {
         transform: CSS.Transform.toString(transform),
         transition,
     };
+
+    const handleDelete = (e) => {
+        e.preventDefault()
+        openConfirmModal()
+    }
 
     return <Box
         ref={setNodeRef}
@@ -73,7 +124,7 @@ export const Stage = ({stage, draggable}) => {
                     Создать урок
                 </Menu.Item>
                 <Menu.Label>Опасное</Menu.Label>
-                <Menu.Item color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
+                <Menu.Item onClick={handleDelete} color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
             </Menu>
         </Group>
         <Collapse in={opened} transitionDuration={300}>

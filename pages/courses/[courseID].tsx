@@ -5,8 +5,12 @@ import {useRouter} from "next/router";
 import {useModals} from "@mantine/modals";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
 import {useListState, useToggle} from "@mantine/hooks";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import dynamic from "next/dynamic";
+import axios from "axios";
+import {CheckIcon} from "@modulz/radix-icons";
+import {useNotifications} from "@mantine/notifications";
+import {useQueryClient} from "react-query";
 
 
 const Stages = dynamic(import('@components/Layout/Stages'), {
@@ -16,13 +20,40 @@ const Stages = dynamic(import('@components/Layout/Stages'), {
 export default function CoursePage() {
     const router = useRouter()
     const modals = useModals()
+    const notifications = useNotifications()
+    const queryClient = useQueryClient()
     const courseQuery = useCourse(router.query.courseID)
     const [draggable, toggleDragging] = useToggle(false, [true, false])
     const [stages, stagesHandlers] = useListState([])
 
+    const handleToggle = (e) => {
+        toggleDragging()
+        if (!draggable) return
+        const toUpdate = stages.map((stage, index) => ({id: stage.id, position: index + 1}))
+        axios.patch('/api/stages', toUpdate, {
+            headers: {
+                authorization: 'Bearer ' + localStorage.getItem('accessToken')
+            }
+        }).then(res => {
+            notifications.showNotification({
+                title: "Успех",
+                message: res.data.message,
+                color: "green",
+                icon: <CheckIcon/>
+            })
+            queryClient.invalidateQueries(['course', router.query.courseID])
+        }).catch(e => {
+            notifications.showNotification({
+                title: "Ошибка",
+                message: "При изменении порядка произошла ошибка",
+                color: "red"
+            })
+        })
+    }
+
     useEffect(() => {
         courseQuery.isSuccess && stagesHandlers.setState(courseQuery.data.stages)
-    }, [courseQuery.isLoading, courseQuery.isSuccess])
+    }, [courseQuery?.data?.stages, courseQuery.isSuccess])
 
     const openCreatingModal = () => {
         const id = modals.openModal({
@@ -42,7 +73,7 @@ export default function CoursePage() {
                 <Button onClick={openCreatingModal}>
                     Создать этап
                 </Button>
-                <Button onClick={() => toggleDragging()}>
+                <Button onClick={handleToggle}>
                     Изменить порядок
                 </Button>
             </Group>

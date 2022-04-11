@@ -19,6 +19,23 @@ class StagesService {
 
     }
 
+    async updateMany(arr: {id: string, position: number}[]) {
+        for (let data of arr) {
+            await prisma.stage.update({
+                where: {id: data.id},
+                data: {
+                    position: data.position
+                }
+            })
+        }
+    }
+
+    async deleteOneById(id) {
+        return await prisma.stage.delete({
+            where: {id}
+        })
+    }
+
     async findOneById(id) {
         return await prisma.stage.findUnique({
             where: {id},

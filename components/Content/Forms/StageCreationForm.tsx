@@ -33,7 +33,7 @@ export default function StageCreationForm({courseId}) {
             setLoading(false)
             notifications.showNotification({
                 title: "Успех",
-                message: "Курс был успешно создан",
+                message: "Этап был успешно создан",
                 color: "green",
                 icon: <CheckIcon/>
             })
