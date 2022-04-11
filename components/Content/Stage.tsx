@@ -1,5 +1,4 @@
 import {Box, Collapse, createStyles, Group, Menu, SimpleGrid, Text} from "@mantine/core";
-import {useState} from "react";
 import {Lesson} from "@components/Content/Lesson";
 import {GripVertical, Trash} from "tabler-icons-react";
 import {useSortable} from "@dnd-kit/sortable";
@@ -9,6 +8,8 @@ import axios from "axios";
 import {useNotifications} from "@mantine/notifications";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
+import {LessonCreationDrawer} from "@components/Content/Forms/LessonCreationDrawer";
+import {useToggle} from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
     item: {
@@ -54,8 +55,8 @@ export const Stage = ({stage, draggable}) => {
     const modals = useModals()
     const notifications = useNotifications()
     const queryClient = useQueryClient()
-    const [opened, setOpened] = useState(false)
-
+    const [collapse, toggleCollapse] = useToggle(false, [true, false])
+    const [drawer, toggleDrawer] = useToggle(false, [true, false])
     const openConfirmModal = () => modals.openConfirmModal({
         title: 'Пожалуйста, подтвердите удаление',
         children: (
@@ -106,33 +107,38 @@ export const Stage = ({stage, draggable}) => {
         openConfirmModal()
     }
 
-    return <Box
-        ref={setNodeRef}
-        style={style}
-        {...attributes}
-        className={classes.item}
-        onClick={(e) => setOpened(!opened)}>
-        <Group position={"apart"} className={classes.control}>
-            <Group>
-                {draggable && <div {...listeners} className={classes.dragHandle}>
-                    <GripVertical size={18}/>
-                </div>}
-                <Text>{stage.title}</Text>
+    return <>
+        <LessonCreationDrawer stage={stage} opened={drawer} setOpened={toggleDrawer}/>
+        <Box ref={setNodeRef}
+             style={style}
+             {...attributes}
+             className={classes.item}
+             onClick={(e) => toggleCollapse()}>
+            <Group position={"apart"} className={classes.control}>
+                <Group>
+                    {draggable && <div {...listeners} className={classes.dragHandle}>
+                        <GripVertical size={18}/>
+                    </div>}
+                    <Text>{stage.title}</Text>
+                </Group>
+                <Menu onClick={(e) => e.stopPropagation()}>
+                    <Menu.Item onClick={(e) => {
+                        e.stopPropagation();
+                        toggleDrawer()
+                    }}>
+                        Создать урок
+                    </Menu.Item>
+                    <Menu.Label>Опасное</Menu.Label>
+                    <Menu.Item onClick={handleDelete} color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
+                </Menu>
             </Group>
-            <Menu onClick={(e) => e.stopPropagation()}>
-                <Menu.Item>
-                    Создать урок
-                </Menu.Item>
-                <Menu.Label>Опасное</Menu.Label>
-                <Menu.Item onClick={handleDelete} color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
-            </Menu>
-        </Group>
-        <Collapse in={opened} transitionDuration={300}>
-            <Box className={classes.contentInner}>
-                <SimpleGrid cols={4}>
-                    {stage.lessons.map((lesson, index) => <Lesson lesson={lesson} key={lesson.id}/>)}
-                </SimpleGrid>
-            </Box>
-        </Collapse>
-    </Box>
+            <Collapse in={collapse} transitionDuration={300}>
+                <Box className={classes.contentInner}>
+                    <SimpleGrid cols={4}>
+                        {stage.lessons.map((lesson, index) => <Lesson lesson={lesson} key={lesson.id}/>)}
+                    </SimpleGrid>
+                </Box>
+            </Collapse>
+        </Box>
+    </>
 }

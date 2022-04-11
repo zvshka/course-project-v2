@@ -10,6 +10,7 @@ class LessonsService {
                 position: "desc"
             }
         })
+
         return await prisma.lesson.create({
             data: {
                 ...lessonDTO,
