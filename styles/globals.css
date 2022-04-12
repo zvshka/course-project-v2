@@ -1,3 +1,5 @@
+@import "ck-editor.css";
+
 @tailwind utilities;
 @tailwind components;
 @tailwind base;

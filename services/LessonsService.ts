@@ -21,7 +21,14 @@ class LessonsService {
 
     async findOneById(id) {
         return await prisma.lesson.findUnique({
-            where: {id}
+            where: {id},
+            include: {
+                stage: {
+                    include: {
+                        course: true
+                    }
+                }
+            }
         })
     }
 }
