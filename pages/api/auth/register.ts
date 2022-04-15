@@ -1,4 +1,4 @@
-import AuthService from "@services/AuthService";
+import AuthService from "@services/Auth.service";
 import {apiRouter} from "@lib/utils";
 
 const apiRoute = apiRouter()

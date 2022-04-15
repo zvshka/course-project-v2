@@ -38,6 +38,7 @@ export default function StageCreationForm({courseId}) {
                 icon: <CheckIcon/>
             })
             queryClient.invalidateQueries(['course', courseId])
+            form.reset()
         }).catch(e => {
             setLoading(false)
             notifications.showNotification({

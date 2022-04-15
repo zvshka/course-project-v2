@@ -1,4 +1,4 @@
-import CoursesService from "@services/CoursesService";
+import CoursesService from "@services/Courses.service";
 import {apiRouter, AuthGuard} from "@lib/utils";
 
 const apiRoute = apiRouter()

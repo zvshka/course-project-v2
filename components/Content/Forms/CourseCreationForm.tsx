@@ -1,7 +1,17 @@
-import {Box, Button, Group, LoadingOverlay, Textarea, TextInput, useMantineTheme} from "@mantine/core";
+import {
+    Box,
+    Button,
+    Group,
+    LoadingOverlay,
+    MultiSelect,
+    Select,
+    Textarea,
+    TextInput,
+    useMantineTheme
+} from "@mantine/core";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {dropzoneChildren} from "@components/Content/Dropzone";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useForm} from "@mantine/form";
 import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
@@ -9,6 +19,7 @@ import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
 import Link from "next/link"
 import {useModals} from "@mantine/modals";
+import useBadges from "@hooks/useBadges";
 
 interface iconObject {
     data: string
@@ -18,6 +29,7 @@ interface iconObject {
 interface initialValues {
     title: string
     description: string
+    badges: string[]
     icon: iconObject
 }
 
@@ -28,60 +40,70 @@ export function CourseCreationForm() {
     const [loading, setLoading] = useState(false)
     const [courseId, setCourseId] = useState('')
     const queryClient = useQueryClient()
+    const badgesQuery = useBadges()
+    const [mappedBadges, setBadges] = useState([])
+    useEffect(() => badgesQuery.isSuccess &&
+            setBadges(badgesQuery.data.map(badge => ({value: badge.id, label: badge.label}))),
+        [badgesQuery.data, badgesQuery.isSuccess])
 
-    const handleSubmit = (values: typeof form.values) => {
+    const uploadImage = (file) => {
         const formData = new FormData()
-        formData.append('upload', form.values.icon.file)
-        setLoading(true)
-        axios.post("/api/images", formData, {
+        formData.append('upload', file)
+        return axios.post("/api/images", formData, {
             headers: {
                 "Content-Type": 'multipart/form-data',
                 "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
             }
-        }).then(res => {
-            axios.post("/api/courses", {
-                title: values.title,
-                description: values.description,
-                iconURL: res.data.url
-            }, {
-                headers: {
-                    "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
-                }
-            })
-                .then(res => {
-                    setLoading(false)
-                    notifications.showNotification({
-                        title: "Успех",
-                        message: "Курс был успешно создан",
-                        color: "green",
-                        icon: <CheckIcon/>
-                    })
-                    setCourseId(res.data.course.id)
-                    queryClient.invalidateQueries("coursesData")
-                })
-                .catch(error => {
-                    setLoading(false)
-                    notifications.showNotification({
-                        title: "Ошибка",
-                        message: "При создании курса произошла ошибка",
-                        color: "red"
-                    })
-                })
         })
+    }
+
+    const uploadCourse = (values: typeof form.values, iconURL = null) => {
+        axios.post("/api/courses", {
+            title: values.title,
+            description: values.description,
+            iconURL,
+            badges: values.badges
+        }, {
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+            }
+        })
+            .then(res => {
+                notifications.showNotification({
+                    title: "Успех",
+                    message: "Курс был успешно создан",
+                    color: "green",
+                    icon: <CheckIcon/>
+                })
+                setCourseId(res.data.course.id)
+                queryClient.invalidateQueries("courses")
+            })
             .catch(error => {
-                setLoading(false)
                 notifications.showNotification({
                     title: "Ошибка",
-                    message: "При загрузке изображения произошла ошибка",
+                    message: "При создании курса произошла ошибка",
                     color: "red"
                 })
             })
+    }
+
+    const handleSubmit = (values: typeof form.values) => {
+        setLoading(true)
+        if (values.icon.file) {
+            uploadImage(values.icon.file).then(res => {
+                uploadCourse(values, res.data.url)
+            })
+        } else {
+            uploadCourse(values)
+        }
+        setLoading(false)
     }
 
     const form = useForm<initialValues>({
         initialValues: {
             title: "",
             description: "",
+            badges: [],
             icon: {
                 data: '',
                 file: null
@@ -98,13 +120,25 @@ export function CourseCreationForm() {
                 placeholder="Курс Абракадабры"
                 {...form.getInputProps('title')}
             />
-
             <Textarea
                 required
                 label="Описание курса"
                 placeholder="Курс Абракадабры"
                 {...form.getInputProps('description')}
             />
+
+            <MultiSelect
+                label="Выбор тегов"
+                data={mappedBadges}
+                placeholder="Выбери теги"
+                searchable
+                creatable
+                clearable
+                getCreateLabel={(query) => `+ Создать ${query}`}
+                onCreate={(query) => console.log(query)}
+                {...form.getInputProps('badges')}
+            />
+
             <Box my={"md"}>
                 <Dropzone
                     onDrop={(files) => {

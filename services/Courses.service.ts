@@ -1,13 +1,35 @@
 import prisma from "@lib/prisma";
 
+interface CourseDTO {
+    title: string,
+    description: string,
+    iconURL: string,
+    languageId: string,
+    badges: string[]
+}
+
 class CoursesService {
     async getAll() {
-        return await prisma.course.findMany({})
+        return await prisma.course.findMany({
+            include: {
+                language: true,
+                badges: true,
+            }
+        })
     }
 
-    async create(courseDTO) {
+    async create(courseDTO: CourseDTO) {
+        console.log(courseDTO)
         return await prisma.course.create({
-            data: courseDTO
+            data: {
+                title: courseDTO.title,
+                description: courseDTO.description,
+                iconURL: courseDTO.iconURL,
+                languageId: courseDTO.languageId,
+                badges: {
+                    connect: [...courseDTO.badges.map(badge => ({id: badge}))]
+                }
+            }
         })
     }
 

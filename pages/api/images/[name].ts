@@ -1,5 +1,5 @@
 import fs from "fs";
-import ImagesService from "@services/ImagesService";
+import ImagesService from "@services/Images.service";
 import {apiRouter} from "@lib/utils";
 
 const apiRoute = apiRouter()

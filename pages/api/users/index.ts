@@ -1,6 +1,6 @@
 import {AuthGuard} from "@lib/utils";
 import {apiRouter} from "@lib/utils";
-import UsersService from "@services/UsersService";
+import UsersService from "@services/Users.service";
 
 const apiRoute = apiRouter()
 

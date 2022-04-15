@@ -1,4 +1,4 @@
-import LessonsService from "@services/LessonsService";
+import LessonsService from "@services/Lessons.service";
 import {apiRouter} from "@lib/utils";
 
 const apiRoute = apiRouter()

@@ -1,5 +1,5 @@
 import {apiRouter, AuthGuard} from "@lib/utils";
-import StagesService from "@services/StagesService";
+import StagesService from "@services/Stages.service";
 
 const apiRoute = apiRouter()
 

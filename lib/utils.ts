@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import UsersService from "@services/UsersService";
+import UsersService from "@services/Users.service";
 import nextConnect from "next-connect";
 import {NextApiRequest, NextApiResponse} from "next";
 

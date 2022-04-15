@@ -16,20 +16,27 @@ model Course {
   title       String
   description String
   iconURL     String?
+  badges      Badge[]
+  stages      Stage[]
+}
 
-  stages Stage[]
+model Badge {
+  id    String @id @default(cuid())
+  label String
+
+  courses Course[]
 }
 
 model Stage {
   id String @id @default(cuid())
 
-  title String
+  title    String
   position Int
 
   lessons Lesson[]
   course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  courseId      String
+  courseId String
 }
 
 model Lesson {
@@ -39,7 +46,7 @@ model Lesson {
   description String
   text        String?
 
-  position    Int
+  position Int
 
   stage   Stage  @relation(fields: [stageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stageId String
@@ -57,8 +64,8 @@ model User {
   firstname String?
   lastname  String?
 
-  avatarURL     String?
-  role          Role?   @default(USER)
+  avatarURL String?
+  role      Role?   @default(USER)
 }
 
 enum Role {
