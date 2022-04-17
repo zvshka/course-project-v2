@@ -1,5 +1,5 @@
 import {Shell} from "@components/Layout/Shell";
-import {Button, Group, Title} from "@mantine/core";
+import {Button, Group, Paper, Title} from "@mantine/core";
 import useCourse from "@hooks/useCourse";
 import {useRouter} from "next/router";
 import {useModals} from "@mantine/modals";
@@ -67,19 +67,21 @@ export default function CoursePage() {
     }
 
     return <Shell>
-        <Group position={"apart"}>
-            <Title order={2}>
-                Страница курса
-            </Title>
-            {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Group>
-                <Button onClick={openCreatingModal}>
-                    Создать этап
-                </Button>
-                <Button onClick={handleToggle}>
-                    Изменить порядок
-                </Button>
-            </Group>}
-        </Group>
+        <Paper shadow={'lg'} px={'sm'} py={'sm'}>
+            <Group position={"apart"}>
+                <Title order={3}>
+                    Страница курса
+                </Title>
+                {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Group>
+                    <Button onClick={openCreatingModal}>
+                        Создать этап
+                    </Button>
+                    <Button onClick={handleToggle}>
+                        Изменить порядок
+                    </Button>
+                </Group>}
+            </Group>
+        </Paper>
         <Stages stages={stages} stagesHandlers={stagesHandlers} draggable={draggable}/>
     </Shell>
 }

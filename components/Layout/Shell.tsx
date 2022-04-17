@@ -1,6 +1,5 @@
 import {AppShell, Container, createStyles} from "@mantine/core";
 import {DoubleHeader} from "@components/Layout/Header";
-import {Navigation} from "@components/Layout/Navigation";
 
 const useStyles = createStyles((theme) => ({
     mainContainer: {

@@ -1,6 +1,6 @@
 import useUser from "@hooks/useUser";
 import useCourses from "@hooks/useCourses";
-import {Button, Group, SimpleGrid, Title} from "@mantine/core";
+import {Button, Group, Paper, SimpleGrid, Title} from "@mantine/core";
 import {useNotifications} from "@mantine/notifications";
 import {useEffect} from "react";
 import {Shell} from "@components/Layout/Shell";
@@ -32,14 +32,16 @@ export default function Courses() {
     }, [coursesQuery.isError])
 
     return <Shell>
-        <Group position={"apart"}>
-            <Title order={2}>
-                Курсы
-            </Title>
-            {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Button onClick={openCreatingModal}>
-                Создать курс
-            </Button>}
-        </Group>
+        <Paper shadow={'lg'} px={'sm'} py={'sm'}>
+            <Group position={"apart"}>
+                <Title order={3}>
+                    Курсы
+                </Title>
+                {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Button onClick={openCreatingModal}>
+                    Создать курс
+                </Button>}
+            </Group>
+        </Paper>
         <SimpleGrid cols={1} mt={"md"} breakpoints={[{minWidth: 'md', cols: 3}, {minWidth: 'xs', cols: 2}]}>
             {coursesQuery.isSuccess && coursesQuery.data.map((c, i) => (
                 <div key={i} >

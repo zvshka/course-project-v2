@@ -195,7 +195,7 @@ export function DoubleHeader() {
                                     <Group spacing={7}>
                                         <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"
                                                 size={26}/>
-                                        <Text weight={500} sx={{lineHeight: 1, color: theme.black}} mr={3}>
+                                        <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>
                                             {userQuery.data.username}
                                         </Text>
                                         {/*<ChevronDown size={12}/>*/}

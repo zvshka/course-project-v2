@@ -1,4 +1,4 @@
-import {Box, Collapse, createStyles, Group, Menu, SimpleGrid, Text} from "@mantine/core";
+import {Box, Collapse, createStyles, Group, Menu, SimpleGrid, Text, Title} from "@mantine/core";
 import {Lesson} from "@components/Content/Lesson";
 import {GripVertical, Trash} from "tabler-icons-react";
 import {useSortable} from "@dnd-kit/sortable";
@@ -119,7 +119,7 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                     {draggable && <div {...listeners} className={classes.dragHandle}>
                         <GripVertical size={18}/>
                     </div>}
-                    <Text>{stage.title}</Text>
+                    <Title order={4}>{stage.title}</Title>
                 </Group>
                 {isAdmin && <>
                     <Menu onClick={(e) => e.stopPropagation()}>
