@@ -138,7 +138,7 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
             <Collapse in={collapse} transitionDuration={300}>
                 <Box className={classes.contentInner}>
                     <SimpleGrid cols={4}>
-                        {stage.lessons.map((lesson, index) => <Lesson lesson={lesson} key={lesson.id}/>)}
+                        {stage.lessons.map((lesson, index) => <Lesson isAdmin={isAdmin} lesson={lesson} key={lesson.id}/>)}
                     </SimpleGrid>
                 </Box>
             </Collapse>

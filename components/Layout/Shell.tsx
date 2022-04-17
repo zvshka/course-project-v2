@@ -17,7 +17,7 @@ export const Shell = ({children}) => {
         padding="md"
         header={<DoubleHeader/>}
         styles={(theme) => ({
-            main: {backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0]},
+            main: {backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[2]},
         })}
     >
         <Container className={classes.mainContainer}>

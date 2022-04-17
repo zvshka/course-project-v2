@@ -13,11 +13,18 @@ export default function LessonPage() {
 
     return <Shell>
         <Paper shadow={'lg'} px={'sm'} py={'sm'}>
-            <Title order={3}>
-                {lessonQuery.isSuccess && lessonQuery.data.title}
-            </Title>
-            <Text>Курс: {lessonQuery.isSuccess && lessonQuery.data.stage.course.title}</Text>
-            <Text>Этап: {lessonQuery.isSuccess && lessonQuery.data.stage.title}</Text>
+            <Group position={"apart"}>
+                <Box>
+                    <Title order={3}>
+                        {lessonQuery.isSuccess && lessonQuery.data.title}
+                    </Title>
+                    <Text>{lessonQuery.isSuccess && lessonQuery.data.description}</Text>
+                </Box>
+                <Box>
+                    <Text>Курс: {lessonQuery.isSuccess && lessonQuery.data.stage.course.title}</Text>
+                    <Text>Этап: {lessonQuery.isSuccess && lessonQuery.data.stage.title}</Text>
+                </Box>
+            </Group>
         </Paper>
         <Paper shadow={'lg'} px={'sm'} py={'sm'} mt={'md'}>
             <Group position={'apart'}>

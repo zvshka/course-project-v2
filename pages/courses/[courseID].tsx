@@ -6,17 +6,14 @@ import {useModals} from "@mantine/modals";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
 import {useListState, useToggle} from "@mantine/hooks";
 import {useEffect} from "react";
-import dynamic from "next/dynamic";
 import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
 import useUser from "@hooks/useUser";
-
-
-const Stages = dynamic(import('@components/Layout/Stages'), {
-    ssr: false
-})
+import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy} from "@dnd-kit/sortable";
+import {Stage} from "@components/Content/Stage";
 
 export default function CoursePage() {
     const userQuery = useUser()
@@ -24,9 +21,30 @@ export default function CoursePage() {
     const modals = useModals()
     const notifications = useNotifications()
     const queryClient = useQueryClient()
-    const courseQuery = useCourse(router.query.courseID)
     const [draggable, toggleDragging] = useToggle(false, [true, false])
+
+    const courseQuery = useCourse(router.query.courseID)
     const [stages, stagesHandlers] = useListState([])
+
+    useEffect(() => {
+        courseQuery.isSuccess && stagesHandlers.setState(courseQuery.data.stages)
+    }, [courseQuery?.data?.stages, courseQuery.isSuccess])
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    function handleDragEnd(event) {
+        const {active, over} = event;
+        const oldIndex = stages.indexOf(stages.find(item => item.id === active.id));
+        const newIndex = stages.indexOf(stages.find(item => item.id === over.id));
+        if (active.id !== over.id) {
+            stagesHandlers.reorder({from: oldIndex, to: newIndex})
+        }
+    }
 
     const handleToggle = (e) => {
         toggleDragging()
@@ -53,12 +71,8 @@ export default function CoursePage() {
         })
     }
 
-    useEffect(() => {
-        courseQuery.isSuccess && stagesHandlers.setState(courseQuery.data.stages)
-    }, [courseQuery?.data?.stages, courseQuery.isSuccess])
-
     const openCreatingModal = () => {
-        const id = modals.openModal({
+        modals.openModal({
             title: "Создание этапа",
             children: <>
                 <StageCreationForm courseId={router.query.courseID}/>
@@ -82,6 +96,20 @@ export default function CoursePage() {
                 </Group>}
             </Group>
         </Paper>
-        <Stages stages={stages} stagesHandlers={stagesHandlers} draggable={draggable}/>
+        <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+        >
+            <SortableContext
+                items={stages}
+                strategy={verticalListSortingStrategy}
+            >
+                {stages.map((stage) =>
+                    <Stage key={stage.id} stage={stage} draggable={draggable}
+                           isAdmin={userQuery.isSuccess && userQuery.data.role === "ADMIN"}/>
+                )}
+            </SortableContext>
+        </DndContext>
     </Shell>
 }
