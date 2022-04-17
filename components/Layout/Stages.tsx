@@ -1,8 +1,11 @@
 import {Stage} from "@components/Content/Stage";
 import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy} from "@dnd-kit/sortable";
+import useUser from "@hooks/useUser";
 
 const Stages = ({stages, stagesHandlers, draggable}) => {
+
+    const userQuery = useUser()
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -29,7 +32,10 @@ const Stages = ({stages, stagesHandlers, draggable}) => {
             items={stages}
             strategy={verticalListSortingStrategy}
         >
-            {stages.map((stage) => <Stage key={stage.id} stage={stage} draggable={draggable}/>)}
+            {stages.map((stage) =>
+                <Stage key={stage.id} stage={stage} draggable={draggable}
+                       isAdmin={userQuery.isSuccess && userQuery.data.role === "ADMIN"}/>
+            )}
         </SortableContext>
     </DndContext>
 }

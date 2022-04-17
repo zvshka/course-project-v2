@@ -11,6 +11,7 @@ import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
+import useUser from "@hooks/useUser";
 
 
 const Stages = dynamic(import('@components/Layout/Stages'), {
@@ -18,6 +19,7 @@ const Stages = dynamic(import('@components/Layout/Stages'), {
 })
 
 export default function CoursePage() {
+    const userQuery = useUser()
     const router = useRouter()
     const modals = useModals()
     const notifications = useNotifications()
@@ -69,14 +71,14 @@ export default function CoursePage() {
             <Title order={2}>
                 Страница курса
             </Title>
-            <Group>
+            {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Group>
                 <Button onClick={openCreatingModal}>
                     Создать этап
                 </Button>
                 <Button onClick={handleToggle}>
                     Изменить порядок
                 </Button>
-            </Group>
+            </Group>}
         </Group>
         <Stages stages={stages} stagesHandlers={stagesHandlers} draggable={draggable}/>
     </Shell>

@@ -4,7 +4,6 @@ interface CourseDTO {
     title: string,
     description: string,
     iconURL: string,
-    languageId: string,
     badges: string[]
 }
 
@@ -12,7 +11,6 @@ class CoursesService {
     async getAll() {
         return await prisma.course.findMany({
             include: {
-                language: true,
                 badges: true,
             }
         })
@@ -25,7 +23,6 @@ class CoursesService {
                 title: courseDTO.title,
                 description: courseDTO.description,
                 iconURL: courseDTO.iconURL,
-                languageId: courseDTO.languageId,
                 badges: {
                     connect: [...courseDTO.badges.map(badge => ({id: badge}))]
                 }

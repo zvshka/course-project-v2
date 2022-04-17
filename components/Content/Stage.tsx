@@ -50,7 +50,7 @@ const useStyles = createStyles((theme) => ({
     },
 }))
 
-export const Stage = ({stage, draggable}) => {
+export const Stage = ({stage, draggable, isAdmin = false}) => {
     const {classes} = useStyles()
     const modals = useModals()
     const notifications = useNotifications()
@@ -121,16 +121,19 @@ export const Stage = ({stage, draggable}) => {
                     </div>}
                     <Text>{stage.title}</Text>
                 </Group>
-                <Menu onClick={(e) => e.stopPropagation()}>
-                    <Menu.Item onClick={(e) => {
-                        e.stopPropagation();
-                        toggleDrawer()
-                    }}>
-                        Создать урок
-                    </Menu.Item>
-                    <Menu.Label>Опасное</Menu.Label>
-                    <Menu.Item onClick={handleDelete} color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
-                </Menu>
+                {isAdmin && <>
+                    <Menu onClick={(e) => e.stopPropagation()}>
+                        <Menu.Item>Изменить этап</Menu.Item>
+                        <Menu.Item onClick={(e) => {
+                            e.stopPropagation();
+                            toggleDrawer()
+                        }}>
+                            Создать урок
+                        </Menu.Item>
+                        <Menu.Label>Опасное</Menu.Label>
+                        <Menu.Item onClick={handleDelete} color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
+                    </Menu>
+                </>}
             </Group>
             <Collapse in={collapse} transitionDuration={300}>
                 <Box className={classes.contentInner}>

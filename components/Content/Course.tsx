@@ -33,7 +33,7 @@ export function Course({course}) {
 
     const features = course.badges.map((badge) => (
         <Badge
-            color={theme.colorScheme === 'dark' ? 'dark' : 'gray'}
+            color={"blue"}
             key={badge.label}
         >
             {badge.label}

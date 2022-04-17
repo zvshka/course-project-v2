@@ -22,7 +22,7 @@ model Course {
 
 model Badge {
   id    String @id @default(cuid())
-  label String
+  label String @unique
 
   courses Course[]
 }

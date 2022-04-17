@@ -16,10 +16,11 @@ import {useForm} from "@mantine/form";
 import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
-import {useQueryClient} from "react-query";
+import {useMutation, useQueryClient} from "react-query";
 import Link from "next/link"
 import {useModals} from "@mantine/modals";
 import useBadges from "@hooks/useBadges";
+import {useListState} from "@mantine/hooks";
 
 interface iconObject {
     data: string
@@ -41,10 +42,11 @@ export function CourseCreationForm() {
     const [courseId, setCourseId] = useState('')
     const queryClient = useQueryClient()
     const badgesQuery = useBadges()
-    const [mappedBadges, setBadges] = useState([])
-    useEffect(() => badgesQuery.isSuccess &&
-            setBadges(badgesQuery.data.map(badge => ({value: badge.id, label: badge.label}))),
-        [badgesQuery.data, badgesQuery.isSuccess])
+    const [badges, badgesHandlers] = useListState([])
+
+    useEffect(() => {
+        badgesQuery.isSuccess && badgesHandlers.setState(badgesQuery.data.map(badge => ({value: badge.id, label: badge.label})))
+    }, [badgesQuery.data, badgesQuery.isSuccess])
 
     const uploadImage = (file) => {
         const formData = new FormData()
@@ -99,6 +101,31 @@ export function CourseCreationForm() {
         setLoading(false)
     }
 
+    const createBadge = (query) => {
+        axios.post('/api/badges', {
+            label: query
+        }, {
+            headers: {
+                authorization: 'Bearer ' + localStorage.getItem('accessToken')
+            }
+        }).then(res => {
+            notifications.showNotification({
+                title: "Успех",
+                message: "Категория была успешно создана",
+                color: "green",
+                icon: <CheckIcon/>
+            })
+            queryClient.invalidateQueries("badges")
+            form.setFieldValue('badges', [...form.values.badges, res.data.id])
+        }).catch(e => {
+            notifications.showNotification({
+                title: "Ошибка",
+                message: "При создании категории произошла ошибка",
+                color: "red"
+            })
+        })
+    }
+
     const form = useForm<initialValues>({
         initialValues: {
             title: "",
@@ -110,6 +137,10 @@ export function CourseCreationForm() {
             }
         }
     });
+
+    useEffect(() => {
+        console.log(form.values.badges)
+    }, [form.values.badges])
 
     return <Box mx="auto" sx={{maxWidth: "30rem", position: "relative"}}>
         <LoadingOverlay visible={loading}/>
@@ -129,13 +160,14 @@ export function CourseCreationForm() {
 
             <MultiSelect
                 label="Выбор тегов"
-                data={mappedBadges}
+                data={badges}
+                value={form.values.badges}
                 placeholder="Выбери теги"
                 searchable
                 creatable
                 clearable
                 getCreateLabel={(query) => `+ Создать ${query}`}
-                onCreate={(query) => console.log(query)}
+                onCreate={createBadge}
                 {...form.getInputProps('badges')}
             />
 

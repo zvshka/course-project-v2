@@ -42,7 +42,9 @@ export default function Courses() {
         </Group>
         <SimpleGrid cols={1} mt={"md"} breakpoints={[{minWidth: 'md', cols: 3}, {minWidth: 'xs', cols: 2}]}>
             {coursesQuery.isSuccess && coursesQuery.data.map((c, i) => (
-                <Course key={i} course={c}/>
+                <div key={i} >
+                    <Course course={c}/>
+                </div>
             ))}
         </SimpleGrid>
     </Shell>
