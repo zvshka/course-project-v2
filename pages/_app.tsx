@@ -17,26 +17,26 @@ function MyApp({Component, pageProps}) {
             <meta charSet="utf-8"/>
             <link rel="shortcut icon" href="/food-waffles.svg"/>
         </Head>
-        <QueryClientProvider client={queryClient}>
-            <MantineProvider
-                withGlobalStyles
-                withNormalizeCSS
-                emotionOptions={{key: 'mantin', prepend: false}}
-                theme={{
-                    colorScheme: 'light',
-                }}
-            >
-                <NotificationsProvider>
-                    <ModalsProvider>
+        <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            emotionOptions={{key: 'mantin', prepend: false}}
+            theme={{
+                colorScheme: 'light',
+            }}
+        >
+            <NotificationsProvider>
+                <ModalsProvider>
+                    <QueryClientProvider client={queryClient}>
                         <Component {...pageProps} />
                         <ReactQueryDevtools initialIsOpen={false}/>
-                    </ModalsProvider>
-                </NotificationsProvider>
-            </MantineProvider>
-        </QueryClientProvider>
+                    </QueryClientProvider>
+                </ModalsProvider>
+            </NotificationsProvider>
+        </MantineProvider>
     </>
 }
 
-MyApp.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({});
+// MyApp.getInitialProps = ({ctx}: { ctx: GetServerSidePropsContext }) => ({});
 
 export default MyApp
