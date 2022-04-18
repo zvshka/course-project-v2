@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import nextConnect from "next-connect";
 import {NextApiRequest, NextApiResponse} from "next";
-import axios from "axios";
 
 export const apiRouter = () => nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
@@ -29,15 +28,9 @@ export const signToken = (data: IData) => {
 }
 
 export const verifyToken = (token) => {
-    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as IData
-}
-
-export const fetcher = (url, {auth = false, headers = {}, ...props}) => {
-    return axios(url, {
-        ...props,
-        headers: {
-            ...headers,
-            authorization: auth && 'Bearer ' + localStorage.getItem('accessToken')
-        }
-    })
+    try {
+        return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as IData
+    } catch (e) {
+        return null
+    }
 }

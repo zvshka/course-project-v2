@@ -9,7 +9,7 @@ import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
 import {LessonCreationDrawer} from "@components/Content/Forms/LessonCreationDrawer";
 import {useToggle} from "@mantine/hooks";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 const useStyles = createStyles((theme) => ({
     item: {

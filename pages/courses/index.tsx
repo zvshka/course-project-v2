@@ -1,6 +1,6 @@
 import useUser from "@hooks/useUser";
 import useCourses from "@hooks/useCourses";
-import {Button, Group, Paper, SimpleGrid, Title} from "@mantine/core";
+import {Box, Button, Group, Paper, SimpleGrid, Skeleton, Title} from "@mantine/core";
 import {useNotifications} from "@mantine/notifications";
 import {useEffect} from "react";
 import {Shell} from "@components/Layout/Shell";
@@ -31,6 +31,8 @@ export default function Courses() {
         })
     }, [coursesQuery.isError])
 
+    useEffect(() => console.log(coursesQuery.isSuccess))
+
     return <Shell>
         <Paper shadow={'lg'} px={'sm'} py={'sm'}>
             <Group position={"apart"}>
@@ -43,10 +45,10 @@ export default function Courses() {
             </Group>
         </Paper>
         <SimpleGrid cols={1} mt={"md"} breakpoints={[{minWidth: 'md', cols: 3}, {minWidth: 'xs', cols: 2}]}>
-            {coursesQuery.isSuccess && coursesQuery.data.map((c, i) => (
-                <div key={i} >
+            {coursesQuery.isSuccess && !coursesQuery.isLoading && coursesQuery.data.map((c, i) => (
+                <Box key={i}>
                     <Course course={c}/>
-                </div>
+                </Box>
             ))}
         </SimpleGrid>
     </Shell>

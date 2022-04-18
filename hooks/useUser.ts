@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 export default function useUser() {
     return useQuery('user', () =>

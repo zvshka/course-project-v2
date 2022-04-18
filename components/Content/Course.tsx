@@ -1,5 +1,5 @@
 import React from 'react';
-import {Badge, Card, createStyles, Group, Image, Text, useMantineTheme} from '@mantine/core';
+import {Badge, Card, createStyles, Group, Image, Skeleton, Text, useMantineTheme} from '@mantine/core';
 import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
@@ -43,15 +43,15 @@ export function Course({course}) {
     return <Link href={`/courses/${course.id}`} passHref>
         <Card component={'a'} withBorder radius="md" p="md" className={classes.card}>
             <Card.Section>
-                <Image src={course.iconURL} alt={course.title} height={180}/>
+                <Image src={course?.iconURL} alt={course?.title} height={180}/>
             </Card.Section>
 
             <Card.Section className={classes.section} mt="md">
                 <Text size="lg" weight={500}>
-                    {course.title}
+                    {course?.title || "Just a title"}
                 </Text>
                 <Text size="sm" mt="xs">
-                    {course.description}
+                    {course?.description || "Small description for skeleton of course"}
                 </Text>
             </Card.Section>
 
@@ -63,15 +63,6 @@ export function Course({course}) {
                     {features}
                 </Group>
             </Card.Section>
-
-            {/*<Group mt="xs">*/}
-            {/*    <Button radius="md" style={{ flex: 1 }}>*/}
-            {/*        Show details*/}
-            {/*    </Button>*/}
-            {/*    <ActionIcon variant="default" radius="md" size={36}>*/}
-            {/*        <Heart size={18} className={classes.like} />*/}
-            {/*    </ActionIcon>*/}
-            {/*</Group>*/}
         </Card>
     </Link>
 }

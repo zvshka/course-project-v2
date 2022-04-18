@@ -17,7 +17,7 @@ import {useForm} from "@mantine/form";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 const Editor = dynamic(() => import("@components/Content/Editor"), {
     ssr: false

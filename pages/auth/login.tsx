@@ -3,7 +3,7 @@ import {useState} from "react";
 import {useRouter} from "next/router";
 import {useForm} from "@mantine/form";
 import {Button, createStyles, PasswordInput, TextInput} from "@mantine/core";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 const useStyles = createStyles((theme) => ({
     loginButton: {

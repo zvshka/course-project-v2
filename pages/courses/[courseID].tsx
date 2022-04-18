@@ -13,7 +13,7 @@ import useUser from "@hooks/useUser";
 import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {Stage} from "@components/Content/Stage";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 export default function CoursePage() {
     const userQuery = useUser()

@@ -4,7 +4,7 @@ import {useRouter} from "next/router";
 import {useForm} from "@mantine/form";
 import {Box, Button, createStyles, PasswordInput, Popover, Progress, Text, TextInput} from "@mantine/core";
 import {CheckIcon, Cross1Icon} from "@modulz/radix-icons";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 function PasswordRequirement({meets, label}: { meets: boolean; label: string }) {
     return (

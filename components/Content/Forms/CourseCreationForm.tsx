@@ -10,7 +10,7 @@ import Link from "next/link"
 import {useModals} from "@mantine/modals";
 import useBadges from "@hooks/useBadges";
 import {useListState} from "@mantine/hooks";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 interface iconObject {
     data: string

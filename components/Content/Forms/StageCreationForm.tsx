@@ -5,7 +5,7 @@ import {useState} from "react";
 import {useForm} from "@mantine/form";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 export default function StageCreationForm({courseId}) {
     const modals = useModals()

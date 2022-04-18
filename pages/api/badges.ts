@@ -1,5 +1,6 @@
-import {apiRouter, AuthGuard} from "@lib/utils";
+import {apiRouter} from "@lib/utils";
 import BadgesService from "@services/Badges.service";
+import {AuthGuard} from "@lib/AuthGuard";
 
 const apiRoute = apiRouter()
 

@@ -1,6 +1,6 @@
 import {useQuery} from "react-query";
 import useUser from "@hooks/useUser";
-import {fetcher} from "@lib/utils";
+import {fetcher} from "@lib/fetcher";
 
 export default function useUsers() {
     const user = useUser()

@@ -1,4 +1,5 @@
-import {apiRouter, AuthGuard} from "@lib/utils";
+import {apiRouter} from "@lib/utils";
+import {AuthGuard} from "@lib/AuthGuard";
 import {NextApiRequest} from "next";
 
 const apiRoute = apiRouter()

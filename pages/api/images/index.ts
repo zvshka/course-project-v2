@@ -6,6 +6,7 @@ import imagemin from "imagemin";
 import imageminJpegtran from 'imagemin-jpegtran';
 import imageminPngquant from 'imagemin-pngquant';
 import fs from "fs";
+import {AuthGuard} from "@lib/AuthGuard";
 
 const oneMegabyteInBytes = 1000000;
 const outputFolderName = './public/uploads';
@@ -31,7 +32,7 @@ const apiRoute = apiRouter()
 
 apiRoute.use(upload.single("upload"));
 
-apiRoute.post(async (req: NextApiResponse & { file: any }, res) => {
+apiRoute.post(AuthGuard("ADMIN"), async (req: NextApiResponse & { file: any }, res) => {
     const {filename, mimetype, size, path: filepath} = req.file;
     const minified = await imagemin([`public/uploads/${filename}`], {
         destination: 'public/uploads',
