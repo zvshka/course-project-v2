@@ -20,7 +20,7 @@ function MyApp({Component, pageProps}) {
         <MantineProvider
             withGlobalStyles
             withNormalizeCSS
-            emotionOptions={{key: 'mantin', prepend: false}}
+            emotionOptions={{key: 'mantine', prepend: false}}
             theme={{
                 colorScheme: 'light',
             }}
