@@ -6,7 +6,6 @@ import {MantineProvider} from '@mantine/core';
 import {NotificationsProvider} from "@mantine/notifications";
 import {ModalsProvider} from "@mantine/modals";
 import Head from "next/head";
-import {GetServerSidePropsContext} from "next";
 
 const queryClient = new QueryClient()
 
@@ -17,23 +16,25 @@ function MyApp({Component, pageProps}) {
             <meta charSet="utf-8"/>
             <link rel="shortcut icon" href="/food-waffles.svg"/>
         </Head>
-        <MantineProvider
-            withGlobalStyles
-            withNormalizeCSS
-            emotionOptions={{key: 'mantine', prepend: false}}
-            theme={{
-                colorScheme: 'light',
-            }}
-        >
-            <NotificationsProvider>
-                <ModalsProvider>
-                    <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+            <MantineProvider
+                withGlobalStyles
+                withNormalizeCSS
+                emotionOptions={{key: 'mantine', prepend: false}}
+                theme={{
+                    colorScheme: 'light',
+                }}
+            >
+                <NotificationsProvider>
+                    <ModalsProvider>
+                        {/*<QueryClientProvider client={queryClient}>*/}
                         <Component {...pageProps} />
                         <ReactQueryDevtools initialIsOpen={false}/>
-                    </QueryClientProvider>
-                </ModalsProvider>
-            </NotificationsProvider>
-        </MantineProvider>
+                        {/*</QueryClientProvider>*/}
+                    </ModalsProvider>
+                </NotificationsProvider>
+            </MantineProvider>
+        </QueryClientProvider>
     </>
 }
 

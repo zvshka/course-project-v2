@@ -31,8 +31,6 @@ export default function Courses() {
         })
     }, [coursesQuery.isError])
 
-    useEffect(() => console.log(coursesQuery.isSuccess))
-
     return <Shell>
         <Paper shadow={'lg'} px={'sm'} py={'sm'}>
             <Group position={"apart"}>

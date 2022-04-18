@@ -25,7 +25,6 @@ class AuthService {
     }
 
     async login(loginDTO) {
-        console.log(loginDTO)
         const {email, password} = loginDTO
         const candidate = await prisma.user.findUnique({
             where: {email}
