@@ -1,6 +1,8 @@
 import React from 'react';
-import {Badge, Card, createStyles, Group, Image, Skeleton, Text, useMantineTheme} from '@mantine/core';
+import {Badge, Card, createStyles, Group, Text, Image as MImage, useMantineTheme, Box} from '@mantine/core';
 import Link from "next/link";
+// import Image from "next/image";
+// import {imageLoader} from "@lib/imageLoader";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -32,10 +34,7 @@ export function Course({course}) {
     const theme = useMantineTheme();
 
     const features = course.badges.map((badge) => (
-        <Badge
-            color={"blue"}
-            key={badge.label}
-        >
+        <Badge color={"blue"} key={badge.label}>
             {badge.label}
         </Badge>
     ));
@@ -43,9 +42,9 @@ export function Course({course}) {
     return <Link href={`/courses/${course.id}`} passHref>
         <Card component={'a'} withBorder radius="md" p="md" className={classes.card}>
             <Card.Section>
-                <Image src={course?.iconURL} alt={course?.title} height={180}/>
+                {/*<Image src={course?.iconURL} alt={course?.title} layout={'responsive'} height={180} width={360} loader={imageLoader}/>*/}
+                <MImage src={course?.iconURL + '?width=300'} alt={course?.title} height={180}/>
             </Card.Section>
-
             <Card.Section className={classes.section} mt="md">
                 <Text size="lg" weight={500}>
                     {course?.title || "Just a title"}

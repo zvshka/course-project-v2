@@ -16,7 +16,7 @@ import {useBooleanToggle} from '@mantine/hooks';
 import Link from "next/link"
 import {useRouter} from "next/router";
 import useUser from "@hooks/useUser";
-import {Logout, Pencil, Settings, Users} from "tabler-icons-react";
+import {Logout, Settings, Users} from "tabler-icons-react";
 import {NextLink} from "@mantine/next";
 import {useQueryClient} from "react-query";
 
@@ -73,7 +73,7 @@ const useStyles = createStyles((theme) => ({
     mainLink: {
         textTransform: 'uppercase',
         fontSize: 14,
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[6],
+        color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7],
         padding: `7px ${theme.spacing.sm}px`,
         fontWeight: 700,
         borderBottom: '2px solid transparent',
@@ -86,7 +86,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     secondaryLink: {
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
+        color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[7],
         fontSize: theme.fontSizes.sm,
         textTransform: 'uppercase',
         transition: 'color 100ms ease',
@@ -131,15 +131,15 @@ export function DoubleHeader() {
     const userQuery = useUser()
     const theme = useMantineTheme()
     const queryClient = useQueryClient()
-    const [userMenuOpened, setUserMenuOpened] = useState(false);
+    const [_, setUserMenuOpened] = useState(false);
     const handleLogout = (e) => {
         e.preventDefault()
         localStorage.setItem("accessToken", null)
         queryClient.removeQueries("user")
     }
 
-    const mainItems = mainLinks.map((item, index) => (
-        <Link href={item.link} key={item.label}>
+    const mainItems = mainLinks.map((item) => (
+        <Link href={item.link} key={item.label} passHref>
             <Anchor<'a'>
                 href={item.link}
                 className={cx(classes.mainLink, {
@@ -166,7 +166,7 @@ export function DoubleHeader() {
                 <div className={classes.links}>
                     <Group position="right">
                         {!userQuery.isSuccess && <>
-                            <Link href={"/auth/login"}>
+                            <Link href={"/auth/login"} passHref>
                                 <Anchor<'a'>
                                     href={"/auth/login"}
                                     className={classes.secondaryLink}
@@ -174,7 +174,7 @@ export function DoubleHeader() {
                                     Вход
                                 </Anchor>
                             </Link>
-                            <Link href={"/auth/login"}>
+                            <Link href={"/auth/login"} passHref>
                                 <Anchor<'a'>
                                     href={"/auth/login"}
                                     className={classes.secondaryLink}
