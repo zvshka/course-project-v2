@@ -7,14 +7,15 @@ import {NotificationsProvider} from "@mantine/notifications";
 import {ModalsProvider} from "@mantine/modals";
 import Head from "next/head";
 import {GetServerSidePropsContext} from "next";
+
 const queryClient = new QueryClient()
 
 function MyApp({Component, pageProps}) {
     return <>
         <Head>
             <title>Fantastic Waffle</title>
-            <meta charSet="utf-8" />
-            <link rel="shortcut icon" href="/food-waffles.svg" />
+            <meta charSet="utf-8"/>
+            <link rel="shortcut icon" href="/food-waffles.svg"/>
         </Head>
         <QueryClientProvider client={queryClient}>
             <MantineProvider
@@ -35,6 +36,7 @@ function MyApp({Component, pageProps}) {
         </QueryClientProvider>
     </>
 }
+
 MyApp.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({});
 
 export default MyApp
