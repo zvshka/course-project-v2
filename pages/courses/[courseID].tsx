@@ -6,7 +6,6 @@ import {useModals} from "@mantine/modals";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
 import {useListState, useToggle} from "@mantine/hooks";
 import {useEffect} from "react";
-import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
@@ -14,6 +13,7 @@ import useUser from "@hooks/useUser";
 import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {Stage} from "@components/Content/Stage";
+import {fetcher} from "@lib/utils";
 
 export default function CoursePage() {
     const userQuery = useUser()
@@ -50,10 +50,10 @@ export default function CoursePage() {
         toggleDragging()
         if (!draggable) return
         const toUpdate = stages.map((stage, index) => ({id: stage.id, position: index + 1}))
-        axios.patch('/api/stages', toUpdate, {
-            headers: {
-                authorization: 'Bearer ' + localStorage.getItem('accessToken')
-            }
+        fetcher('/api/stages', {
+            data: toUpdate,
+            auth: true,
+            method: 'PATCH'
         }).then(res => {
             notifications.showNotification({
                 title: "Успех",

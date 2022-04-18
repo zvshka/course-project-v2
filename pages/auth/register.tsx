@@ -2,28 +2,28 @@ import Link from "next/link";
 import {useState} from "react";
 import {useRouter} from "next/router";
 import {useForm} from "@mantine/form";
-import {Button, createStyles, PasswordInput, TextInput, Text, Box, Progress, Popover} from "@mantine/core";
-import axios from "axios";
+import {Box, Button, createStyles, PasswordInput, Popover, Progress, Text, TextInput} from "@mantine/core";
 import {CheckIcon, Cross1Icon} from "@modulz/radix-icons";
+import {fetcher} from "@lib/utils";
 
-function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
+function PasswordRequirement({meets, label}: { meets: boolean; label: string }) {
     return (
         <Text
             color={meets ? 'teal' : 'red'}
-            sx={{ display: 'flex', alignItems: 'center' }}
+            sx={{display: 'flex', alignItems: 'center'}}
             mt={7}
             size="sm"
         >
-            {meets ? <CheckIcon /> : <Cross1Icon />} <Box ml={10}>{label}</Box>
+            {meets ? <CheckIcon/> : <Cross1Icon/>} <Box ml={10}>{label}</Box>
         </Text>
     );
 }
 
 const requirements = [
-    { re: /[0-9]/, label: 'Содержит числа' },
-    { re: /[a-z]/, label: 'Содержит символ нижнего регистра' },
-    { re: /[A-Z]/, label: 'Содержит символ верхнего регистра' },
-    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Содержит спец. символ' },
+    {re: /[0-9]/, label: 'Содержит числа'},
+    {re: /[a-z]/, label: 'Содержит символ нижнего регистра'},
+    {re: /[A-Z]/, label: 'Содержит символ верхнего регистра'},
+    {re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Содержит спец. символ'},
 ];
 
 function getStrength(password: string) {
@@ -51,7 +51,7 @@ const useStyles = createStyles((theme) => ({
         borderRadius: "0.25rem",
         paddingTop: "0.6rem",
         paddingBottom: "0.6rem",
-        "&:hover" : {
+        "&:hover": {
             backgroundColor: "rgb(79 70 229) !important"
         }
     }
@@ -80,7 +80,7 @@ export default function Register() {
     });
 
     const checks = requirements.map((requirement, index) => (
-        <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(form.values.password)} />
+        <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(form.values.password)}/>
     ));
 
     const strength = getStrength(form.values.password);
@@ -88,7 +88,7 @@ export default function Register() {
 
     const handleSubmit = (values: typeof form.values) => {
         form.clearErrors()
-        axios("/api/auth/register", {
+        fetcher("/api/auth/register", {
             method: "POST",
             data: {
                 username: values.username,
@@ -167,7 +167,7 @@ export default function Register() {
                         position="bottom"
                         placement="start"
                         withArrow
-                        styles={{ popover: { width: '100%' }}}
+                        styles={{popover: {width: '100%'}}}
                         sx={{display: "block"}}
                         trapFocus={false}
                         transition="pop-top-left"
@@ -183,8 +183,9 @@ export default function Register() {
                             />
                         }
                     >
-                        <Progress color={color} value={strength} size={5} style={{ marginBottom: 10 }} />
-                        <PasswordRequirement label="Содержит как минимум 6 символов" meets={form.values.password.length > 5} />
+                        <Progress color={color} value={strength} size={5} style={{marginBottom: 10}}/>
+                        <PasswordRequirement label="Содержит как минимум 6 символов"
+                                             meets={form.values.password.length > 5}/>
                         {checks}
                     </Popover>
                     <PasswordInput

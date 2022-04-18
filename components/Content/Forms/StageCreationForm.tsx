@@ -3,9 +3,9 @@ import {Box, Button, Group, LoadingOverlay, TextInput, useMantineTheme} from "@m
 import {useNotifications} from "@mantine/notifications";
 import {useState} from "react";
 import {useForm} from "@mantine/form";
-import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
+import {fetcher} from "@lib/utils";
 
 export default function StageCreationForm({courseId}) {
     const modals = useModals()
@@ -22,13 +22,13 @@ export default function StageCreationForm({courseId}) {
 
     const handleSubmit = (values: typeof form.values) => {
         setLoading(true)
-        axios.post('/api/stages', {
-            courseId,
-            title: values.title
-        }, {
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
-            }
+        fetcher('/api/stages', {
+            data: {
+                courseId,
+                title: values.title
+            },
+            method: 'POST',
+            auth: true,
         }).then(res => {
             setLoading(false)
             notifications.showNotification({

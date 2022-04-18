@@ -1,26 +1,16 @@
-import {
-    Box,
-    Button,
-    Group,
-    LoadingOverlay,
-    MultiSelect,
-    Select,
-    Textarea,
-    TextInput,
-    useMantineTheme
-} from "@mantine/core";
+import {Box, Button, Group, LoadingOverlay, MultiSelect, Textarea, TextInput, useMantineTheme} from "@mantine/core";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {dropzoneChildren} from "@components/Content/Dropzone";
 import {useEffect, useState} from "react";
 import {useForm} from "@mantine/form";
-import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
-import {useMutation, useQueryClient} from "react-query";
+import {useQueryClient} from "react-query";
 import Link from "next/link"
 import {useModals} from "@mantine/modals";
 import useBadges from "@hooks/useBadges";
 import {useListState} from "@mantine/hooks";
+import {fetcher} from "@lib/utils";
 
 interface iconObject {
     data: string
@@ -45,32 +35,38 @@ export function CourseCreationForm() {
     const [badges, badgesHandlers] = useListState([])
 
     useEffect(() => {
-        badgesQuery.isSuccess && badgesHandlers.setState(badgesQuery.data.map(badge => ({value: badge.id, label: badge.label})))
+        badgesQuery.isSuccess && badgesHandlers.setState(badgesQuery.data.map(badge => ({
+            value: badge.id,
+            label: badge.label
+        })))
     }, [badgesQuery.data, badgesQuery.isSuccess])
 
     const uploadImage = (file) => {
         const formData = new FormData()
         formData.append('upload', file)
-        return axios.post("/api/images", formData, {
+        return fetcher("/api/images", {
+            method: 'POST',
+            data: formData,
+            auth: true,
             headers: {
                 "Content-Type": 'multipart/form-data',
-                "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
             }
         })
     }
 
     const uploadCourse = (values: typeof form.values, iconURL = null) => {
-        axios.post("/api/courses", {
-            title: values.title,
-            description: values.description,
-            iconURL,
-            badges: values.badges
-        }, {
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
-            }
+        fetcher("/api/courses", {
+            method: 'POST',
+            data: {
+                title: values.title,
+                description: values.description,
+                iconURL,
+                badges: values.badges
+            },
+            auth: true
         })
             .then(res => {
+                setLoading(false)
                 notifications.showNotification({
                     title: "Успех",
                     message: "Курс был успешно создан",
@@ -81,6 +77,7 @@ export function CourseCreationForm() {
                 queryClient.invalidateQueries("courses")
             })
             .catch(error => {
+                setLoading(false)
                 notifications.showNotification({
                     title: "Ошибка",
                     message: "При создании курса произошла ошибка",
@@ -98,16 +95,15 @@ export function CourseCreationForm() {
         } else {
             uploadCourse(values)
         }
-        setLoading(false)
     }
 
     const createBadge = (query) => {
-        axios.post('/api/badges', {
-            label: query
-        }, {
-            headers: {
-                authorization: 'Bearer ' + localStorage.getItem('accessToken')
-            }
+        fetcher('/api/badges', {
+            method: 'POST',
+            data: {
+                label: query
+            },
+            auth: true
         }).then(res => {
             notifications.showNotification({
                 title: "Успех",
@@ -137,10 +133,6 @@ export function CourseCreationForm() {
             }
         }
     });
-
-    useEffect(() => {
-        console.log(form.values.badges)
-    }, [form.values.badges])
 
     return <Box mx="auto" sx={{maxWidth: "30rem", position: "relative"}}>
         <LoadingOverlay visible={loading}/>

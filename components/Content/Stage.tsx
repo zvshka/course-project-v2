@@ -4,12 +4,12 @@ import {GripVertical, Trash} from "tabler-icons-react";
 import {useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import {useModals} from "@mantine/modals";
-import axios from "axios";
 import {useNotifications} from "@mantine/notifications";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
 import {LessonCreationDrawer} from "@components/Content/Forms/LessonCreationDrawer";
 import {useToggle} from "@mantine/hooks";
+import {fetcher} from "@lib/utils";
 
 const useStyles = createStyles((theme) => ({
     item: {
@@ -67,10 +67,9 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
         labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
         onCancel: () => console.log('Cancel'),
         onConfirm: () => {
-            axios.delete('/api/stages/' + stage.id, {
-                headers: {
-                    authorization: 'Bearer ' + localStorage.getItem('accessToken')
-                }
+            fetcher('/api/stages/' + stage.id, {
+                method: "DELETE",
+                auth: true
             }).then(res => {
                 notifications.showNotification({
                     title: "Успех",
@@ -138,7 +137,8 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
             <Collapse in={collapse} transitionDuration={300}>
                 <Box className={classes.contentInner}>
                     <SimpleGrid cols={4}>
-                        {stage.lessons.map((lesson, index) => <Lesson isAdmin={isAdmin} lesson={lesson} key={lesson.id}/>)}
+                        {stage.lessons.map((lesson, index) => <Lesson isAdmin={isAdmin} lesson={lesson}
+                                                                      key={lesson.id}/>)}
                     </SimpleGrid>
                 </Box>
             </Collapse>

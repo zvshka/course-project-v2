@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import UsersService from "@services/Users.service";
 import nextConnect from "next-connect";
 import {NextApiRequest, NextApiResponse} from "next";
+import axios from "axios";
 
 export const apiRouter = () => nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
@@ -32,19 +32,12 @@ export const verifyToken = (token) => {
     return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as IData
 }
 
-export const AuthGuard = (requiredRole = "USER") => async (req, res, next) => {
-    if (!req.headers.authorization) return res.status(401).json({error: "No Auth Token"})
-    const [type, token] = req.headers.authorization.split(" ")
-    if (type !== "Bearer") return res.status(401).json({error: "Not valid"})
-    try {
-        const {id, role} = verifyToken(token)
-        const userData = await UsersService.findOneById(id)
-        if (!userData) return res.status(401)
-        if (userData && (userData.role === requiredRole || userData.role === "ADMIN"))
-            req.user = userData
-        return next()
-    } catch (e) {
-        console.error(e)
-        res.status(401).json({error: "Invalid Token"})
-    }
+export const fetcher = (url, {auth = false, headers = {}, ...props}) => {
+    return axios(url, {
+        ...props,
+        headers: {
+            ...headers,
+            authorization: auth && 'Bearer ' + localStorage.getItem('accessToken')
+        }
+    })
 }

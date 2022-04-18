@@ -2,6 +2,10 @@ import multer from 'multer';
 import {NextApiResponse} from "next";
 import {apiRouter} from "@lib/utils";
 import ImagesService from "@services/Images.service";
+import imagemin from "imagemin";
+import imageminJpegtran from 'imagemin-jpegtran';
+import imageminPngquant from 'imagemin-pngquant';
+import fs from "fs";
 
 const oneMegabyteInBytes = 1000000;
 const outputFolderName = './public/uploads';
@@ -12,10 +16,15 @@ const upload = multer({
         destination: outputFolderName,
         filename: (req, file, cb) => cb(null, file.originalname),
     }),
-    /*fileFilter: (req, file, cb) => {
-      const acceptFile: boolean = ['image/jpeg', 'image/png'].includes(file.mimetype);
-      cb(null, acceptFile);
-    },*/
+    // storage: CustomStorage({
+    //     destination: function (req, file, cb) {
+    //         cb(null, outputFolderName + file.originalname)
+    //     }
+    // }),
+    fileFilter: (req, file, cb) => {
+        const acceptFile: boolean = ['image/jpeg', 'image/png'].includes(file.mimetype);
+        cb(null, acceptFile);
+    },
 });
 
 const apiRoute = apiRouter()
@@ -24,7 +33,16 @@ apiRoute.use(upload.single("upload"));
 
 apiRoute.post(async (req: NextApiResponse & { file: any }, res) => {
     const {filename, mimetype, size, path: filepath} = req.file;
-    const result = await ImagesService.upload({filename, mimetype, size, filepath})
+    const minified = await imagemin([`public/uploads/${filename}`], {
+        destination: 'public/uploads',
+        plugins: [
+            imageminJpegtran(),
+            imageminPngquant({
+                quality: [0.6, 0.8]
+            })
+        ]
+    });
+    const result = await ImagesService.upload({filename, mimetype, size: Buffer.byteLength(minified[0].data), filepath})
     if (result) {
         res.status(200).json({url: "http://localhost:3000/api/images/" + filename});
     } else {

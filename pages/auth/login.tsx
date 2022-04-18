@@ -3,7 +3,7 @@ import {useState} from "react";
 import {useRouter} from "next/router";
 import {useForm} from "@mantine/form";
 import {Button, createStyles, PasswordInput, TextInput} from "@mantine/core";
-import axios from "axios";
+import {fetcher} from "@lib/utils";
 
 const useStyles = createStyles((theme) => ({
     loginButton: {
@@ -18,7 +18,7 @@ const useStyles = createStyles((theme) => ({
         borderRadius: "0.25rem",
         paddingTop: "0.6rem",
         paddingBottom: "0.6rem",
-        "&:hover" : {
+        "&:hover": {
             backgroundColor: "rgb(79 70 229) !important"
         }
     }
@@ -41,7 +41,7 @@ export default function Login() {
 
     const handleSubmit = (values: typeof form.values) => {
         form.clearErrors()
-        axios("/api/auth/login", {
+        fetcher("/api/auth/login", {
             method: "POST",
             data: {
                 email: values.email,

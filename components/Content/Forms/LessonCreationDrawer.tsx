@@ -14,10 +14,10 @@ import {
 import dynamic from "next/dynamic";
 import parser from "html-react-parser"
 import {useForm} from "@mantine/form";
-import axios from "axios";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
+import {fetcher} from "@lib/utils";
 
 const Editor = dynamic(() => import("@components/Content/Editor"), {
     ssr: false
@@ -36,10 +36,10 @@ export const LessonCreationDrawer = ({stage, setOpened, opened}) => {
     })
 
     const handleSubmit = (values: typeof form.values) => {
-        axios.post('/api/lessons', {...values, stageId: stage.id}, {
-            headers: {
-                authorization: 'Bearer ' + localStorage.getItem('accessToken')
-            }
+        fetcher('/api/lessons', {
+            method: 'POST',
+            data: {...values, stageId: stage.id},
+            auth: true
         }).then(res => {
             notifications.showNotification({
                 title: "Успех",

@@ -1,12 +1,10 @@
 import {useQuery} from "react-query";
-import axios from "axios";
+import {fetcher} from "@lib/utils";
 
 export default function useUser() {
     return useQuery('user', () =>
-        axios("/api/auth/aboutMe", {
+        fetcher("/api/auth/aboutMe", {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("accessToken")
-            }
+            auth: true,
         }).then(res => res.data))
 }
