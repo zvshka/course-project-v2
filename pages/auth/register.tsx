@@ -72,7 +72,7 @@ const useStyles = createStyles((theme) => ({
         minHeight: '100vh',
         backgroundImage: `linear-gradient(to top left, ${theme.colors.blue[6]}, ${theme.colors.indigo[9]})`,
         width: '100%',
-        padding: `${theme.spacing.xl * 4}px ${theme.spacing.sm}px`
+        padding: `${theme.spacing.xl * 2}px ${theme.spacing.sm}px`
     },
     form: {
         width: '100%',
