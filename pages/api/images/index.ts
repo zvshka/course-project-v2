@@ -45,7 +45,7 @@ apiRoute.post(AuthGuard("ADMIN"), async (req: NextApiResponse & { file: any }, r
     });
     const result = await ImagesService.upload({filename, mimetype, size: Buffer.byteLength(minified[0].data), filepath})
     if (result) {
-        res.status(200).json({url: "http://localhost:3000/api/images/" + filename});
+        res.status(200).json({url: process.env.BASE_URL + "/api/images/" + filename});
     } else {
         res.status(500).json({error: "Something went wrong!"})
     }

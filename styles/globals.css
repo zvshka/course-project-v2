@@ -1,9 +1,5 @@
 @import "ck-editor.css";
 
-@tailwind utilities;
-@tailwind components;
-@tailwind base;
-
 html,
 body {
     padding: 0;

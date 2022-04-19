@@ -1,7 +1,18 @@
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useForm} from "@mantine/form";
-import {Box, Button, createStyles, Group, Paper, PasswordInput, TextInput} from "@mantine/core";
+import {
+    Anchor,
+    Box,
+    Button,
+    createStyles, Divider,
+    Group,
+    Paper,
+    PasswordInput,
+    Text,
+    TextInput,
+    UnstyledButton
+} from "@mantine/core";
 import {fetcher} from "@lib/fetcher";
 import {BrandGithub} from "tabler-icons-react";
 
@@ -30,14 +41,53 @@ const useStyles = createStyles((theme) => ({
     },
     form: {
         width: '100%',
-        padding: theme.spacing.md,
-        marginTop: theme.spacing.xl * 4,
+        padding: theme.spacing.xl * 1.5,
+        // marginTop: theme.spacing.xl * 4,
         [theme.fn.largerThan("sm")]: {
             width: '50%'
         },
         [theme.fn.largerThan("lg")]: {
             width: '33.333%'
         },
+    },
+    formTitle: {
+        fontSize: theme.fontSizes.xl * 1.4,
+        fontWeight: 800,
+        lineHeight: 1,
+        color: theme.colors.gray[8]
+    },
+    noAccount: {
+        fontSize: theme.fontSizes.sm,
+        marginTop: theme.spacing.md,
+        fontWeight: 500,
+        color: theme.colors.gray[7],
+        lineHeight: 1
+    },
+    registerUrl: {
+        cursor: "pointer",
+        color: theme.colors.gray[8],
+        fontSize: theme.fontSizes.sm,
+        fontWeight: 500,
+        "&:hover": {
+            color: theme.colors.blue[5],
+            textDecoration: "underline"
+        }
+    },
+    gitButton: {
+        padding: `${theme.spacing.lg}px ${theme.spacing.md}px`,
+        width: '100%',
+        marginTop: theme.spacing.lg,
+        backgroundColor: "rgba(0, 0, 0, 0)",
+        border: 'solid 1px',
+        borderRadius: theme.radius.md,
+        [theme.fn.largerThan('sm')]: {
+            paddingTop: theme.spacing.sm,
+            paddingBottom: theme.spacing.sm
+        }
+    },
+    gitButtonText: {
+        fontWeight: 500,
+        color: theme.colors.gray[7]
     }
 }))
 
@@ -87,27 +137,28 @@ export default function Login() {
                 {/* LOGO */}
 
                 <Paper radius={theme.spacing.sm / 2} shadow={'md'} className={classes.form}>
-                    <p tabIndex={0} className="focus:outline-none text-2xl font-extrabold leading-6 text-gray-800">
-                        Вход в аккаунт</p>
-                    <p tabIndex={0} className="focus:outline-none text-sm mt-4 font-medium leading-none text-gray-500">
+                    <Text className={classes.formTitle}>Вход в аккаунт</Text>
+                    <Text className={classes.noAccount}>
                         Нет аккаунта?
-                        <Link href={"/auth/register"}>
-                            <a className="hover:text-gray-500 focus:text-gray-500 focus:outline-none
-                                 focus:underline hover:underline text-sm font-medium leading-none text-gray-800 cursor-pointer"> Регистрация</a>
+                        <Link href={"/auth/register"} passHref>
+                            <Anchor className={classes.registerUrl}> Регистрация</Anchor>
                         </Link>
-                    </p>
+                    </Text>
 
-                    <button aria-label="Continue with github" role="button"
-                            className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 md:py-3.5 py-2 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
-                        <BrandGithub size={24}/>
-                        <p className="text-base font-medium ml-4 text-gray-700">Войти с Github</p>
-                    </button>
+                    <UnstyledButton className={classes.gitButton}>
+                        <Group>
+                            <BrandGithub size={24}/>
+                            <Text className={classes.gitButtonText}>Войти с Github</Text>
+                        </Group>
+                    </UnstyledButton >
 
-                    <div className="w-full flex items-center justify-between py-5">
-                        <hr className="w-full bg-gray-400"/>
-                        <p className="text-base font-medium leading-4 px-2.5 text-gray-400">ИЛИ</p>
-                        <hr className="w-full bg-gray-400"/>
-                    </div>
+                    <Divider my="xl" label="ИЛИ" labelPosition="center" size="md" styles={{
+                        label: {
+                            fontSize: theme.fontSizes.md,
+                            fontWeight: 500,
+                        }
+                    }}/>
+
                     <TextInput
                         required
                         label="Email"

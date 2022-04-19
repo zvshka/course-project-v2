@@ -8,7 +8,7 @@ const Editor = ({data, setData}) => {
             {
                 simpleUpload: {
                     // The URL that the images are uploaded to.
-                    uploadUrl: 'http://localhost:3000/api/images',
+                    uploadUrl: 'https://waffle.zvshka.keenetic.pro/api/images',
                 }
             }
         }

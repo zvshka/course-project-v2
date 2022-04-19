@@ -11,7 +11,7 @@
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
-  "proxy": "http://localhost:3000",
+  "proxy": "https://waffle.zvshka.keenetic.pro",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@ckeditor/ckeditor5-react": "^4.0.0",
