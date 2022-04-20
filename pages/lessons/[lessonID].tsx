@@ -1,5 +1,5 @@
 import {Shell} from "@components/Layout/Shell";
-import {Box, Button, Group, Paper, Text, Title} from "@mantine/core";
+import {Box, Button, Group, Paper, Text, Title, useMantineTheme} from "@mantine/core";
 import parser from "html-react-parser";
 import {useRouter} from "next/router";
 import useLesson from "@hooks/useLesson";
@@ -8,6 +8,7 @@ import useUser from "@hooks/useUser";
 
 export default function LessonPage() {
     const router = useRouter()
+    const theme = useMantineTheme()
     const lessonQuery = useLesson(router.query.lessonID)
     const userQuery = useUser()
 
@@ -39,7 +40,9 @@ export default function LessonPage() {
             </Group>
         </Paper>
         <Box className='ck-content' mt={'md'}>
-            {lessonQuery.isSuccess && parser(lessonQuery.data.text)}
+            <Paper shadow={"xl"} radius={theme.radius.md} px={theme.spacing.sm} py={theme.spacing.sm / 4}>
+                {lessonQuery.isSuccess && parser(lessonQuery.data.text)}
+            </Paper>
         </Box>
         <Paper shadow={'lg'} px={'sm'} py={'sm'} mt={'md'}>
             <Group position={'apart'}>

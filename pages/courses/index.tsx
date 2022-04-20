@@ -45,7 +45,7 @@ export default function Courses() {
         <SimpleGrid cols={1} mt={"md"} breakpoints={[{minWidth: 'md', cols: 3}, {minWidth: 'xs', cols: 2}]}>
             {coursesQuery.isSuccess && !coursesQuery.isLoading && coursesQuery.data.map((c, i) => (
                 <Box key={i}>
-                    <Course course={c}/>
+                    <Course course={c} isAdmin={userQuery.isSuccess && userQuery.data.role === "ADMIN"}/>
                 </Box>
             ))}
         </SimpleGrid>

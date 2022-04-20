@@ -30,6 +30,15 @@ class StagesService {
         }
     }
 
+    async updateOne(id, stageDTO) {
+        return await prisma.stage.update({
+            where: {id},
+            data: {
+                title: stageDTO.title
+            }
+        })
+    }
+
     async deleteOneById(id) {
         return await prisma.stage.delete({
             where: {id}

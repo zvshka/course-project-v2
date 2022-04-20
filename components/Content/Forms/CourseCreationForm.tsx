@@ -75,6 +75,7 @@ export function CourseCreationForm() {
                 })
                 setCourseId(res.data.course.id)
                 queryClient.invalidateQueries("courses")
+                form.reset()
             })
             .catch(error => {
                 setLoading(false)

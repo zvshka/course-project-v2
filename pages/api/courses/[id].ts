@@ -21,7 +21,7 @@ apiRoute.delete(AuthGuard("ADMIN"), async (req, res) => {
     const id = req.query.id
     if (!req.query.id) return res.status(400).json({error: "No id provided"})
     await CoursesService.deleteOneById(id)
-    res.status(200)
+    res.status(200).json({message: "Курс успешно удален"})
 })
 
 export default apiRoute

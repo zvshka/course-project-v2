@@ -1,6 +1,12 @@
 import React from 'react';
-import {Badge, Card, createStyles, Group, Text, Image as MImage, useMantineTheme, Box} from '@mantine/core';
+import {Badge, Card, createStyles, Group, Image, Menu, Text, useMantineTheme} from '@mantine/core';
 import Link from "next/link";
+import {Pencil, TrashX} from "tabler-icons-react";
+import {fetcher} from "@lib/fetcher";
+import {CheckIcon} from "@modulz/radix-icons";
+import {useModals} from "@mantine/modals";
+import {useNotifications} from "@mantine/notifications";
+import {useQueryClient} from "react-query";
 // import Image from "next/image";
 // import {imageLoader} from "@lib/imageLoader";
 
@@ -27,10 +33,20 @@ const useStyles = createStyles((theme) => ({
         fontSize: theme.fontSizes.xs,
         fontWeight: 700,
     },
+    buttons: {
+        // ref: getRef('buttons'),
+        // visibility: "hidden",
+        position: "absolute",
+        top: theme.spacing.sm, right: theme.spacing.sm,
+        zIndex: 5,
+    },
 }));
 
-export function Course({course}) {
+export function Course({course, isAdmin = false}) {
     const {classes} = useStyles();
+    const modals = useModals()
+    const notifications = useNotifications()
+    const queryClient = useQueryClient()
     const theme = useMantineTheme();
 
     const features = course.badges.map((badge) => (
@@ -39,11 +55,60 @@ export function Course({course}) {
         </Badge>
     ));
 
+    const openConfirmModal = () => modals.openConfirmModal({
+        title: 'Пожалуйста, подтвердите удаление',
+        children: (
+            <Text size="sm">
+                Данное действие нельзя отменить, продолжить?
+            </Text>
+        ),
+        labels: {confirm: 'Подтвердить' , cancel: 'Отмена'},
+        onCancel: () => console.log('Cancel'),
+        onConfirm: () => {
+            fetcher('/api/courses/' + course.id, {
+                method: "DELETE",
+                auth: true
+            }).then(res => {
+                notifications.showNotification({
+                    title: "Успех",
+                    message: res.data.message,
+                    color: "green",
+                    icon: <CheckIcon/>
+                })
+                queryClient.invalidateQueries("courses")
+            }).catch(e => {
+                notifications.showNotification({
+                    title: "Ошибка",
+                    message: "При удалении этапа произошла ошибка",
+                    color: "red"
+                })
+            })
+        },
+    });
+
+    const handleDelete = (e) => {
+        e.preventDefault()
+        openConfirmModal()
+    }
+
     return <Link href={`/courses/${course.id}`} passHref>
         <Card component={'a'} withBorder radius="md" p="md" className={classes.card}>
-            <Card.Section>
+            <Card.Section sx={{position: "relative"}}>
                 {/*<Image src={course?.iconURL} alt={course?.title} layout={'responsive'} height={180} width={360} loader={imageLoader}/>*/}
-                <MImage src={course?.iconURL + '?width=300'} alt={course?.title} height={180}/>
+                <Group className={classes.buttons}>
+                    {isAdmin && <Menu onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                    }}>
+                        <Menu.Item icon={<Pencil size={14}/>}>Изменить</Menu.Item>
+                        <Menu.Item icon={<TrashX size={14}/>}
+                                   color={"red"}
+                                   onClick={handleDelete}>
+                            Удалить
+                        </Menu.Item>
+                    </Menu>}
+                </Group>
+                <Image src={course?.iconURL + '?width=300'} withPlaceholder alt={course?.title} height={180}/>
             </Card.Section>
             <Card.Section className={classes.section} mt="md">
                 <Text size="lg" weight={500}>

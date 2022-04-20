@@ -85,7 +85,7 @@ export const LessonCreationDrawer = ({stage, setOpened, opened}) => {
                         </Paper>
                         <Box my={'md'}>
                             <Title order={3}>Предварительный результат</Title>
-                            <Paper style={{padding: '0 var(--ck-spacing-standard)'}} shadow={'xl'}
+                            <Paper px={theme.spacing.sm} py={theme.spacing.sm / 4} shadow={'xl'}
                                    className='ck-content'>
                                 {parser(form.values.text)}
                             </Paper>

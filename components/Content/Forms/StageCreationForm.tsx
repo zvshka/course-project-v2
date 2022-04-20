@@ -1,49 +1,58 @@
-import {useModals} from "@mantine/modals";
-import {Box, Button, Group, LoadingOverlay, TextInput, useMantineTheme} from "@mantine/core";
+import {Box, Button, Group, LoadingOverlay, TextInput} from "@mantine/core";
 import {useNotifications} from "@mantine/notifications";
 import {useState} from "react";
 import {useForm} from "@mantine/form";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
 import {fetcher} from "@lib/fetcher";
+import {useModals} from "@mantine/modals";
 
-export default function StageCreationForm({courseId}) {
+export default function StageCreationForm({courseId, stage = null}) {
     const modals = useModals()
-    const theme = useMantineTheme()
     const queryClient = useQueryClient()
     const notifications = useNotifications()
     const [loading, setLoading] = useState(false)
 
     const form = useForm({
         initialValues: {
-            title: ''
+            title: stage ? stage.title : ''
         }
     })
 
     const handleSubmit = (values: typeof form.values) => {
         setLoading(true)
-        fetcher('/api/stages', {
-            data: {
-                courseId,
-                title: values.title
-            },
-            method: 'POST',
-            auth: true,
-        }).then(res => {
+        let promise: Promise<any>;
+        if (stage) {
+            promise = fetcher('/api/stages/' + stage.id, {
+                auth: true,
+                method: "PATCH",
+                data: {
+                    title: values.title
+                }
+            })
+        } else {
+            promise = fetcher('/api/stages', {
+                data: {courseId, title: values.title},
+                method: "POST",
+                auth: true,
+            })
+        }
+
+        promise.then(res => {
             setLoading(false)
             notifications.showNotification({
                 title: "Успех",
-                message: "Этап был успешно создан",
+                message: res.data.message,
                 color: "green",
                 icon: <CheckIcon/>
             })
             queryClient.invalidateQueries(['course', courseId])
-            form.reset()
+            stage ? modals.closeAll() : form.reset()
         }).catch(e => {
             setLoading(false)
             notifications.showNotification({
                 title: "Ошибка",
-                message: "При создании этапа произошла ошибка",
+                message: "При отправлении произошла ошибка",
                 color: "red"
             })
         })

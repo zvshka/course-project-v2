@@ -1,4 +1,4 @@
-import {Box, Collapse, createStyles, Group, Menu, SimpleGrid, Text, Title} from "@mantine/core";
+import {Box, Button, Collapse, createStyles, Group, Menu, SimpleGrid, Text, Title} from "@mantine/core";
 import {Lesson} from "@components/Content/Lesson";
 import {GripVertical, Trash} from "tabler-icons-react";
 import {useSortable} from "@dnd-kit/sortable";
@@ -10,6 +10,7 @@ import {useQueryClient} from "react-query";
 import {LessonCreationDrawer} from "@components/Content/Forms/LessonCreationDrawer";
 import {useToggle} from "@mantine/hooks";
 import {fetcher} from "@lib/fetcher";
+import StageCreationForm from "@components/Content/Forms/StageCreationForm";
 
 const useStyles = createStyles((theme) => ({
     item: {
@@ -64,7 +65,7 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                 Данное действие нельзя отменить, продолжить?
             </Text>
         ),
-        labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
+        labels: {confirm: 'Подтвердить' , cancel: 'Отмена'},
         onCancel: () => console.log('Cancel'),
         onConfirm: () => {
             fetcher('/api/stages/' + stage.id, {
@@ -122,7 +123,15 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                 </Group>
                 {isAdmin && <>
                     <Menu onClick={(e) => e.stopPropagation()}>
-                        <Menu.Item>Изменить этап</Menu.Item>
+                        <Menu.Item onClick={(e) => {
+                            e.stopPropagation()
+                            modals.openModal({
+                                title: "Создание этапа",
+                                children: <>
+                                    <StageCreationForm courseId={stage.courseId} stage={stage}/>
+                                </>
+                            })
+                        }}>Изменить этап</Menu.Item>
                         <Menu.Item onClick={(e) => {
                             e.stopPropagation();
                             toggleDrawer()
