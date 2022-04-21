@@ -7,8 +7,6 @@ import {CheckIcon} from "@modulz/radix-icons";
 import {useModals} from "@mantine/modals";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
-// import Image from "next/image";
-// import {imageLoader} from "@lib/imageLoader";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -47,7 +45,6 @@ export function Course({course, isAdmin = false}) {
     const modals = useModals()
     const notifications = useNotifications()
     const queryClient = useQueryClient()
-    const theme = useMantineTheme();
 
     const features = course.badges.map((badge) => (
         <Badge color={"blue"} key={badge.label}>
@@ -62,7 +59,7 @@ export function Course({course, isAdmin = false}) {
                 Данное действие нельзя отменить, продолжить?
             </Text>
         ),
-        labels: {confirm: 'Подтвердить' , cancel: 'Отмена'},
+        labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
         onCancel: () => console.log('Cancel'),
         onConfirm: () => {
             fetcher('/api/courses/' + course.id, {
@@ -94,7 +91,6 @@ export function Course({course, isAdmin = false}) {
     return <Link href={`/courses/${course.id}`} passHref>
         <Card component={'a'} withBorder radius="md" p="md" className={classes.card}>
             <Card.Section sx={{position: "relative"}}>
-                {/*<Image src={course?.iconURL} alt={course?.title} layout={'responsive'} height={180} width={360} loader={imageLoader}/>*/}
                 <Group className={classes.buttons}>
                     {isAdmin && <Menu onClick={(e) => {
                         e.preventDefault()

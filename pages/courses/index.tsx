@@ -1,35 +1,25 @@
 import useUser from "@hooks/useUser";
 import useCourses from "@hooks/useCourses";
-import {Box, Button, Group, Paper, SimpleGrid, Skeleton, Title} from "@mantine/core";
+import {Box, Button, Group, Paper, SimpleGrid, Title} from "@mantine/core";
 import {useNotifications} from "@mantine/notifications";
-import {useEffect} from "react";
 import {Shell} from "@components/Layout/Shell";
 import {useModals} from "@mantine/modals";
 import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
 import {Course} from "@components/Content/Course";
 
 export default function Courses() {
-    const notifications = useNotifications()
     const modals = useModals()
     const userQuery = useUser()
     const coursesQuery = useCourses()
 
     const openCreatingModal = () => {
-        const id = modals.openModal({
+        modals.openModal({
             title: "Создание курса",
             children: <>
                 <CourseCreationForm/>
             </>
         })
     }
-
-    useEffect(() => {
-        coursesQuery.isError && notifications.showNotification({
-            title: "Произошла ошибка",
-            message: "Не удалось загрузить курсы",
-            color: "red"
-        })
-    }, [coursesQuery.isError])
 
     return <Shell>
         <Paper shadow={'lg'} px={'sm'} py={'sm'}>

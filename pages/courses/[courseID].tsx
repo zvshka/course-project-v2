@@ -25,7 +25,6 @@ export default function CoursePage() {
 
     const courseQuery = useCourse(router.query.courseID)
     const [stages, stagesHandlers] = useListState([])
-
     useEffect(() => {
         courseQuery.isSuccess && stagesHandlers.setState(courseQuery.data.stages)
     }, [courseQuery?.data?.stages, courseQuery.isSuccess])
@@ -74,9 +73,7 @@ export default function CoursePage() {
     const openCreatingModal = () => {
         modals.openModal({
             title: "Создание этапа",
-            children: <>
-                <StageCreationForm courseId={router.query.courseID}/>
-            </>
+            children: <StageCreationForm courseId={router.query.courseID}/>
         })
     }
 
@@ -91,7 +88,7 @@ export default function CoursePage() {
                         Создать этап
                     </Button>
                     <Button onClick={handleToggle}>
-                        Изменить порядок
+                        {draggable ? "Сохранить порядок" : "Изменить порядок"}
                     </Button>
                 </Group>}
             </Group>

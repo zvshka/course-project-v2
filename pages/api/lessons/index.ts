@@ -6,7 +6,7 @@ const apiRoute = apiRouter()
 
 apiRoute.post(AuthGuard("ADMIN"), async (req, res) => {
     await LessonsService.create(req.body)
-    res.status(200).json({message: "Success"})
+    res.status(200).json({message: "Урок успешно создан"})
 })
 
 export default apiRoute

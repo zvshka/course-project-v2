@@ -6,7 +6,7 @@ import {
     Container,
     createStyles,
     Group,
-    Header,
+    Header, Image,
     Menu,
     Text,
     Title,
@@ -19,6 +19,8 @@ import useUser from "@hooks/useUser";
 import {Logout, Settings, Users} from "tabler-icons-react";
 import {NextLink} from "@mantine/next";
 import {useQueryClient} from "react-query";
+import waffle from "../../public/food-waffles.svg"
+
 
 const HEADER_HEIGHT = 84;
 const mainLinks = [
@@ -161,7 +163,7 @@ export function DoubleHeader() {
     return (
         <Header height={HEADER_HEIGHT}>
             <Container className={classes.inner}>
-                {/*<MantineLogo width={130} />*/}
+                <Image alt={"Waffle Logo"} src={waffle.src} height={40}/>
                 <Title order={2}>Fantastic Waffle</Title>
                 <div className={classes.links}>
                     <Group position="right">

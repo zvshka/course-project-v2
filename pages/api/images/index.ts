@@ -5,10 +5,7 @@ import ImagesService from "@services/Images.service";
 import imagemin from "imagemin";
 import imageminJpegtran from 'imagemin-jpegtran';
 import imageminPngquant from 'imagemin-pngquant';
-import fs from "fs";
 import {AuthGuard} from "@lib/AuthGuard";
-
-const oneMegabyteInBytes = 1000000;
 const outputFolderName = './public/uploads';
 
 const upload = multer({
@@ -17,11 +14,6 @@ const upload = multer({
         destination: outputFolderName,
         filename: (req, file, cb) => cb(null, file.originalname),
     }),
-    // storage: CustomStorage({
-    //     destination: function (req, file, cb) {
-    //         cb(null, outputFolderName + file.originalname)
-    //     }
-    // }),
     fileFilter: (req, file, cb) => {
         const acceptFile: boolean = ['image/jpeg', 'image/png'].includes(file.mimetype);
         cb(null, acceptFile);
@@ -47,7 +39,7 @@ apiRoute.post(AuthGuard("ADMIN"), async (req: NextApiResponse & { file: any }, r
     if (result) {
         res.status(200).json({url: process.env.BASE_URL + "/api/images/" + filename});
     } else {
-        res.status(500).json({error: "Something went wrong!"})
+        res.status(500).json({error: "Что-то пошло не так"})
     }
 });
 

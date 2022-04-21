@@ -30,10 +30,10 @@ apiRoute.get(async (req: NextApiRequest & { query: { width: string, quality: str
             res.setHeader('Content-Type', result.mimetype);
             res.send(sharped);
         } catch (e) {
-            res.status(400).json({error: 'Image not found'});
+            res.status(500).json({error: 'Что-то пошло не так, попробуй еще раз или измени запрос'});
         }
     } else {
-        res.status(400).json({error: 'Image not found'});
+        res.status(400).json({error: "Изображение не найдено"});
     }
 })
 

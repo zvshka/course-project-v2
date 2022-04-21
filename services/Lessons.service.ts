@@ -31,6 +31,12 @@ class LessonsService {
             }
         })
     }
+
+    async deleteOneById(id) {
+        return await prisma.lesson.delete({
+            where: {id}
+        })
+    }
 }
 
 export default new LessonsService()

@@ -16,12 +16,7 @@ export const mapToIds = (arr) => {
     return arr.map(el => el.id)
 }
 
-interface IData {
-    id: string
-    role: string
-}
-
-export const signToken = (data: IData) => {
+export const signToken = (data: { id: string, role: string }) => {
     return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "7d"
     })
@@ -29,7 +24,7 @@ export const signToken = (data: IData) => {
 
 export const verifyToken = (token) => {
     try {
-        return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as IData
+        return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as { id: string, role: string }
     } catch (e) {
         return null
     }

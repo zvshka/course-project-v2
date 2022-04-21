@@ -12,7 +12,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export const Shell = ({children}) => {
-    const {classes, cx} = useStyles();
+    const {classes} = useStyles();
     return <AppShell
         padding="md"
         header={<DoubleHeader/>}
@@ -21,7 +21,6 @@ export const Shell = ({children}) => {
         })}
     >
         <Container className={classes.mainContainer}>
-            {/*<Navigation/>*/}
             {children}
         </Container>
     </AppShell>

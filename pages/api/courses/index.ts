@@ -7,12 +7,11 @@ const apiRoute = apiRouter()
 apiRoute.get(async (req, res) => {
     const courses = await CoursesService.getAll()
     res.status(200).json(courses)
-    // res.status(500).json({error: "Ошибка типа"})
 })
 
 apiRoute.post(AuthGuard("ADMIN"), async (req, res) => {
     const course = await CoursesService.create(req.body)
-    res.status(200).json({message: "Success", course})
+    res.status(200).json({message: "Курс успешно создан", courseId: course.id})
 })
 
 export default apiRoute

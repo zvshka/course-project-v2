@@ -1,5 +1,5 @@
 import {Shell} from "@components/Layout/Shell";
-import {Avatar, Title, Text, Group, Box} from "@mantine/core";
+import {Title, Text, Group, Box, Image} from "@mantine/core";
 import useUser from "@hooks/useUser";
 
 export default function Account() {
@@ -11,7 +11,7 @@ export default function Account() {
             </Title>
             {userQuery.isSuccess ? <>
                 <Group>
-                    <Avatar size={"xl"} src={userQuery.data.avatarURL}/>
+                    <Image alt={"User Avatar"} withPlaceholder height={512} src={userQuery.data.avatarURL}/>
                     <Box>
                         <Text>Имя: {userQuery.data.firstname || ""}</Text>
                         <Text>Фамилия: {userQuery.data.lastname || ""}</Text>

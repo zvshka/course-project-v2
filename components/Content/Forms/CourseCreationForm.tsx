@@ -69,11 +69,11 @@ export function CourseCreationForm() {
                 setLoading(false)
                 notifications.showNotification({
                     title: "Успех",
-                    message: "Курс был успешно создан",
+                    message: res.data.message,
                     color: "green",
                     icon: <CheckIcon/>
                 })
-                setCourseId(res.data.course.id)
+                setCourseId(res.data.courseId)
                 queryClient.invalidateQueries("courses")
                 form.reset()
             })

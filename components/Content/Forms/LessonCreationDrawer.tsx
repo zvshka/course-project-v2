@@ -72,7 +72,7 @@ export const LessonCreationDrawer = ({stage, setOpened, opened}) => {
                 padding="xl"
                 size="full"
                 styles={{drawer: {backgroundColor: theme.colors.gray[2]}}}>
-            <ScrollArea style={{height: '98%'}}>
+            <ScrollArea style={{height: '85%'}}>
                 <Container pb={'xl'}>
                     <form onSubmit={form.onSubmit(handleSubmit)}>
                         <TextInput label={"Название"} required

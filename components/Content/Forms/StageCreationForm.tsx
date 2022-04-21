@@ -52,7 +52,7 @@ export default function StageCreationForm({courseId, stage = null}) {
             setLoading(false)
             notifications.showNotification({
                 title: "Ошибка",
-                message: "При отправлении произошла ошибка",
+                message: "При создании этапа произошла ошибка",
                 color: "red"
             })
         })
