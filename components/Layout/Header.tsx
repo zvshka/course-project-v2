@@ -17,7 +17,7 @@ import {useBooleanToggle} from '@mantine/hooks';
 import Link from "next/link"
 import {useRouter} from "next/router";
 import useUser from "@hooks/useUser";
-import {Logout, Settings, Users} from "tabler-icons-react";
+import {Logout, Pencil, Settings, Users} from "tabler-icons-react";
 import {NextLink} from "@mantine/next";
 import {useQueryClient} from "react-query";
 
@@ -32,6 +32,10 @@ const mainLinks = [
         "link": "/courses",
         "label": "Курсы"
     },
+    {
+        "link": "/about",
+        "label": "О проекте"
+    }
 ]
 
 const adminLinks = [
@@ -39,6 +43,11 @@ const adminLinks = [
         "link": '/admin/users',
         "label": "Пользователи",
         "icon": Users
+    },
+    {
+        "link": '/lessons/create',
+        "label": "Создать урок",
+        "icon": Pencil
     }
 ]
 
