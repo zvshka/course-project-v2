@@ -1,4 +1,4 @@
-import {Box, Button, Collapse, createStyles, Group, Menu, SimpleGrid, Text, Title} from "@mantine/core";
+import {Box, Collapse, createStyles, Group, Menu, SimpleGrid, Text, Title} from "@mantine/core";
 import {Lesson} from "@components/Content/Lesson";
 import {GripVertical, Trash} from "tabler-icons-react";
 import {useSortable} from "@dnd-kit/sortable";
@@ -7,10 +7,11 @@ import {useModals} from "@mantine/modals";
 import {useNotifications} from "@mantine/notifications";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
-import {LessonCreationDrawer} from "@components/Content/Forms/LessonCreationDrawer";
 import {useToggle} from "@mantine/hooks";
 import {fetcher} from "@lib/fetcher";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
+import {useRouter} from "next/router";
+import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
     item: {
@@ -52,6 +53,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export const Stage = ({stage, draggable, isAdmin = false}) => {
+    const router = useRouter()
     const {classes} = useStyles()
     const modals = useModals()
     const notifications = useNotifications()
@@ -65,7 +67,7 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                 Данное действие нельзя отменить, продолжить?
             </Text>
         ),
-        labels: {confirm: 'Подтвердить' , cancel: 'Отмена'},
+        labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
         onCancel: () => console.log('Cancel'),
         onConfirm: () => {
             fetcher('/api/stages/' + stage.id, {
@@ -108,7 +110,6 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
     }
 
     return <>
-        <LessonCreationDrawer stage={stage} opened={drawer} setOpened={toggleDrawer}/>
         <Box ref={setNodeRef}
              style={style}
              {...attributes}
@@ -132,12 +133,11 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                                 </>
                             })
                         }}>Изменить этап</Menu.Item>
-                        <Menu.Item onClick={(e) => {
-                            e.stopPropagation();
-                            toggleDrawer()
-                        }}>
-                            Создать урок
-                        </Menu.Item>
+                        <Link href={"/lessons/create?courseId=" + stage.courseId + "&stageId=" + stage.id} passHref>
+                            <Menu.Item component={'a'}>
+                                Создать урок
+                            </Menu.Item>
+                        </Link>
                         <Menu.Label>Опасное</Menu.Label>
                         <Menu.Item onClick={handleDelete} color={'red'} icon={<Trash size={14}/>}>Удалить</Menu.Item>
                     </Menu>

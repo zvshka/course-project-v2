@@ -1,11 +1,11 @@
 import multer from 'multer';
-import {NextApiResponse} from "next";
+import {NextApiRequest, NextApiResponse} from "next";
 import {apiRouter} from "@lib/utils";
 import ImagesService from "@services/Images.service";
-import imagemin from "imagemin";
-import imageminJpegtran from 'imagemin-jpegtran';
-import imageminPngquant from 'imagemin-pngquant';
 import {AuthGuard} from "@lib/AuthGuard";
+import sharp from "sharp";
+import {MIME_TYPES} from "@mantine/dropzone";
+
 const outputFolderName = './public/uploads';
 
 const upload = multer({
@@ -24,18 +24,21 @@ const apiRoute = apiRouter()
 
 apiRoute.use(upload.single("upload"));
 
-apiRoute.post(AuthGuard("ADMIN"), async (req: NextApiResponse & { file: any }, res) => {
+apiRoute.post(AuthGuard("ADMIN"), async (req: NextApiRequest & { user: any, file: any }, res: NextApiResponse) => {
     const {filename, mimetype, size, path: filepath} = req.file;
-    const minified = await imagemin([`public/uploads/${filename}`], {
-        destination: 'public/uploads',
-        plugins: [
-            imageminJpegtran(),
-            imageminPngquant({
-                quality: [0.6, 0.8]
-            })
-        ]
-    });
-    const result = await ImagesService.upload({filename, mimetype, size: Buffer.byteLength(minified[0].data), filepath})
+    const sharped = sharp(filepath)
+    if (mimetype === MIME_TYPES.jpeg) {
+        sharped.jpeg({
+            quality: 85
+        })
+    } else if (mimetype === MIME_TYPES.png) {
+        sharped.png({
+            quality: 85
+        })
+    }
+    await sharped.toFile(filepath)
+    const buffer = await sharped.toBuffer()
+    const result = await ImagesService.upload({filename, mimetype, size: Buffer.byteLength(buffer), filepath})
     if (result) {
         res.status(200).json({url: process.env.BASE_URL + "/api/images/" + filename});
     } else {

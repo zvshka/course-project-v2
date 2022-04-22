@@ -1,4 +1,3 @@
-import {Shell} from "@components/Layout/Shell";
 import {Button, Group, Paper, Title} from "@mantine/core";
 import useCourse from "@hooks/useCourse";
 import {useRouter} from "next/router";
@@ -26,8 +25,10 @@ export default function CoursePage() {
     const courseQuery = useCourse(router.query.courseID)
     const [stages, stagesHandlers] = useListState([])
     useEffect(() => {
-        courseQuery.isSuccess && stagesHandlers.setState(courseQuery.data.stages)
-    }, [courseQuery?.data?.stages, courseQuery.isSuccess])
+        if (courseQuery.isSuccess && courseQuery.data) {
+            stagesHandlers.setState(courseQuery.data.stages)
+        }
+    }, [courseQuery.data, courseQuery.isSuccess])
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -45,7 +46,7 @@ export default function CoursePage() {
         }
     }
 
-    const handleToggle = (e) => {
+    const handleToggle = () => {
         toggleDragging()
         if (!draggable) return
         const toUpdate = stages.map((stage, index) => ({id: stage.id, position: index + 1}))
@@ -61,7 +62,7 @@ export default function CoursePage() {
                 icon: <CheckIcon/>
             })
             queryClient.invalidateQueries(['course', router.query.courseID])
-        }).catch(e => {
+        }).catch(_ => {
             notifications.showNotification({
                 title: "Ошибка",
                 message: "При изменении порядка произошла ошибка",
@@ -77,7 +78,7 @@ export default function CoursePage() {
         })
     }
 
-    return <Shell>
+    return <>
         <Paper shadow={'lg'} px={'sm'} py={'sm'}>
             <Group position={"apart"}>
                 <Title order={3}>
@@ -108,5 +109,5 @@ export default function CoursePage() {
                 )}
             </SortableContext>
         </DndContext>
-    </Shell>
+    </>
 }

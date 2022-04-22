@@ -12,7 +12,7 @@ export default function LessonPage() {
     const lessonQuery = useLesson(router.query.lessonID)
     const userQuery = useUser()
 
-    return <Shell>
+    return <>
         <Paper shadow={'lg'} px={'sm'} py={'sm'}>
             <Group position={"apart"}>
                 <Box>
@@ -34,9 +34,11 @@ export default function LessonPage() {
                         Назад к курсу
                     </Button>
                 </Link>}
-                {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Button component={'a'}>
-                    Редактировать урок
-                </Button>}
+                {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Link href={'/lessons/' + router.query.lessonID + '/edit'}>
+                    <Button component={'a'}>
+                        Редактировать урок
+                    </Button>
+                </Link>}
             </Group>
         </Paper>
         <Box className='ck-content' mt={'md'}>
@@ -54,5 +56,5 @@ export default function LessonPage() {
                 </Button>
             </Group>
         </Paper>
-    </Shell>
+    </>
 }

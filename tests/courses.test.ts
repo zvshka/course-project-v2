@@ -1,5 +1,5 @@
-import {coursesService} from "@services/Courses.service";
+import {test} from "jest-circus";
 
 test('Courses service test', async () => {
-    expect(3+2).toBe(5)
+    expect(3 + 2).toBe(5)
 })

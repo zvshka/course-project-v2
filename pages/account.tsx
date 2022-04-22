@@ -1,33 +1,41 @@
-import {Shell} from "@components/Layout/Shell";
-import {Title, Text, Group, Box, Image} from "@mantine/core";
+import {Avatar, Box, Button, Group, Paper, Stack, Text, TextInput, Title} from "@mantine/core";
 import useUser from "@hooks/useUser";
 
 export default function Account() {
     const userQuery = useUser()
     return (
-        <Shell>
+        <>
             <Title order={2}>
                 Ваш профиль
             </Title>
             {userQuery.isSuccess ? <>
-                <Group>
-                    <Image alt={"User Avatar"} withPlaceholder height={512} src={userQuery.data.avatarURL}/>
-                    <Box>
-                        <Text>Имя: {userQuery.data.firstname || ""}</Text>
-                        <Text>Фамилия: {userQuery.data.lastname || ""}</Text>
+                <Paper p={'lg'}>
+                    <Box sx={{display: 'flex'}}>
+                        <Stack align={"center"} justify="flex-start" spacing={'xs'}>
+                            <Avatar alt={"User Avatar"} size={256} src={userQuery.data.avatarURL}/>
+                            <Text>
+                                {userQuery.data.username}
+                            </Text>
+                            <Text>{userQuery.data.role}</Text>
+                        </Stack>
+                        <Box sx={(theme) => ({
+                            marginLeft: theme.spacing.md,
+                            width: "100%"
+                        })}>
+                            <Group grow>
+                                {/*{userQuery.data.firstname || ""}*/}
+                                <TextInput label={"Имя"} contentEditable={false} value={userQuery.data.firstname || ""}/>
+                                <TextInput label={"Фамилия"} contentEditable={false} value={userQuery.data.lastname || ""}/>
+                            </Group>
+                            <Group grow>
+                                <TextInput label={"Email"} contentEditable={false} value={userQuery.data.email || ""}/>
+                            </Group>
+                        </Box>
                     </Box>
-                    <Box>
-                        <Text>Email: {userQuery.data.email}</Text>
-                        <Text>Email подтвержден: {userQuery.data.email_verified}</Text>
-                    </Box>
-                    <Box>
-                        <Text>Имя пользователя: {userQuery.data.username}</Text>
-                        <Text>Роль: {userQuery.data.role}</Text>
-                    </Box>
-                </Group>
+                </Paper>
             </> : <>
                 <Text>Вы не авторизованы</Text>
             </>}
-        </Shell>
+        </>
     )
 }

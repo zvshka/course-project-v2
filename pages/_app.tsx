@@ -1,15 +1,18 @@
 import "../styles/globals.css"
-// import "../styles/prism.css"
+import "../styles/prism.css"
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from 'react-query/devtools'
 import {MantineProvider} from '@mantine/core';
 import {NotificationsProvider} from "@mantine/notifications";
 import {ModalsProvider} from "@mantine/modals";
 import Head from "next/head";
+import {Shell} from "@components/Layout/Shell";
+import {useRouter} from "next/router";
 
 const queryClient = new QueryClient()
 
 function MyApp({Component, pageProps}) {
+    const router = useRouter()
     return <>
         <Head>
             <title>Fantastic Waffle</title>
@@ -27,10 +30,14 @@ function MyApp({Component, pageProps}) {
             >
                 <NotificationsProvider>
                     <ModalsProvider>
-                        {/*<QueryClientProvider client={queryClient}>*/}
-                        <Component {...pageProps} />
+                        {
+                            router.pathname.includes("auth") ?
+                                <Component {...pageProps}/> :
+                                <Shell>
+                                    <Component {...pageProps} />
+                                </Shell>
+                        }
                         <ReactQueryDevtools initialIsOpen={false}/>
-                        {/*</QueryClientProvider>*/}
                     </ModalsProvider>
                 </NotificationsProvider>
             </MantineProvider>

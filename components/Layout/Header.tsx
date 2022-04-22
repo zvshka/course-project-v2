@@ -6,7 +6,8 @@ import {
     Container,
     createStyles,
     Group,
-    Header, Image,
+    Header,
+    Image,
     Menu,
     Text,
     Title,
@@ -19,7 +20,6 @@ import useUser from "@hooks/useUser";
 import {Logout, Settings, Users} from "tabler-icons-react";
 import {NextLink} from "@mantine/next";
 import {useQueryClient} from "react-query";
-import waffle from "../../public/food-waffles.svg"
 
 
 const HEADER_HEIGHT = 84;
@@ -135,9 +135,9 @@ export function DoubleHeader() {
     const queryClient = useQueryClient()
     const [_, setUserMenuOpened] = useState(false);
     const handleLogout = (e) => {
-        e.preventDefault()
         localStorage.setItem("accessToken", null)
         queryClient.removeQueries("user")
+        router.reload()
     }
 
     const mainItems = mainLinks.map((item) => (
@@ -163,7 +163,7 @@ export function DoubleHeader() {
     return (
         <Header height={HEADER_HEIGHT}>
             <Container className={classes.inner}>
-                <Image alt={"Waffle Logo"} src={waffle.src} height={40}/>
+                <Image alt={"Waffle Logo"} src={'/food-waffles.svg'} height={40}/>
                 <Title order={2}>Fantastic Waffle</Title>
                 <div className={classes.links}>
                     <Group position="right">

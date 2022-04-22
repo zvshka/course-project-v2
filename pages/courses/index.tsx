@@ -21,7 +21,7 @@ export default function Courses() {
         })
     }
 
-    return <Shell>
+    return <>
         <Paper shadow={'lg'} px={'sm'} py={'sm'}>
             <Group position={"apart"}>
                 <Title order={3}>
@@ -39,5 +39,5 @@ export default function Courses() {
                 </Box>
             ))}
         </SimpleGrid>
-    </Shell>
+    </>
 }

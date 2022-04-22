@@ -91,7 +91,9 @@ export function Lesson({lesson, isAdmin}) {
                         e.preventDefault()
                         e.stopPropagation()
                     }}>
-                        <Menu.Item icon={<Pencil size={14}/>}>Изменить</Menu.Item>
+                        <Link href={"/lessons/" + lesson.id + '/edit'}>
+                            <Menu.Item component={"a"} icon={<Pencil size={14}/>}>Изменить</Menu.Item>
+                        </Link>
                         <Menu.Item onClick={openDeletionModal} icon={<TrashX size={14}/>} color={"red"}>Удалить</Menu.Item>
                     </Menu>}
                 </Group>

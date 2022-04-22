@@ -1,11 +1,12 @@
-import {Shell} from "@components/Layout/Shell";
+import {Button} from "@mantine/core";
 
 export default function Home() {
     return (
-        <Shell>
+        <>
+            {/*<Button onClick={helloWorld}/>*/}
             {/*<HeroSection/>*/}
             {/*/!*<FeaturesSection/>*!/*/}
             {/*<ContactUs/>*/}
-        </Shell>
+        </>
     )
 }

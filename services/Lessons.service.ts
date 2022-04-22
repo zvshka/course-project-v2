@@ -37,6 +37,13 @@ class LessonsService {
             where: {id}
         })
     }
+
+    async updateOneById(id: string, body: any) {
+        return await prisma.lesson.update({
+            where: {id},
+            data: body
+        })
+    }
 }
 
 export default new LessonsService()

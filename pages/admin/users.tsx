@@ -76,7 +76,7 @@ export default function Users() {
         )))
     }, [usersQuery.data, usersQuery.isSuccess])
     return (
-        <Shell>
+        <>
             {userQuery.data && !userQuery.isLoading ? <>
                 <Title order={2}>
                     Все пользователи
@@ -100,6 +100,6 @@ export default function Users() {
             </> : <>
                 <div>Loading...</div>
             </>}
-        </Shell>
+        </>
     )
 }

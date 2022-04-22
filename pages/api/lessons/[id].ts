@@ -9,6 +9,11 @@ apiRoute.get(async (req, res) => {
     return res.status(200).json(data)
 })
 
+apiRoute.patch(AuthGuard("ADMIN"), async (req, res) => {
+    await LessonsService.updateOneById(req.query.id as string, req.body)
+    res.status(200).json({message: "Урок успешно обновлен"})
+})
+
 apiRoute.delete(AuthGuard("ADMIN"), async (req, res) => {
     await LessonsService.deleteOneById(req.query.id)
     res.status(200).json({message: "Урок успешно удален"})
