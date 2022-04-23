@@ -1,5 +1,5 @@
 import React from 'react';
-import {Badge, Card, createStyles, Group, Image, Menu, Text, useMantineTheme} from '@mantine/core';
+import {Badge, Card, createStyles, Group, Image, Menu, Text} from '@mantine/core';
 import Link from "next/link";
 import {Pencil, TrashX} from "tabler-icons-react";
 import {fetcher} from "@lib/fetcher";
@@ -7,6 +7,7 @@ import {CheckIcon} from "@modulz/radix-icons";
 import {useModals} from "@mantine/modals";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
+import {NextPage} from "next";
 
 const useStyles = createStyles((theme) => ({
     card: {

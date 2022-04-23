@@ -1,5 +1,6 @@
 import {Avatar, Box, Button, Group, Paper, Stack, Text, TextInput, Title} from "@mantine/core";
 import useUser from "@hooks/useUser";
+import Link from "next/link";
 
 export default function Account() {
     const userQuery = useUser()
@@ -23,12 +24,17 @@ export default function Account() {
                             width: "100%"
                         })}>
                             <Group grow>
-                                {/*{userQuery.data.firstname || ""}*/}
-                                <TextInput label={"Имя"} contentEditable={false} value={userQuery.data.firstname || ""}/>
-                                <TextInput label={"Фамилия"} contentEditable={false} value={userQuery.data.lastname || ""}/>
+                                <TextInput label={"Имя"} contentEditable={false} readOnly
+                                           value={userQuery.data.firstname || ""}/>
+                                <TextInput label={"Фамилия"} contentEditable={false} readOnly
+                                           value={userQuery.data.lastname || ""}/>
                             </Group>
                             <Group grow>
-                                <TextInput label={"Email"} contentEditable={false} value={userQuery.data.email || ""}/>
+                                <TextInput label={"Email"} contentEditable={false} readOnly
+                                           value={userQuery.data.email || ""}/>
+                                <Link href={"/api/auth/github"} passHref>
+                                    <Button component={"a"}>Привязать Github</Button>
+                                </Link>
                             </Group>
                         </Box>
                     </Box>

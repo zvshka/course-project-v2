@@ -76,6 +76,7 @@ const useStyles = createStyles((theme) => ({
     gitButton: {
         padding: `${theme.spacing.lg}px ${theme.spacing.md}px`,
         width: '100%',
+        display: "flex",
         marginTop: theme.spacing.lg,
         backgroundColor: "rgba(0, 0, 0, 0)",
         border: 'solid 1px',
@@ -145,12 +146,14 @@ export default function Login() {
                         </Link>
                     </Text>
 
-                    <UnstyledButton className={classes.gitButton}>
-                        <Group>
-                            <BrandGithub size={24}/>
-                            <Text className={classes.gitButtonText}>Войти с Github</Text>
-                        </Group>
-                    </UnstyledButton >
+                    <Link href={"/api/auth/github"} passHref>
+                        <UnstyledButton component={"a"} className={classes.gitButton}>
+                            <Group>
+                                <BrandGithub size={24}/>
+                                <Text className={classes.gitButtonText}>Войти с Github</Text>
+                            </Group>
+                        </UnstyledButton>
+                    </Link>
 
                     <Divider my="xl" label="ИЛИ" labelPosition="center" size="md" styles={{
                         label: {

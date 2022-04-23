@@ -11,7 +11,7 @@ import {
     Paper,
     PasswordInput,
     Popover,
-    Progress,
+    Progress, Space,
     Text,
     TextInput, UnstyledButton
 } from "@mantine/core";
@@ -77,7 +77,7 @@ const useStyles = createStyles((theme) => ({
     form: {
         width: '100%',
         padding: theme.spacing.xl * 1.5,
-        // marginTop: theme.spacing.xl * 4,
+        marginTop: theme.spacing.xl * 2,
         [theme.fn.largerThan("sm")]: {
             width: '50%'
         },
@@ -199,19 +199,21 @@ export default function Register() {
                         </Link>
                     </Text>
 
-                    <UnstyledButton className={classes.gitButton}>
-                        <Group>
-                            <BrandGithub size={24}/>
-                            <Text className={classes.gitButtonText}>Войти с Github</Text>
-                        </Group>
-                    </UnstyledButton >
+                    {/*<UnstyledButton className={classes.gitButton}>*/}
+                    {/*    <Group>*/}
+                    {/*        <BrandGithub size={24}/>*/}
+                    {/*        <Text className={classes.gitButtonText}>Войти с Github</Text>*/}
+                    {/*    </Group>*/}
+                    {/*</UnstyledButton >*/}
 
-                    <Divider my="xl" label="ИЛИ" labelPosition="center" size="md" styles={{
-                        label: {
-                            fontSize: theme.fontSizes.md,
-                            fontWeight: 500,
-                        }
-                    }}/>
+                    {/*<Divider my="xl" label="ИЛИ" labelPosition="center" size="md" styles={{*/}
+                    {/*    label: {*/}
+                    {/*        fontSize: theme.fontSizes.md,*/}
+                    {/*        fontWeight: 500,*/}
+                    {/*    }*/}
+                    {/*}}/>*/}
+
+                    <Space mt={"md"}/>
 
                     <TextInput
                         required

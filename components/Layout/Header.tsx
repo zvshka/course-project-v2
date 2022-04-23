@@ -172,8 +172,10 @@ export function DoubleHeader() {
     return (
         <Header height={HEADER_HEIGHT}>
             <Container className={classes.inner}>
-                <Image alt={"Waffle Logo"} src={'/food-waffles.svg'} height={40}/>
-                <Title order={2}>Fantastic Waffle</Title>
+                <Group>
+                    <Image alt={"Waffle Logo"} src={'/food-waffles.svg'} height={32}/>
+                    <Title order={2}>Fantastic Waffle</Title>
+                </Group>
                 <div className={classes.links}>
                     <Group position="right">
                         {!userQuery.isSuccess && <>

@@ -10,7 +10,10 @@ class UsersService {
 
     async findOneById(id) {
         const userData = await prisma.user.findUnique({
-            where: {id}
+            where: {id},
+            include: {
+                github: true
+            }
         })
         if (userData) {
             const {password, ...user} = userData

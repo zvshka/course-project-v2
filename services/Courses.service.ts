@@ -17,7 +17,6 @@ class CoursesService {
     }
 
     async create(courseDTO: CourseDTO) {
-        console.log(courseDTO)
         return await prisma.course.create({
             data: {
                 title: courseDTO.title,

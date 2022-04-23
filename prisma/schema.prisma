@@ -66,6 +66,21 @@ model User {
 
   avatarURL String?
   role      Role?   @default(USER)
+
+  github Github?
+}
+
+model Github {
+  id Int @id
+
+  access_token   String
+  access_expires Int
+
+  refresh_token   String
+  refresh_expires Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 enum Role {
