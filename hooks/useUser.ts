@@ -1,10 +1,7 @@
 import {useQuery} from "react-query";
-import {fetcher} from "@lib/fetcher";
+import axios from "axios";
 
 export default function useUser() {
     return useQuery('user', () =>
-        fetcher("/api/auth/aboutMe", {
-            method: "GET",
-            auth: true,
-        }).then(res => res.data))
+        axios.get("/api/auth/aboutMe").then(res => res.data), {retry: failureCount => failureCount < 0})
 }

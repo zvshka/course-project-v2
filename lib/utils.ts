@@ -1,19 +1,45 @@
 import jwt from "jsonwebtoken";
 import nextConnect from "next-connect";
 import {NextApiRequest, NextApiResponse} from "next";
+import cookieParse from "cookie-parser"
+import {CookieSerializeOptions, serialize} from 'cookie'
+import csrf from "csurf";
+
+const csrfProtection = csrf({
+    cookie: true
+});
 
 export const apiRouter = () => nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
         console.error(error)
+        if (error.code === "EBADCSRFTOKEN") return res.status(403).json({error: error.message});
         res.status(500).json({error: `Sorry something Happened! ${error.message}`});
     },
     onNoMatch(req, res) {
         res.status(405).json({error: `Method '${req.method}' Not Allowed`});
     },
-})
+}).use(cookieParse()).use(csrfProtection)
 
-export const mapToIds = (arr) => {
-    return arr.map(el => el.id)
+export const setCookie = (
+    res: NextApiResponse,
+    name: string,
+    value: unknown,
+    options: CookieSerializeOptions = {}
+) => {
+    const stringValue =
+        typeof value === 'object' ? 'j:' + JSON.stringify(value) : String(value)
+
+    if ('maxAge' in options) {
+        options.expires = new Date(Date.now() + options.maxAge)
+        options.maxAge /= 1000
+    }
+
+    res.setHeader('Set-Cookie', serialize(name, stringValue, {path: "/", ...options}))
+}
+
+export const withCallback = (url) => {
+    window.location.href = url + "?callbackUrl=" + window.location.href
+    return
 }
 
 export const signToken = (data: { id: string, role: string }) => {

@@ -4,7 +4,7 @@ import {AuthGuard} from "@lib/AuthGuard";
 
 const apiRoute = apiRouter()
 
-apiRoute.get(AuthGuard("ADMIN"), async (req, res) => {
+apiRoute.get(AuthGuard({isAdmin: true}), async (req, res) => {
     const users = await UsersService.getAllUsers()
     res.status(200).json(users)
 })

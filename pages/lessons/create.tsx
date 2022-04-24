@@ -3,14 +3,13 @@ import parser from "html-react-parser";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
 import {useForm} from "@mantine/form";
-import {fetcher} from "@lib/fetcher";
 import {CheckIcon} from "@modulz/radix-icons";
 import dynamic from "next/dynamic";
-import {Shell} from "@components/Layout/Shell";
 import {useRouter} from "next/router";
 import useCourse from "@hooks/useCourse";
 import useCourses from "@hooks/useCourses";
 import {useEffect, useState} from "react";
+import axios from "axios";
 
 const Editor = dynamic(() => import("@components/Content/Editor"), {
     ssr: false
@@ -23,7 +22,7 @@ export default function LessonCreation() {
     const notifications = useNotifications()
     const queryClient = useQueryClient()
     const [course, setCourse] = useState("")
-    
+
     useEffect(() => {
         setCourse(courseId as string)
     }, [courseId])
@@ -42,11 +41,7 @@ export default function LessonCreation() {
     }, [stageId])
 
     const handleSubmit = (values: typeof form.values) => {
-        fetcher('/api/lessons', {
-            method: 'POST',
-            data: {...values},
-            auth: true
-        }).then(res => {
+        axios.post('/api/lessons', values).then(res => {
             notifications.showNotification({
                 title: "Успех",
                 message: res.data.message,

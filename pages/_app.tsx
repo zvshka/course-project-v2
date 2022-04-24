@@ -8,10 +8,19 @@ import {ModalsProvider} from "@mantine/modals";
 import Head from "next/head";
 import {Shell} from "@components/Layout/Shell";
 import {useRouter} from "next/router";
+import {useEffect} from "react";
+import axios from "axios";
 
 const queryClient = new QueryClient()
 
 function MyApp({Component, pageProps}) {
+    useEffect(() => {
+        const getCsrfToken = async () => {
+            const { data } = await axios.get('/api/auth/csrf');
+            axios.defaults.headers.post['X-CSRF-Token'] = data.csrfToken;
+        };
+        getCsrfToken();
+    }, []);
     const router = useRouter()
     return <>
         <Head>

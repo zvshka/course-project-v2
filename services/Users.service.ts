@@ -8,6 +8,28 @@ class UsersService {
         })
     }
 
+    async connectGithub(githubDTO) {
+        return await prisma.github.create({
+            data: {
+                id: githubDTO.id,
+                access_token: githubDTO.access_token,
+                access_expires: githubDTO.access_expires,
+                refresh_token: githubDTO.refresh_token,
+                refresh_expires: githubDTO.refresh_expires,
+                userId: githubDTO.userId
+            }
+        })
+    }
+
+    async findOneByGithub(id) {
+        const github = await prisma.github.findUnique({
+            where: {id}
+        })
+        return await prisma.user.findUnique({
+            where: {id: github.userId}
+        })
+    }
+
     async findOneById(id) {
         const userData = await prisma.user.findUnique({
             where: {id},

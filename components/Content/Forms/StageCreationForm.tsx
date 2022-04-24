@@ -4,8 +4,8 @@ import {useState} from "react";
 import {useForm} from "@mantine/form";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
-import {fetcher} from "@lib/fetcher";
 import {useModals} from "@mantine/modals";
+import axios from "axios";
 
 export default function StageCreationForm({courseId, stage = null}) {
     const modals = useModals()
@@ -23,19 +23,11 @@ export default function StageCreationForm({courseId, stage = null}) {
         setLoading(true)
         let promise: Promise<any>;
         if (stage) {
-            promise = fetcher('/api/stages/' + stage.id, {
-                auth: true,
-                method: "PATCH",
-                data: {
-                    title: values.title
-                }
+            promise = axios.patch('/api/stages/' + stage.id, {
+                title: values.title
             })
         } else {
-            promise = fetcher('/api/stages', {
-                data: {courseId, title: values.title},
-                method: "POST",
-                auth: true,
-            })
+            promise = axios.post('/api/stages', {courseId, title: values.title})
         }
 
         promise.then(res => {

@@ -32,9 +32,14 @@ export default function Account() {
                             <Group grow>
                                 <TextInput label={"Email"} contentEditable={false} readOnly
                                            value={userQuery.data.email || ""}/>
-                                <Link href={"/api/auth/github"} passHref>
-                                    <Button component={"a"}>Привязать Github</Button>
-                                </Link>
+                                {userQuery.isSuccess && !userQuery.data.github &&
+                                    <Link href={"/api/auth/github"} passHref>
+                                        <Button component={"a"}>Привязать Github</Button>
+                                    </Link>}
+                                {userQuery.isSuccess && userQuery.data.github &&
+                                    <Link href={"/api/auth/github"} passHref>
+                                        <Button component={"a"}>Отвязать Github</Button>
+                                    </Link>}
                             </Group>
                         </Box>
                     </Box>

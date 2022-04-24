@@ -9,7 +9,7 @@ apiRoute.get(async (req, res) => {
     res.status(200).json(courses)
 })
 
-apiRoute.post(AuthGuard("ADMIN"), async (req, res) => {
+apiRoute.post(AuthGuard({isAdmin: true}), async (req, res) => {
     const course = await CoursesService.create(req.body)
     res.status(200).json({message: "Курс успешно создан", courseId: course.id})
 })

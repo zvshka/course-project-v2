@@ -6,18 +6,18 @@ import {
     Anchor,
     Box,
     Button,
-    createStyles, Divider,
+    createStyles,
     Group,
     Paper,
     PasswordInput,
     Popover,
-    Progress, Space,
+    Progress,
+    Space,
     Text,
-    TextInput, UnstyledButton
+    TextInput
 } from "@mantine/core";
 import {CheckIcon, Cross1Icon} from "@modulz/radix-icons";
-import {fetcher} from "@lib/fetcher";
-import {BrandGithub} from "tabler-icons-react";
+import axios from "axios";
 
 function PasswordRequirement({meets, label}: { meets: boolean; label: string }) {
     return (
@@ -157,13 +157,10 @@ export default function Register() {
 
     const handleSubmit = (values: typeof form.values) => {
         form.clearErrors()
-        fetcher("/api/auth/register", {
-            method: "POST",
-            data: {
-                username: values.username,
-                email: values.email,
-                password: values.password
-            }
+        axios.post("/api/auth/register", {
+            username: values.username,
+            email: values.email,
+            password: values.password
         }).then(res => {
             const accessToken = res.data.accessToken
             if (!accessToken) return form.setErrors(() => ({
@@ -172,8 +169,8 @@ export default function Register() {
                 password: true,
                 confirmPassword: "Что-то пошло не так, попробуй еще раз позже"
             }))
-            localStorage.setItem("accessToken", res.data.accessToken)
-            router.push("/")
+            // localStorage.setItem("accessToken", res.data.accessToken)
+            router.push(router.query.callbackUrl ? router.query.callbackUrl as string : "/")
         }).catch(e => {
             form.setErrors({
                 username: true,

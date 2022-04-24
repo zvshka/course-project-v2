@@ -1,13 +1,11 @@
-import AuthService from "@services/Auth.service";
 import {apiRouter, setCookie} from "@lib/utils";
 import {NextApiResponse} from "next";
 
 const apiRoute = apiRouter()
 
 apiRoute.post(async (req, res: NextApiResponse) => {
-    const data = await AuthService.login(req.body)
-    setCookie(res,'access_token', data.accessToken, { httpOnly: true });
-    res.json(data)
+    setCookie(res, 'access_token', "", {httpOnly: true});
+    res.status(200).json({message: "Успешный выход"})
 })
 
 export default apiRoute

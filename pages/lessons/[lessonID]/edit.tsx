@@ -5,8 +5,8 @@ import {Box, Button, Group, Paper, TextInput, Title, useMantineTheme} from "@man
 import parser from "html-react-parser";
 import {useForm} from "@mantine/form";
 import dynamic from "next/dynamic";
-import {fetcher} from "@lib/fetcher";
 import Link from "next/link";
+import axios from "axios";
 
 const Editor = dynamic(() => import("@components/Content/Editor"), {
     ssr: false
@@ -36,10 +36,7 @@ export default function LessonEdit() {
     }, [lessonQuery.isSuccess, lessonQuery.data])
 
     const handleSubmit = (values: typeof form.values) => {
-        fetcher("/api/lessons/" + lessonID, {
-            auth: true,
-            method: 'PATCH',
-            data: values
+        axios.patch("/api/lessons/" + lessonID, values).then(r => {
         })
     }
 

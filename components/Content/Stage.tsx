@@ -8,10 +8,10 @@ import {useNotifications} from "@mantine/notifications";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
 import {useToggle} from "@mantine/hooks";
-import {fetcher} from "@lib/fetcher";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
 import {useRouter} from "next/router";
 import Link from "next/link";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
     item: {
@@ -70,10 +70,7 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
         labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
         onCancel: () => console.log('Cancel'),
         onConfirm: () => {
-            fetcher('/api/stages/' + stage.id, {
-                method: "DELETE",
-                auth: true
-            }).then(res => {
+            axios.delete('/api/stages/' + stage.id).then(res => {
                 notifications.showNotification({
                     title: "Успех",
                     message: res.data.message,

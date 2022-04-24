@@ -2,12 +2,11 @@ import React from 'react';
 import {Badge, Card, createStyles, Group, Image, Menu, Text} from '@mantine/core';
 import Link from "next/link";
 import {Pencil, TrashX} from "tabler-icons-react";
-import {fetcher} from "@lib/fetcher";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useModals} from "@mantine/modals";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
-import {NextPage} from "next";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -63,10 +62,7 @@ export function Course({course, isAdmin = false}) {
         labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
         onCancel: () => console.log('Cancel'),
         onConfirm: () => {
-            fetcher('/api/courses/' + course.id, {
-                method: "DELETE",
-                auth: true
-            }).then(res => {
+            axios.delete('/api/courses/' + course.id).then(res => {
                 notifications.showNotification({
                     title: "Успех",
                     message: res.data.message,
@@ -105,7 +101,8 @@ export function Course({course, isAdmin = false}) {
                         </Menu.Item>
                     </Menu>}
                 </Group>
-                <Image src={course?.iconURL + '?width=300'} withPlaceholder alt={course?.title} height={180}/>
+                <Image src={course.iconURL ? course.iconURL + '?width=300' : ""} withPlaceholder alt={course?.title}
+                       height={180}/>
             </Card.Section>
             <Card.Section className={classes.section} mt="md">
                 <Text size="lg" weight={500}>

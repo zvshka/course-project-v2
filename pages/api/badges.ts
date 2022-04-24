@@ -9,7 +9,7 @@ apiRoute.get(async (req, res) => {
     return res.json(data)
 })
 
-apiRoute.post(AuthGuard("ADMIN"), async (req, res) => {
+apiRoute.post(AuthGuard({isAdmin: true}), async (req, res) => {
     const data = await BadgesService.create(req.body)
     return res.json(data)
 })

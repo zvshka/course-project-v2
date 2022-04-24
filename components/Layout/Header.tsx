@@ -20,6 +20,7 @@ import useUser from "@hooks/useUser";
 import {Logout, Pencil, Settings, Users} from "tabler-icons-react";
 import {NextLink} from "@mantine/next";
 import {useQueryClient} from "react-query";
+import axios from "axios";
 
 
 const HEADER_HEIGHT = 84;
@@ -143,10 +144,12 @@ export function DoubleHeader() {
     const theme = useMantineTheme()
     const queryClient = useQueryClient()
     const [_, setUserMenuOpened] = useState(false);
+
     const handleLogout = (e) => {
-        localStorage.setItem("accessToken", null)
-        queryClient.removeQueries("user")
-        router.reload()
+        axios.post("/api/auth/logout").then(res => {
+            localStorage.removeItem("accessToken")
+            queryClient.invalidateQueries("user")
+        })
     }
 
     const mainItems = mainLinks.map((item) => (
@@ -180,18 +183,12 @@ export function DoubleHeader() {
                     <Group position="right">
                         {!userQuery.isSuccess && <>
                             <Link href={"/auth/login"} passHref>
-                                <Anchor<'a'>
-                                    href={"/auth/login"}
-                                    className={classes.secondaryLink}
-                                >
+                                <Anchor<'a'> className={classes.secondaryLink}>
                                     Вход
                                 </Anchor>
                             </Link>
-                            <Link href={"/auth/login"} passHref>
-                                <Anchor<'a'>
-                                    href={"/auth/login"}
-                                    className={classes.secondaryLink}
-                                >
+                            <Link href={"/auth/register"} passHref>
+                                <Anchor<'a'> className={classes.secondaryLink}>
                                     Регистрация
                                 </Anchor>
                             </Link>

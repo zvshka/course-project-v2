@@ -5,7 +5,8 @@ import {
     Anchor,
     Box,
     Button,
-    createStyles, Divider,
+    createStyles,
+    Divider,
     Group,
     Paper,
     PasswordInput,
@@ -13,8 +14,8 @@ import {
     TextInput,
     UnstyledButton
 } from "@mantine/core";
-import {fetcher} from "@lib/fetcher";
 import {BrandGithub} from "tabler-icons-react";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
     loginButton: {
@@ -109,20 +110,17 @@ export default function Login() {
 
     const handleSubmit = (values: typeof form.values) => {
         form.clearErrors()
-        fetcher("/api/auth/login", {
-            method: "POST",
-            data: {
-                email: values.email,
-                password: values.password
-            }
+        axios.post("/api/auth/login", {
+            email: values.email,
+            password: values.password
         }).then(res => {
             const accessToken = res.data.accessToken
             if (!accessToken) return form.setErrors(() => ({
                 email: "",
                 password: "Не правильный email или пароль"
             }))
-            localStorage.setItem("accessToken", res.data.accessToken)
-            router.push("/")
+            // localStorage.setItem("accessToken", res.data.accessToken)
+            router.push(router.query.callbackUrl ? router.query.callbackUrl as string : "/")
         }).catch(e => {
             form.setErrors({
                 email: true,

@@ -2,11 +2,11 @@ import {Box, createStyles, Group, Menu, Text} from "@mantine/core";
 import Link from "next/link"
 import {Pencil, TrashX} from "tabler-icons-react";
 import {useModals} from "@mantine/modals";
-import {fetcher} from "@lib/fetcher";
 import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
 import {useRouter} from "next/router";
+import axios from "axios";
 
 const useStyles = createStyles((theme, _, getRef) => ({
     box: {
@@ -57,13 +57,10 @@ export function Lesson({lesson, isAdmin}) {
                 Данное действие нельзя отменить, продолжить?
             </Text>
         ),
-        labels: {confirm: 'Подтвердить' , cancel: 'Отмена'},
+        labels: {confirm: 'Подтвердить', cancel: 'Отмена'},
         onCancel: () => console.log('Cancel'),
         onConfirm: () => {
-            fetcher('/api/lessons/' + lesson.id, {
-                method: "DELETE",
-                auth: true
-            }).then(res => {
+            axios.delete('/api/lessons/' + lesson.id).then(res => {
                 notifications.showNotification({
                     title: "Успех",
                     message: res.data.message,
@@ -94,7 +91,8 @@ export function Lesson({lesson, isAdmin}) {
                         <Link href={"/lessons/" + lesson.id + '/edit'}>
                             <Menu.Item component={"a"} icon={<Pencil size={14}/>}>Изменить</Menu.Item>
                         </Link>
-                        <Menu.Item onClick={openDeletionModal} icon={<TrashX size={14}/>} color={"red"}>Удалить</Menu.Item>
+                        <Menu.Item onClick={openDeletionModal} icon={<TrashX size={14}/>}
+                                   color={"red"}>Удалить</Menu.Item>
                     </Menu>}
                 </Group>
                 <Text sx={{fontWeight: 600}}>
