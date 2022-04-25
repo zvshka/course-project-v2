@@ -102,12 +102,6 @@ export default function Login() {
     const {classes, theme} = useStyles()
     const notifications = useNotifications()
 
-    useEffect(() => {
-        if (userQuery.isSuccess && userQuery.data) {
-            router.push("/")
-        }
-    })
-
     const form = useForm({
         initialValues: {
             email: '',
