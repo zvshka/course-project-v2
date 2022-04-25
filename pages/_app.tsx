@@ -18,6 +18,8 @@ function MyApp({Component, pageProps}) {
         const getCsrfToken = async () => {
             const { data } = await axios.get('/api/auth/csrf');
             axios.defaults.headers.post['X-CSRF-Token'] = data.csrfToken;
+            axios.defaults.headers.patch['X-CSRF-Token'] = data.csrfToken;
+            axios.defaults.headers.delete['X-CSRF-Token'] = data.csrfToken;
         };
         getCsrfToken();
     }, []);

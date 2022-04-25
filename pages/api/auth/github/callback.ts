@@ -39,6 +39,9 @@ apiRoute.get(async (req, res) => {
         })
     } else {
         const userData = await UsersService.findOneByGithub(gitUserData.id)
+        if (!userData) return res.redirect(`/auth/login?${new URLSearchParams({
+            error: "No user this that github"
+        })}`)
         const access_token = signToken({id: userData.id, role: userData.role})
         setCookie(res, 'access_token', access_token, {httpOnly: true});
         // res.json({accessToken: access_token})

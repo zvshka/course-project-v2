@@ -16,6 +16,8 @@ import {
 } from "@mantine/core";
 import {BrandGithub} from "tabler-icons-react";
 import axios from "axios";
+import {useEffect} from "react";
+import {useNotifications} from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({
     loginButton: {
@@ -96,6 +98,7 @@ const useStyles = createStyles((theme) => ({
 export default function Login() {
     const router = useRouter()
     const {classes, theme} = useStyles()
+    const notifications = useNotifications()
 
     const form = useForm({
         initialValues: {
@@ -107,6 +110,16 @@ export default function Login() {
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Неверно указан email'),
         },
     });
+
+    useEffect(() => {
+        if (router.query.error) {
+            notifications.showNotification({
+                title: "Произошла ошибка",
+                message: router.query.error,
+                color: "red"
+            })
+        }
+    }, [])
 
     const handleSubmit = (values: typeof form.values) => {
         form.clearErrors()

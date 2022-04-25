@@ -22,11 +22,10 @@ class UsersService {
     }
 
     async findOneByGithub(id) {
-        const github = await prisma.github.findUnique({
-            where: {id}
-        })
-        return await prisma.user.findUnique({
-            where: {id: github.userId}
+        return await prisma.user.findFirst({
+            where: {
+                github: {id}
+            }
         })
     }
 
@@ -42,6 +41,14 @@ class UsersService {
             return user
         }
         return userData
+    }
+
+    async unlinkGithub(userId) {
+        return await prisma.github.delete({
+            where: {
+                userId
+            }
+        })
     }
 }
 
