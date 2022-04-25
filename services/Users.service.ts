@@ -50,6 +50,17 @@ class UsersService {
             }
         })
     }
+
+    async updateOneById(id: string, updateDTO: any) {
+        return await prisma.user.update({
+            where: {id},
+            data: {
+                firstname: updateDTO.firstname,
+                lastname: updateDTO.lastname,
+                avatarURL: updateDTO.avatarURL
+            }
+        })
+    }
 }
 
 export default new UsersService()

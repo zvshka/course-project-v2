@@ -26,7 +26,7 @@ const apiRoute = apiRouter()
 
 apiRoute.use(upload.single("upload"));
 
-apiRoute.post(AuthGuard({isAdmin: true}), async (req: NextApiRequest & { user: any, file: any }, res: NextApiResponse) => {
+apiRoute.post(AuthGuard(), async (req: NextApiRequest & { user: any, file: any }, res: NextApiResponse) => {
     const {filename, mimetype, size, path: filepath} = req.file;
     const sharped = sharp(filepath)
     if (mimetype === MIME_TYPES.jpeg) {
