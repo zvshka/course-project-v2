@@ -7,7 +7,7 @@ const apiRoute = apiRouter()
 apiRoute.get(async (req, res) => {
     const {code} = req.query
 
-    const access_token = req.cookies.access_token
+    const {access_token, callbackUrl} = req.cookies
     const tokenData = verifyToken(access_token)
 
     const url = new URL("https://github.com/login/oauth/access_token")
@@ -16,6 +16,7 @@ apiRoute.get(async (req, res) => {
         client_secret: process.env.GITHUB_SECRET,
         code: code as string
     })
+
     const {data: accessData} = await axios.post(`${url}?${urlSearch.toString()}`, {}, {
         headers: {
             Accept: "application/json"
@@ -27,8 +28,10 @@ apiRoute.get(async (req, res) => {
         }
     })
     if (tokenData) {
+        const gitCandidate = await UsersService.findOneByGithub(gitUserData.id)
+        if (gitCandidate) return res.redirect("/")
+
         const userData = await UsersService.findOneById(tokenData.id)
-        console.log(userData)
         await UsersService.connectGithub({
             id: gitUserData.id,
             access_token: accessData.access_token,
@@ -40,14 +43,13 @@ apiRoute.get(async (req, res) => {
     } else {
         const userData = await UsersService.findOneByGithub(gitUserData.id)
         if (!userData) return res.redirect(`/auth/login?${new URLSearchParams({
-            error: "No user this that github"
+            error: "Не верные данные для входа"
         })}`)
         const access_token = signToken({id: userData.id, role: userData.role})
         setCookie(res, 'access_token', access_token, {httpOnly: true});
         // res.json({accessToken: access_token})
     }
-
-    res.redirect("/")
+    res.redirect(callbackUrl || "/")
 })
 
 export default apiRoute

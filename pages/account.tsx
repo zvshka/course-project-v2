@@ -1,12 +1,16 @@
 import {Avatar, Box, Button, Grid, Paper, Stack, Text, TextInput, Title} from "@mantine/core";
 import useUser from "@hooks/useUser";
-import Link from "next/link";
 import axios from "axios";
 import {useQueryClient} from "react-query";
 import {useToggle} from "@mantine/hooks";
 import {useForm} from "@mantine/form";
 import {useEffect} from "react";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
+
+const handleLink = () => {
+    window.location.href = "/api/auth/github?callbackUrl=" + window.location.href
+    return
+}
 
 export default function Account() {
     const userQuery = useUser()
@@ -87,6 +91,11 @@ export default function Account() {
         })
     }
 
+    // const handleLink = (e) => {
+    //     e.preventDefault()
+    //     router.push("/api/auth/github?callbackUrl=" + getHref())
+    // }
+
     return (
         <>
             <Title order={2}>
@@ -153,9 +162,8 @@ export default function Account() {
                                         width: "100%"
                                     }}>
                                         {userQuery.isSuccess && !userQuery.data.github &&
-                                            <Link href={"/api/auth/github"} passHref>
-                                                <Button component={"a"} sx={{width: "100%"}}>Привязать Github</Button>
-                                            </Link>}
+                                            <Button color={"dark"} onClick={() => handleLink()} sx={{width: "100%"}}>Привязать
+                                                Github</Button>}
                                         {userQuery.isSuccess && userQuery.data.github &&
                                             <Button color={"dark"} onClick={handleUnlink} sx={{width: "100%"}}>Отвязать
                                                 Github</Button>}
