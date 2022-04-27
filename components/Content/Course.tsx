@@ -7,6 +7,7 @@ import {useModals} from "@mantine/modals";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
 import axios from "axios";
+import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -80,6 +81,17 @@ export function Course({course, isAdmin = false}) {
         },
     });
 
+    const handleEdit = (e) => {
+        e.preventDefault()
+        modals.openModal({
+            title: "Изменение курса",
+            children: <>
+                <CourseCreationForm course={course}/>
+            </>
+        })
+    }
+
+
     const handleDelete = (e) => {
         e.preventDefault()
         openConfirmModal()
@@ -93,7 +105,8 @@ export function Course({course, isAdmin = false}) {
                         e.preventDefault()
                         e.stopPropagation()
                     }}>
-                        <Menu.Item icon={<Pencil size={14}/>}>Изменить</Menu.Item>
+                        <Menu.Item onClick={handleEdit}
+                                   icon={<Pencil size={14}/>}>Изменить</Menu.Item>
                         <Menu.Item icon={<TrashX size={14}/>}
                                    color={"red"}
                                    onClick={handleDelete}>

@@ -119,3 +119,5 @@ export default function LessonCreation() {
         </form>
     </>
 }
+
+LessonCreation.haveLayout = true

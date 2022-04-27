@@ -52,10 +52,16 @@ class CoursesService {
         })
     }
 
-    async deleteById(id) {
-        return await prisma.course.delete({
-            where: {
-                id
+    async updateOneById(id: string, courseDTO: any) {
+        return await prisma.course.update({
+            where: {id},
+            data: {
+                title: courseDTO.title,
+                description: courseDTO.description,
+                iconURL: courseDTO.iconURL,
+                badges: {
+                    connect: [...courseDTO.badges.map(badge => ({id: badge}))]
+                }
             }
         })
     }

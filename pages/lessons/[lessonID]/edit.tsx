@@ -70,3 +70,5 @@ export default function LessonEdit() {
         </form>
     </>
 }
+
+LessonEdit.haveLayout = true

@@ -24,6 +24,7 @@ function MyApp({Component, pageProps}) {
         getCsrfToken();
     }, []);
     const router = useRouter()
+    const haveLayout = Component.haveLayout || false
     return <>
         <Head>
             <title>Fantastic Waffle</title>
@@ -41,13 +42,9 @@ function MyApp({Component, pageProps}) {
             >
                 <NotificationsProvider>
                     <ModalsProvider>
-                        {
-                            router.pathname.includes("auth") ?
-                                <Component {...pageProps}/> :
-                                <Shell>
-                                    <Component {...pageProps} />
-                                </Shell>
-                        }
+                        {haveLayout ? <Shell>
+                            <Component/>
+                        </Shell> : <Component {...pageProps}/>}
                         <ReactQueryDevtools initialIsOpen={false}/>
                     </ModalsProvider>
                 </NotificationsProvider>

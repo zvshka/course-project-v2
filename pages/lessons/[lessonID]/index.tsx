@@ -58,3 +58,5 @@ export default function LessonPage() {
         </Paper>
     </>
 }
+
+LessonPage.haveLayout = true

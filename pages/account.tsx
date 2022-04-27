@@ -204,3 +204,5 @@ export default function Account() {
         </>
     )
 }
+
+Account.haveLayout = true

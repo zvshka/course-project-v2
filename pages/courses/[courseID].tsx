@@ -107,3 +107,5 @@ export default function CoursePage() {
         </DndContext>
     </>
 }
+
+CoursePage.haveLayout = true

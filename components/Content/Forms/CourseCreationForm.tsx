@@ -9,7 +9,6 @@ import {useQueryClient} from "react-query";
 import Link from "next/link"
 import {useModals} from "@mantine/modals";
 import useBadges from "@hooks/useBadges";
-import {useListState} from "@mantine/hooks";
 import axios from "axios";
 
 interface iconObject {
@@ -24,21 +23,23 @@ interface initialValues {
     icon: iconObject
 }
 
-export function CourseCreationForm() {
+export function CourseCreationForm({course = null}) {
     const modals = useModals()
     const theme = useMantineTheme();
     const notifications = useNotifications()
-    const [loading, setLoading] = useState(false)
-    const [courseId, setCourseId] = useState('')
     const queryClient = useQueryClient()
     const badgesQuery = useBadges()
-    const [badges, badgesHandlers] = useListState([])
+    const [loading, setLoading] = useState(false)
+    const [courseId, setCourseId] = useState('')
+    const [badges, setBadges] = useState([])
 
     useEffect(() => {
-        badgesQuery.isSuccess && badgesHandlers.setState(badgesQuery.data.map(badge => ({
-            value: badge.id,
-            label: badge.label
-        })))
+        if (badgesQuery.isSuccess && badgesQuery.data) {
+            setBadges(badgesQuery.data.map(badge => ({
+                value: badge.id,
+                label: badge.label
+            })))
+        }
     }, [badgesQuery.data, badgesQuery.isSuccess])
 
     const uploadImage = (file) => {
@@ -52,29 +53,36 @@ export function CourseCreationForm() {
     }
 
     const uploadCourse = (values: typeof form.values, iconURL = null) => {
-        axios.post("/api/courses", {
+        let promise;
+        const data = {
             title: values.title,
             description: values.description,
             iconURL,
             badges: values.badges
-        })
-            .then(res => {
-                setLoading(false)
-                notifications.showNotification({
-                    title: "Успех",
-                    message: res.data.message,
-                    color: "green",
-                    icon: <CheckIcon/>
-                })
-                setCourseId(res.data.courseId)
-                queryClient.invalidateQueries("courses")
-                form.reset()
+        }
+        if (course) {
+            promise = axios.patch("/api/courses/" + course.id, data)
+        } else {
+            promise = axios.post("/api/courses", data)
+        }
+
+        promise.then(res => {
+            setLoading(false)
+            notifications.showNotification({
+                title: "Успех",
+                message: res.data.message,
+                color: "green",
+                icon: <CheckIcon/>
             })
+            setCourseId(res.data.courseId)
+            queryClient.invalidateQueries("courses")
+            modals.closeAll()
+        })
             .catch(error => {
                 setLoading(false)
                 notifications.showNotification({
                     title: "Ошибка",
-                    message: "При создании курса произошла ошибка",
+                    message: error.message,
                     color: "red"
                 })
             })
@@ -123,6 +131,20 @@ export function CourseCreationForm() {
             }
         }
     });
+
+    useEffect(() => {
+        if (course) {
+            form.setValues({
+                title: course.title,
+                description: course.description,
+                badges: course.badges.map(b => b.id),
+                icon: {
+                    data: course.iconURL,
+                    file: null
+                }
+            })
+        }
+    }, [course])
 
     return <Box mx="auto" sx={{maxWidth: "30rem", position: "relative"}}>
         <LoadingOverlay visible={loading}/>

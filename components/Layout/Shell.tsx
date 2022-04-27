@@ -20,7 +20,7 @@ export const Shell = ({children}) => {
             main: {backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[2]},
         })}
     >
-        <Container className={classes.mainContainer}>
+        <Container size={'xl'} className={classes.mainContainer}>
             {children}
         </Container>
     </AppShell>
