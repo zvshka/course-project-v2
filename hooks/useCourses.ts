@@ -1,8 +1,9 @@
-import {useInfiniteQuery, useQuery} from "react-query";
+import {useInfiniteQuery} from "react-query";
 import axios from "axios";
 
-const fetchCourses = ({pageParam = 0}) => {
-    return axios.get("/api/courses?cursor=" + pageParam).then(res => res.data)
+const fetchCourses = ({pageParam = 0}, filter = {}) => {
+    console.log("/api/courses?page=" + pageParam + "&" + new URLSearchParams(filter))
+    return axios.get("/api/courses?page=" + pageParam + "&" + new URLSearchParams(filter)).then(res => res.data)
 }
 
 export default function useCourses(props) {
@@ -10,11 +11,11 @@ export default function useCourses(props) {
     const filter = props.filter
     const search = new URLSearchParams(filter)
 
-    const infQuery = useInfiniteQuery('courses', fetchCourses, {
-        getNextPageParam: (lastPage, pages) => lastPage.nextCursor
+    return useInfiniteQuery('courses', (props) => fetchCourses(props, search), {
+        getNextPageParam: (lastPage, pages) => {
+            return lastPage.nextPage
+        }
     })
-
-    return infQuery
 
     // return useQuery('courses', () =>
     //     axios(`/api/courses?${search}`).then(res =>

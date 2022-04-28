@@ -10,7 +10,6 @@ interface CourseDTO {
 class CoursesService {
     async getAll(query) {
         const badges = query.badges ? query.badges.split(",").filter(b => b.length > 0) : []
-        console.log(query)
         const badgesFilter = badges.length > 0 ? {
             badges: {
                 some: {
@@ -21,8 +20,9 @@ class CoursesService {
             }
         } : {}
 
-        return await prisma.course.findMany({
-            take: Number(query.cursor) * 9,
+        const courses = await prisma.course.findMany({
+            take: 9,
+            skip: Number(query.page) * 9,
             where: {
                 title: {
                     contains: query.title
@@ -33,6 +33,8 @@ class CoursesService {
                 badges: true,
             }
         })
+        const hasNextPage = courses.length === 9
+        return {courses, hasNextPage, nextPage: hasNextPage ? Number(query.page) + 1 : null}
     }
 
     async create(courseDTO: CourseDTO) {

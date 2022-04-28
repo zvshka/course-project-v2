@@ -1,15 +1,30 @@
 import useUser from "@hooks/useUser";
 import useCourses from "@hooks/useCourses";
-import {Box, Button, Grid, Group, MultiSelect, Paper, SimpleGrid, TextInput, Title} from "@mantine/core";
+import {
+    Box,
+    Button,
+    Grid,
+    Group,
+    MultiSelect,
+    Paper,
+    SimpleGrid,
+    TextInput,
+    Title,
+    useMantineTheme
+} from "@mantine/core";
 import {useModals} from "@mantine/modals";
 import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
-import {Course} from "@components/Content/Course";
 import useBadges from "@hooks/useBadges";
-import {useEffect, useState} from "react";
-import {useDebouncedValue, useListState} from "@mantine/hooks";
+import {useEffect, useRef, useState} from "react";
+import {useDebouncedValue, useIntersection, useListState} from "@mantine/hooks";
 import {useQueryClient} from "react-query";
+import {CoursesPage} from "@components/Content/CoursesPage";
+import { useInView } from 'react-intersection-observer'
 
 export default function Courses() {
+    const containerRef = useRef();
+    const { ref, inView } = useInView()
+
     const modals = useModals()
     const queryClient = useQueryClient()
     const userQuery = useUser()
@@ -24,10 +39,8 @@ export default function Courses() {
 
     const coursesQuery = useCourses({filter: {title: debouncedTitle, badges: debouncedBadges}})
 
-    console.log(coursesQuery)
-
     useEffect(() => {
-        coursesQuery.refetch()
+        console.log(coursesQuery)
     }, [debouncedTitle, debouncedBadges])
 
     useEffect(() => {
@@ -38,6 +51,12 @@ export default function Courses() {
             })))
         }
     }, [badgesQuery.data, badgesQuery.isSuccess])
+
+    useEffect(() => {
+        if (inView && coursesQuery.hasNextPage) {
+            coursesQuery.fetchNextPage()
+        }
+    }, [inView])
 
     const openCreatingModal = () => {
         modals.openModal({
@@ -66,17 +85,24 @@ export default function Courses() {
                 </Paper>
                 <Paper shadow={'lg'} px={'sm'} py={'sm'} mt={"xs"}>
                     <TextInput label={"Название"} onChange={e => setTitle(e.currentTarget.value)}/>
-                    <MultiSelect data={badges} label={'Категории'} onChange={value => badgesHandlers.setState(value)} clearable searchable/>
+                    <MultiSelect data={badges} label={'Категории'} onChange={value => badgesHandlers.setState(value)}
+                                 clearable searchable/>
                 </Paper>
             </Grid.Col>
             <Grid.Col sm={18} md={16} lg={17}>
-                <SimpleGrid cols={1} mt={"md"} breakpoints={[{minWidth: 'lg', cols: 3}, {minWidth: 'xs', cols: 2}]}>
-                    {/*{coursesQuery.isSuccess && !coursesQuery.isLoading && coursesQuery.data.map((c, i) => (*/}
-                    {/*    <Box key={i}>*/}
-                    {/*        <Course course={c} isAdmin={userQuery.isSuccess && userQuery.data.role === "ADMIN"}/>*/}
-                    {/*    </Box>*/}
-                    {/*))}*/}
+                <SimpleGrid cols={1} mt={"md"}
+                            breakpoints={[{minWidth: 'lg', cols: 3}, {minWidth: 'xs', cols: 2}]}>
+                    {coursesQuery.isSuccess && coursesQuery.data.pages.map((data, i) => (
+                        // <Box key={i}>
+                        //     <Course course={c} isAdmin={userQuery.isSuccess && userQuery.data.role === "ADMIN"}/>
+                        // </Box>
+                        <CoursesPage courses={data.courses}
+                                     isAdmin={userQuery.isSuccess && userQuery.data.role === "ADMIN"} key={i}/>
+                    ))}
                 </SimpleGrid>
+                <span style={{visibility: 'hidden'}} ref={ref}>
+                    intersection observer marker
+                </span>
             </Grid.Col>
         </Grid>
     </>

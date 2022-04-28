@@ -79,7 +79,7 @@ export function CourseCreationForm({course = null}) {
             if (course) {
                 modals.closeAll()
             } else {
-                form.reset()
+                // form.reset()
             }
         })
             .catch(error => {
