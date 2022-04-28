@@ -76,7 +76,11 @@ export function CourseCreationForm({course = null}) {
             })
             setCourseId(res.data.courseId)
             queryClient.invalidateQueries("courses")
-            modals.closeAll()
+            if (course) {
+                modals.closeAll()
+            } else {
+                form.reset()
+            }
         })
             .catch(error => {
                 setLoading(false)
