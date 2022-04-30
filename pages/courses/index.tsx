@@ -1,29 +1,17 @@
 import useUser from "@hooks/useUser";
 import useCourses from "@hooks/useCourses";
-import {
-    Box,
-    Button,
-    Grid,
-    Group,
-    MultiSelect,
-    Paper,
-    SimpleGrid,
-    TextInput,
-    Title,
-    useMantineTheme
-} from "@mantine/core";
+import {Button, Grid, Group, MultiSelect, Paper, SimpleGrid, TextInput, Title} from "@mantine/core";
 import {useModals} from "@mantine/modals";
 import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
 import useBadges from "@hooks/useBadges";
 import {useEffect, useRef, useState} from "react";
-import {useDebouncedValue, useIntersection, useListState} from "@mantine/hooks";
+import {useDebouncedValue, useListState} from "@mantine/hooks";
 import {useQueryClient} from "react-query";
 import {CoursesPage} from "@components/Content/CoursesPage";
-import { useInView } from 'react-intersection-observer'
+import {useInView} from 'react-intersection-observer'
 
 export default function Courses() {
-    const containerRef = useRef();
-    const { ref, inView } = useInView()
+    const {ref, inView} = useInView()
 
     const modals = useModals()
     const queryClient = useQueryClient()
@@ -34,14 +22,7 @@ export default function Courses() {
     const [title, setTitle] = useState("")
     const [selectedBadges, badgesHandlers] = useListState([])
 
-    const [debouncedBadges] = useDebouncedValue(selectedBadges, 1000)
-    const [debouncedTitle] = useDebouncedValue(title, 1000)
-
-    const coursesQuery = useCourses({filter: {title: debouncedTitle, badges: debouncedBadges}})
-
-    useEffect(() => {
-        console.log(coursesQuery)
-    }, [debouncedTitle, debouncedBadges])
+    const coursesQuery = useCourses()
 
     useEffect(() => {
         if (badgesQuery.isSuccess && badgesQuery.data) {

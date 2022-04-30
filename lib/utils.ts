@@ -18,7 +18,7 @@ export const apiRouter = () => nextConnect<NextApiRequest, NextApiResponse>({
     onNoMatch(req, res) {
         res.status(405).json({error: `Method '${req.method}' Not Allowed`});
     },
-}).use(cookieParse()).use(csrfProtection)
+}).use(csrfProtection).use(cookieParse())
 
 export const setCookie = (
     res: NextApiResponse,

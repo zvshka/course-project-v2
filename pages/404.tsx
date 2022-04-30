@@ -6,6 +6,7 @@ const useStyles = createStyles((theme) => ({
     root: {
         paddingTop: 80,
         paddingBottom: 80,
+        minHeight: "100vh"
     },
 
     label: {

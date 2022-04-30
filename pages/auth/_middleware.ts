@@ -2,7 +2,6 @@ import {NextFetchEvent, NextRequest, NextResponse} from "next/server";
 
 export default async function AuthMiddleware(req: NextRequest, ev: NextFetchEvent) {
     const data = await fetch(process.env.BASE_URL + "/api/auth/aboutMe", {
-        credentials: "same-origin",
         headers: {
             authorization: "Bearer " + req.cookies.access_token
         }

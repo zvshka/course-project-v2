@@ -73,6 +73,11 @@ model User {
 model Github {
   id Int @id
 
+  login String
+  email String?
+  avatar_url String?
+  name String?
+
   access_token   String
   access_expires Int
 

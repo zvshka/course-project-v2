@@ -27,7 +27,9 @@ apiRoute.get(async (req, res) => {
             authorization: `Bearer ${accessData.access_token}`
         }
     })
+
     if (tokenData) {
+
         const gitCandidate = await UsersService.findOneByGithub(gitUserData.id)
         if (gitCandidate) return res.redirect("/")
 
