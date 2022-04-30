@@ -18,7 +18,6 @@ import {BrandGithub} from "tabler-icons-react";
 import axios from "axios";
 import {useEffect} from "react";
 import {useNotifications} from "@mantine/notifications";
-import useUser from "@hooks/useUser";
 
 const useStyles = createStyles((theme) => ({
     loginButton: {
@@ -98,7 +97,6 @@ const useStyles = createStyles((theme) => ({
 
 export default function Login() {
     const router = useRouter()
-    const userQuery = useUser()
     const {classes, theme} = useStyles()
     const notifications = useNotifications()
 

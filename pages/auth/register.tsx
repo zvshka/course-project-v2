@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useForm} from "@mantine/form";
 import {
@@ -7,6 +7,7 @@ import {
     Box,
     Button,
     createStyles,
+    Divider,
     Group,
     Paper,
     PasswordInput,
@@ -14,10 +15,14 @@ import {
     Progress,
     Space,
     Text,
-    TextInput
+    TextInput,
+    UnstyledButton
 } from "@mantine/core";
 import {CheckIcon, Cross1Icon} from "@modulz/radix-icons";
 import axios from "axios";
+import {BrandGithub} from "tabler-icons-react";
+import Cookies from 'js-cookie'
+import useGithub from "@hooks/useGithub";
 
 function PasswordRequirement({meets, label}: { meets: boolean; label: string }) {
     return (
@@ -126,11 +131,22 @@ const useStyles = createStyles((theme) => ({
     }
 }))
 
+const handleLink = () => {
+    window.location.href = "/api/auth/github?callbackUrl=" + window.location.href
+    return
+}
+
 export default function Register() {
     const router = useRouter()
     const {classes, theme} = useStyles()
-
     const [popoverOpened, setPopoverOpened] = useState(false);
+
+    const [githubId, setGithubId] = useState("")
+    useEffect(() => {
+        setGithubId(Cookies.get("github_id"))
+    }, [])
+
+    const githubQuery = useGithub(githubId)
 
     const form = useForm({
         initialValues: {
@@ -148,6 +164,13 @@ export default function Register() {
         },
     });
 
+    useEffect(() => {
+        if (githubQuery.isSuccess && githubQuery.data) {
+            form.setFieldValue("email", githubQuery.data.email)
+            form.setFieldValue('username', githubQuery.data.login)
+        }
+    }, [githubQuery.isSuccess, githubQuery.data])
+
     const checks = requirements.map((requirement, index) => (
         <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(form.values.password)}/>
     ));
@@ -160,7 +183,8 @@ export default function Register() {
         axios.post("/api/auth/register", {
             username: values.username,
             email: values.email,
-            password: values.password
+            password: values.password,
+            github: githubId
         }).then(res => {
             const accessToken = res.data.accessToken
             if (!accessToken) return form.setErrors(() => ({
@@ -196,19 +220,19 @@ export default function Register() {
                         </Link>
                     </Text>
 
-                    {/*<UnstyledButton className={classes.gitButton}>*/}
-                    {/*    <Group>*/}
-                    {/*        <BrandGithub size={24}/>*/}
-                    {/*        <Text className={classes.gitButtonText}>Войти с Github</Text>*/}
-                    {/*    </Group>*/}
-                    {/*</UnstyledButton >*/}
+                    <UnstyledButton className={classes.gitButton} onClick={() => handleLink()} disabled={githubQuery.isLoading || githubQuery.isSuccess && githubQuery.data}>
+                        <Group>
+                            <BrandGithub size={24}/>
+                            <Text className={classes.gitButtonText}>Зарегистрироваться с Github</Text>
+                        </Group>
+                    </UnstyledButton>
 
-                    {/*<Divider my="xl" label="ИЛИ" labelPosition="center" size="md" styles={{*/}
-                    {/*    label: {*/}
-                    {/*        fontSize: theme.fontSizes.md,*/}
-                    {/*        fontWeight: 500,*/}
-                    {/*    }*/}
-                    {/*}}/>*/}
+                    <Divider my="xl" label="ИЛИ" labelPosition="center" size="md" styles={{
+                        label: {
+                            fontSize: theme.fontSizes.md,
+                            fontWeight: 500,
+                        }
+                    }}/>
 
                     <Space mt={"md"}/>
 

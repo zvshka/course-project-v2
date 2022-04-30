@@ -1,56 +1,57 @@
 import {apiRouter, setCookie, signToken, verifyToken} from "@lib/utils";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import UsersService from "@services/Users.service";
+import OAuthService from "@services/OAuth.service";
 
 const apiRoute = apiRouter()
 
 apiRoute.get(async (req, res) => {
-    const {code} = req.query
-
     const {access_token, callbackUrl} = req.cookies
-    const tokenData = verifyToken(access_token)
-
-    const url = new URL("https://github.com/login/oauth/access_token")
+    // const tokenData = verifyToken(access_token)
     const urlSearch = new URLSearchParams({
         client_id: process.env.GITHUB_ID,
         client_secret: process.env.GITHUB_SECRET,
-        code: code as string
+        code: req.query.code as string
     })
 
-    const {data: accessData} = await axios.post(`${url}?${urlSearch.toString()}`, {}, {
+    const accessData = await axios.post(`https://github.com/login/oauth/access_token?${urlSearch.toString()}`, {}, {
         headers: {
             Accept: "application/json"
         }
-    })
-    const {data: gitUserData} = await axios.get("https://api.github.com/user", {
+    }).then(res => res.data)
+
+    const gitUserData = await axios.get("https://api.github.com/user", {
         headers: {
             authorization: `Bearer ${accessData.access_token}`
         }
-    })
+    }).then((res) => res.data)
 
-    if (tokenData) {
-
-        const gitCandidate = await UsersService.findOneByGithub(gitUserData.id)
-        if (gitCandidate) return res.redirect("/")
-
-        const userData = await UsersService.findOneById(tokenData.id)
-        await UsersService.connectGithub({
-            id: gitUserData.id,
-            access_token: accessData.access_token,
-            access_expires: accessData.expires_in,
-            refresh_token: accessData.refresh_token,
-            refresh_expires: accessData.refresh_token_expires_in,
-            userId: userData.id
-        })
-    } else {
-        const userData = await UsersService.findOneByGithub(gitUserData.id)
-        if (!userData) return res.redirect(`/auth/login?${new URLSearchParams({
-            error: "Не верные данные для входа"
-        })}`)
-        const access_token = signToken({id: userData.id, role: userData.role})
-        setCookie(res, 'access_token', access_token, {httpOnly: true});
-        // res.json({accessToken: access_token})
+    let githubCandidate = await OAuthService.findOneByAccountId(gitUserData.id)
+    if (!githubCandidate) {
+        githubCandidate = await OAuthService.create(gitUserData, accessData)
     }
+
+    setCookie(res, 'github_id', githubCandidate.id, {httpOnly: false, path: "/auth/register"})
+
+    const tokenData = verifyToken(access_token)
+    if (tokenData) {
+        const userData = await UsersService.findOneById(tokenData.id)
+        if (userData) {
+            if (!userData.github) {
+                // Нет привязанного гитхаба, привязываем
+                await OAuthService.connectById(userData.id, githubCandidate.id)
+            } else {
+                // Есть гитхаб
+                if (userData.github.id !== githubCandidate.id) {
+                    return res.redirect(callbackUrl || "/")
+                } else {
+                    const access_token = signToken({id: userData.id, role: userData.role})
+                    setCookie(res, 'access_token', access_token, {httpOnly: true});
+                }
+            }
+        }
+    }
+
     res.redirect(callbackUrl || "/")
 })
 

@@ -17,7 +17,12 @@ class AuthService {
         const user = await prisma.user.create({
             data: {
                 email, username,
-                password: hashPassword
+                password: hashPassword,
+                github: {
+                    connect: {
+                        id: registerDTO.github
+                    }
+                }
             }
         })
         const accessToken = signToken({id: user.id, role: user.role})
