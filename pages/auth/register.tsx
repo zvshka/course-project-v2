@@ -293,3 +293,5 @@ export default function Register() {
     </Box>
 
 }
+
+Register.withoutLayout = true

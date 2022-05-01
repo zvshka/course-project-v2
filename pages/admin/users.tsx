@@ -1,5 +1,17 @@
 import {Shell} from "@components/Layout/Shell";
-import {ActionIcon, Anchor, Avatar, Badge, Group, ScrollArea, Table, Text, Title, useMantineTheme} from "@mantine/core";
+import {
+    ActionIcon,
+    Anchor,
+    Avatar,
+    Badge,
+    Group,
+    Paper,
+    ScrollArea,
+    Table,
+    Text,
+    Title,
+    useMantineTheme
+} from "@mantine/core";
 import useUser from "@hooks/useUser";
 import useUsers from "@hooks/useUsers";
 import {Pencil, Trash} from "tabler-icons-react";
@@ -77,29 +89,35 @@ export default function Users() {
     }, [usersQuery.data, usersQuery.isSuccess])
     return (
         <>
-            {userQuery.data && !userQuery.isLoading ? <>
-                <Title order={2}>
-                    Все пользователи
-                </Title>
-                <ScrollArea>
-                    <Table sx={{minWidth: 800}} verticalSpacing="sm">
-                        <thead>
-                        <tr>
-                            <th>Пользователь</th>
-                            <th>Имя</th>
-                            <th>Фамилия</th>
-                            <th>Роль</th>
-                            <th>Email</th>
-                            <th>Email подтвержден</th>
-                            <th/>
-                        </tr>
-                        </thead>
-                        <tbody>{rows}</tbody>
-                    </Table>
-                </ScrollArea>
-            </> : <>
-                <div>Loading...</div>
-            </>}
+            <Paper shadow={'lg'} px={'sm'} py={'sm'}>
+                <Group position={"apart"}>
+                    <Title order={3}>
+                        Пользователи
+                    </Title>
+                </Group>
+            </Paper>
+            <Paper mt={"xl"}>
+                {userQuery.data && !userQuery.isLoading ? <>
+                    <ScrollArea>
+                        <Table sx={{minWidth: 800}} verticalSpacing="sm">
+                            <thead>
+                            <tr>
+                                <th>Пользователь</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Роль</th>
+                                <th>Email</th>
+                                <th>Email подтвержден</th>
+                                <th/>
+                            </tr>
+                            </thead>
+                            <tbody>{rows}</tbody>
+                        </Table>
+                    </ScrollArea>
+                </> : <>
+                    <div>Loading...</div>
+                </>}
+            </Paper>
         </>
     )
 }

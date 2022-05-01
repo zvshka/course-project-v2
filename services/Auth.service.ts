@@ -14,15 +14,16 @@ class AuthService {
         })
         if (candidate.length > 0) throw new Error("Email or username already in use")
         const hashPassword = await bcrypt.hash(password, 10)
+        const github = registerDTO.github ? {
+            connect: {
+                id: registerDTO.github
+            }
+        } : {}
         const user = await prisma.user.create({
             data: {
                 email, username,
                 password: hashPassword,
-                github: {
-                    connect: {
-                        id: registerDTO.github
-                    }
-                }
+                github
             }
         })
         const accessToken = signToken({id: user.id, role: user.role})

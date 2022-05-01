@@ -62,8 +62,13 @@ export default function LessonCreation() {
     const coursesQuery = useCourses()
     const [courses, setCourses] = useState([])
     useEffect(() => {
+        if (coursesQuery.hasNextPage) {
+            coursesQuery.fetchNextPage()
+        }
+    }, [coursesQuery.hasNextPage])
+    useEffect(() => {
         if (coursesQuery.isSuccess && coursesQuery.data) {
-            setCourses(coursesQuery.data.map((course => ({label: course.title, value: course.id}))))
+            setCourses(coursesQuery.data.pages.map((course => ({label: course.title, value: course.id}))))
         }
     }, [coursesQuery.isSuccess, coursesQuery.data])
 

@@ -2,7 +2,7 @@ import "../styles/globals.css"
 import "../styles/prism.css"
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from 'react-query/devtools'
-import {MantineProvider} from '@mantine/core';
+import {Container, createStyles, MantineProvider} from '@mantine/core';
 import {NotificationsProvider} from "@mantine/notifications";
 import {ModalsProvider} from "@mantine/modals";
 import Head from "next/head";
@@ -13,10 +13,21 @@ import axios from "axios";
 
 const queryClient = new QueryClient()
 
+const useStyles = createStyles((theme) => ({
+    mainContainer: {
+        minHeight: "100%",
+        [theme.fn.smallerThan("md")]: {
+            paddingLeft: 0,
+            paddingRight: 0
+        }
+    }
+}))
+
 function MyApp({Component, pageProps}) {
+    const {classes} = useStyles()
     useEffect(() => {
         const getCsrfToken = async () => {
-            const { data } = await axios.get('/api/auth/csrf');
+            const {data} = await axios.get('/api/auth/csrf');
             axios.defaults.headers.post['X-CSRF-Token'] = data.csrfToken;
             axios.defaults.headers.patch['X-CSRF-Token'] = data.csrfToken;
             axios.defaults.headers.delete['X-CSRF-Token'] = data.csrfToken;
@@ -24,7 +35,9 @@ function MyApp({Component, pageProps}) {
         getCsrfToken();
     }, []);
     const router = useRouter()
-    const haveLayout = Component.haveLayout || false
+    const withoutLayout = Component.withoutLayout || false
+    const noContainer = Component.noContainer || false
+    console.log(Component.noContainer)
     return <>
         <Head>
             <title>Fantastic Waffle</title>
@@ -42,9 +55,15 @@ function MyApp({Component, pageProps}) {
             >
                 <NotificationsProvider>
                     <ModalsProvider>
-                        {haveLayout ? <Shell>
-                            <Component/>
-                        </Shell> : <Component {...pageProps}/>}
+                        {!withoutLayout ?
+                            <Shell withPadding={!noContainer}>
+                                {!noContainer ?
+                                    <Container size={'xl'} className={classes.mainContainer}>
+                                        <Component {...pageProps}/>
+                                    </Container> :
+                                    <Component {...pageProps}/>}
+                            </Shell> :
+                            <Component {...pageProps}/>}
                         <ReactQueryDevtools initialIsOpen={false}/>
                     </ModalsProvider>
                 </NotificationsProvider>

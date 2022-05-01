@@ -18,6 +18,7 @@ import {BrandGithub} from "tabler-icons-react";
 import axios from "axios";
 import {useEffect} from "react";
 import {useNotifications} from "@mantine/notifications";
+import Register from "./register";
 
 const useStyles = createStyles((theme) => ({
     loginButton: {
@@ -195,3 +196,5 @@ export default function Login() {
     </Box>
 
 }
+
+Login.withoutLayout = true

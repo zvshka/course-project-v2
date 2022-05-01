@@ -1,4 +1,4 @@
-import {Avatar, Box, Button, Grid, Paper, Stack, Text, TextInput, Title} from "@mantine/core";
+import {Avatar, Box, Button, Container, Grid, Group, Paper, Stack, Text, TextInput, Title} from "@mantine/core";
 import useUser from "@hooks/useUser";
 import axios from "axios";
 import {useQueryClient} from "react-query";
@@ -91,16 +91,15 @@ export default function Account() {
         })
     }
 
-    // const handleLink = (e) => {
-    //     e.preventDefault()
-    //     router.push("/api/auth/github?callbackUrl=" + getHref())
-    // }
-
     return (
         <>
-            <Title order={2}>
-                Ваш профиль
-            </Title>
+            <Paper shadow={'lg'} px={'sm'} py={'sm'}>
+                <Group position={"apart"}>
+                    <Title order={3}>
+                        Ваш профиль
+                    </Title>
+                </Group>
+            </Paper>
             {userQuery.isSuccess ? <>
                 <Paper p={'lg'} mt={"md"}>
                     <Grid columns={24}>
@@ -204,5 +203,3 @@ export default function Account() {
         </>
     )
 }
-
-Account.haveLayout = true

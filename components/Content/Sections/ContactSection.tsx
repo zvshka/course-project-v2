@@ -11,15 +11,17 @@ import {
     ActionIcon,
 } from '@mantine/core';
 import { BrandTwitter, BrandYoutube, BrandInstagram } from 'tabler-icons-react';
+import { ContactIconsList } from './ContactIcons';
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
         minHeight: 400,
         boxSizing: 'border-box',
-        backgroundImage: `linear-gradient(-60deg, ${theme.colors[theme.primaryColor][4]} 0%, ${
-            theme.colors[theme.primaryColor][7]
-        } 100%)`,
-        borderRadius: theme.radius.md,
+        // backgroundImage: `linear-gradient(-60deg, ${theme.colors[theme.primaryColor][4]} 0%, ${
+        //     theme.colors[theme.primaryColor][7]
+        // } 100%)`,
+        backgroundColor: theme.colors[theme.primaryColor][7],
+        // borderRadius: theme.radius.md,
         padding: theme.spacing.xl * 2.5,
 
         [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
@@ -91,12 +93,12 @@ export function ContactUs() {
         <div className={classes.wrapper}>
             <SimpleGrid cols={2} spacing={50} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
                 <div>
-                    <Title className={classes.title}>Contact us</Title>
+                    <Title className={classes.title}>Обратная связь</Title>
                     <Text className={classes.description} mt="sm" mb={30}>
-                        Leave your email and we will get back to you within 24 hours
+                        Напиши свой email и мы свяжемся с тобой в ближайшее время
                     </Text>
 
-                    {/*<ContactIconsList variant="white" />*/}
+                    <ContactIconsList variant="white" />
 
                     <Group mt="xl">{icons}</Group>
                 </div>
@@ -108,22 +110,22 @@ export function ContactUs() {
                         classNames={{ input: classes.input, label: classes.inputLabel }}
                     />
                     <TextInput
-                        label="Name"
+                        label="Как вас зовут?"
                         placeholder="John Doe"
                         mt="md"
                         classNames={{ input: classes.input, label: classes.inputLabel }}
                     />
                     <Textarea
                         required
-                        label="Your message"
-                        placeholder="I want to order your goods"
+                        label="Ваше сообщение"
+                        placeholder="You are the best!"
                         minRows={4}
                         mt="md"
                         classNames={{ input: classes.input, label: classes.inputLabel }}
                     />
 
                     <Group position="right" mt="md">
-                        <Button className={classes.control}>Send message</Button>
+                        <Button className={classes.control}>Отправить сообщение</Button>
                     </Group>
                 </div>
             </SimpleGrid>

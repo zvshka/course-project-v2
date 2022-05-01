@@ -1,107 +1,89 @@
 import React from 'react';
-import {Button, createStyles, Group, Image, List, Text, ThemeIcon, Title,} from '@mantine/core';
-import {Check} from 'tabler-icons-react';
-import image from "../../public/food-waffles.svg"
+import { createStyles, Overlay, Container, Title, Button, Text } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
-    inner: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingTop: theme.spacing.xl * 4,
-        paddingBottom: theme.spacing.xl * 4,
+    hero: {
+        position: 'relative',
+        backgroundImage:
+            'url(https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
     },
 
-    content: {
-        maxWidth: 480,
-        marginRight: theme.spacing.xl * 3,
+    container: {
+        height: 700,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-start',
+        paddingBottom: theme.spacing.xl * 6,
+        zIndex: 1,
+        position: 'relative',
 
-        [theme.fn.smallerThan('md')]: {
-            maxWidth: '100%',
-            marginRight: 0,
+        [theme.fn.smallerThan('sm')]: {
+            height: 500,
+            paddingBottom: theme.spacing.xl * 3,
         },
     },
 
     title: {
-        color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-        fontSize: 44,
-        lineHeight: 1.2,
+        color: theme.white,
+        fontSize: 60,
         fontWeight: 900,
+        lineHeight: 1.1,
+
+        [theme.fn.smallerThan('sm')]: {
+            fontSize: 40,
+            lineHeight: 1.2,
+        },
 
         [theme.fn.smallerThan('xs')]: {
             fontSize: 28,
+            lineHeight: 1.3,
+        },
+    },
+
+    description: {
+        color: theme.white,
+        maxWidth: 600,
+
+        [theme.fn.smallerThan('sm')]: {
+            maxWidth: '100%',
+            fontSize: theme.fontSizes.sm,
         },
     },
 
     control: {
-        [theme.fn.smallerThan('xs')]: {
-            flex: 1,
+        marginTop: theme.spacing.xl * 1.5,
+
+        [theme.fn.smallerThan('sm')]: {
+            width: '100%',
         },
-    },
-
-    image: {
-        flex: 1,
-
-        [theme.fn.smallerThan('md')]: {
-            display: 'none',
-        },
-    },
-
-    highlight: {
-        position: 'relative',
-        backgroundColor:
-            theme.colorScheme === 'dark'
-                ? theme.fn.rgba(theme.colors[theme.primaryColor][6], 0.55)
-                : theme.colors[theme.primaryColor][0],
-        borderRadius: theme.radius.sm,
-        padding: '4px 12px',
     },
 }));
 
-export function HeroSection() {
-    const {classes} = useStyles();
+export function HeroContentLeft() {
+    const { classes } = useStyles();
+
     return (
-        <div className={classes.inner}>
-            <div className={classes.content}>
-                <Title className={classes.title}>
-                    <span className={classes.highlight}>Современный</span> проект <br/>
-                </Title>
-                <Text color="dimmed" mt="md">
-                    Мой новый проект поможет вам не только легко обучиться программированию, но и найти что то полезное в качестве дополнение
-                    к изученнуму материалу.
+        <div className={classes.hero}>
+            <Overlay
+                gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, .65) 40%)"
+                opacity={1}
+                zIndex={0}
+            />
+            <Container className={classes.container}>
+                <Title className={classes.title}>Проект, помогающий вступить в IT</Title>
+                <Text className={classes.description} size="xl" mt="xl">
+                    Полностью бесплатный проект, созданный для обучщающий целей, поможет понять найти свое место также легко, как испечь вафли
                 </Text>
 
-                <List
-                    mt={30}
-                    spacing="sm"
-                    size="sm"
-                    icon={
-                        <ThemeIcon size={20} radius="xl">
-                            <Check size={12}/>
-                        </ThemeIcon>
-                    }
-                >
-                    <List.Item>
-                        <b>TypeScript based</b> – build type safe applications, all components and hooks
-                        export types
-                    </List.Item>
-                    <List.Item>
-                        <b>Free and open source</b> – all packages have MIT license, you can use Mantine in
-                        any project
-                    </List.Item>
-                    <List.Item>
-                        <b>No annoying focus ring</b> – focus ring will appear only when user navigates with
-                        keyboard
-                    </List.Item>
-                </List>
-
-                <Group mt={30}>
-                    <Button radius="xl" size="md" className={classes.control}>
-                        Начать
-                    </Button>
-                </Group>
-            </div>
-            <Image src={image.src} className={classes.image}/>
+                <Button variant="gradient" size="xl" radius="xl" className={classes.control}>
+                    Начать
+                </Button>
+            </Container>
         </div>
     );
 }
+
+HeroContentLeft.noContainer = true

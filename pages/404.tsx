@@ -6,7 +6,12 @@ const useStyles = createStyles((theme) => ({
     root: {
         paddingTop: 80,
         paddingBottom: 80,
-        minHeight: "100vh"
+        minHeight: "100vh",
+        // alignContent: "center",
+        // alignItems: "center",
+        // justifyContent: "center",
+        // display: "flex",
+        // flexDirection: "column"
     },
 
     label: {

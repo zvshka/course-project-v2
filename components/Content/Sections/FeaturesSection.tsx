@@ -1,87 +1,100 @@
 import React from 'react';
-import { createStyles, Title, SimpleGrid, Text, Button, ThemeIcon, Grid, Col } from '@mantine/core';
-import { ReceiptOff, Flame, CircleDotted, FileCode } from 'tabler-icons-react';
+import {
+    ThemeIcon,
+    Text,
+    Title,
+    Container,
+    SimpleGrid,
+    useMantineTheme,
+    createStyles,
+} from '@mantine/core';
+import {Code, Cookie, CurrencyRubel, Icon as TablerIcon, Message, Prison, Speedboat, User} from 'tabler-icons-react';
+
+interface FeatureProps {
+    icon: TablerIcon;
+    title: React.ReactNode;
+    description: React.ReactNode;
+}
+
+export function Feature({ icon: Icon, title, description }: FeatureProps) {
+    const theme = useMantineTheme();
+    return (
+        <div>
+            <ThemeIcon variant="light" size={40} radius={40}>
+                <Icon style={{ width: 20, height: 20 }} />
+            </ThemeIcon>
+            <Text style={{ marginTop: theme.spacing.sm, marginBottom: 7 }}>{title}</Text>
+            <Text size="sm" color="dimmed" style={{ lineHeight: 1.6 }}>
+                {description}
+            </Text>
+        </div>
+    );
+}
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
-        padding: `${theme.spacing.xl}px 0`,
+        paddingTop: theme.spacing.xl * 4,
+        paddingBottom: theme.spacing.xl * 4,
     },
 
     title: {
         fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-        fontSize: 36,
         fontWeight: 900,
-        lineHeight: 1.1,
         marginBottom: theme.spacing.md,
-        color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+        textAlign: 'center',
+
+        [theme.fn.smallerThan('sm')]: {
+            fontSize: 28,
+            textAlign: 'left',
+        },
+    },
+
+    description: {
+        textAlign: 'center',
+
+        [theme.fn.smallerThan('sm')]: {
+            textAlign: 'left',
+        },
     },
 }));
 
-const features = [
-    {
-        icon: ReceiptOff,
-        title: 'Free and open source',
-        description: 'All packages are published under MIT license, you can use Mantine in any project',
-    },
-    {
-        icon: FileCode,
-        title: 'TypeScript based',
-        description: 'Build type safe applications, all components and hooks export types',
-    },
-    {
-        icon: CircleDotted,
-        title: 'No annoying focus ring',
-        description:
-            'With new :focus-visible selector focus ring will appear only when user navigates with keyboard',
-    },
-    {
-        icon: Flame,
-        title: 'Flexible',
-        description:
-            'Customize colors, spacing, shadows, fonts and many other settings with global theme object',
-    },
-];
+interface FeaturesGridProps {
+    title: React.ReactNode;
+    description: React.ReactNode;
+    data?: FeatureProps[];
+}
 
-export function FeaturesSection() {
+export function FeaturesGrid({ title, description, data }: FeaturesGridProps) {
     const { classes } = useStyles();
-
-    const items = features.map((feature) => (
-        <div key={feature.title}>
-            <ThemeIcon
-                size={44}
-                radius="md"
-                variant="gradient"
-                gradient={{ deg: 133, from: 'blue', to: 'cyan' }}
-            >
-                <feature.icon size={26} />
-            </ThemeIcon>
-            <Text size="lg" mt="sm" weight={500}>
-                {feature.title}
-            </Text>
-            <Text color="dimmed" size="sm">
-                {feature.description}
-            </Text>
-        </div>
-    ));
+    const theme = useMantineTheme();
+    const features = data?.map((feature, index) => <Feature {...feature} key={index} />);
 
     return (
-        <div className={classes.wrapper}>
-            <Grid gutter={80}>
-                <Col span={12} md={5}>
-                    <Title className={classes.title} order={2}>
-                        A fully featured React components library for your next project
-                    </Title>
-                    <Text color="dimmed">
-                        Build fully functional accessible web applications faster than ever – Mantine includes
-                        more than 120 customizable components and hooks to cover you in any situation
-                    </Text>
-                </Col>
-                <Col span={12} md={7}>
-                    <SimpleGrid cols={2} spacing={30} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
-                        {items}
-                    </SimpleGrid>
-                </Col>
-            </Grid>
-        </div>
+        <Container className={classes.wrapper}>
+            <Title className={classes.title}>{title}</Title>
+
+            <Container size={560} p={0}>
+                <Text size="sm" className={classes.description}>
+                    {description}
+                </Text>
+            </Container>
+
+            <SimpleGrid
+                mt={60}
+                cols={3}
+                spacing={theme.spacing.xl * 2}
+                breakpoints={[
+                    { maxWidth: 980, cols: 2, spacing: 'xl' },
+                    { maxWidth: 755, cols: 1, spacing: 'xl' },
+                ]}
+            >
+                <Feature icon={Cookie} title={"Максимальное удобство"} description={"Курсы разделены на этапы, а этапы на уроки"}/>
+                <Feature icon={Speedboat} title={"Великолепная оптимизация"} description={"Все курсы загружаются практически моментально"}/>
+                <Feature icon={CurrencyRubel} title={"Не нужно платить ни копейки"} description={"Все курсы сделаны на добровольной основе, с вас никгода и никто не попросит оплаты"}/>
+                <Feature icon={Message} title={"Постоянная поддержака"} description={"Вы можете связаться с разработчиком практически в любое время"}/>
+                <Feature icon={User} title={"Полная безопасность"} description={"Все ваши данные надежны защищены и мы не собираем ничего о вас ( честно :D )"}/>
+                <Feature icon={Code} title={"Открытый исходный код"} description={"Вы можете помочь проекту в любое время, код всегда открыт"}/>
+            </SimpleGrid>
+        </Container>
     );
 }

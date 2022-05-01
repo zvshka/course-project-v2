@@ -1,27 +1,23 @@
-import {AppShell, Container, createStyles} from "@mantine/core";
+import {AppShell, createStyles} from "@mantine/core";
 import {DoubleHeader} from "@components/Layout/Header";
+import {FooterSocial} from "@components/Layout/Footer";
 
-const useStyles = createStyles((theme) => ({
-    mainContainer: {
-        minHeight: "100vh",
-        [theme.fn.smallerThan("md")]: {
-            paddingLeft: 0,
-            paddingRight: 0
-        }
+export const Shell = ({children, withPadding = true}) => {
+    const padding = withPadding ? {} : {
+        padding: 0
     }
-}))
-
-export const Shell = ({children}) => {
-    const {classes} = useStyles();
     return <AppShell
         padding="md"
         header={<DoubleHeader/>}
+        footer={<FooterSocial/>}
         styles={(theme) => ({
-            main: {backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[2]},
+            main: {
+                backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[2],
+                minHeight: "82.5vh",
+                ...padding
+            },
         })}
     >
-        <Container size={'xl'} className={classes.mainContainer}>
-            {children}
-        </Container>
+        {children}
     </AppShell>
 }
