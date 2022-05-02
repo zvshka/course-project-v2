@@ -8,7 +8,7 @@ import {
     Textarea,
     Button,
     Group,
-    ActionIcon,
+    ActionIcon, Container,
 } from '@mantine/core';
 import { BrandTwitter, BrandYoutube, BrandInstagram } from 'tabler-icons-react';
 import { ContactIconsList } from './ContactIcons';
@@ -91,44 +91,46 @@ export function ContactUs() {
 
     return (
         <div className={classes.wrapper}>
-            <SimpleGrid cols={2} spacing={50} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                <div>
-                    <Title className={classes.title}>Обратная связь</Title>
-                    <Text className={classes.description} mt="sm" mb={30}>
-                        Напиши свой email и мы свяжемся с тобой в ближайшее время
-                    </Text>
+            <Container>
+                <SimpleGrid cols={2} spacing={50} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+                    <div>
+                        <Title className={classes.title}>Обратная связь</Title>
+                        <Text className={classes.description} mt="sm" mb={30}>
+                            Напиши свой email и мы свяжемся с тобой в ближайшее время
+                        </Text>
 
-                    <ContactIconsList variant="white" />
+                        <ContactIconsList variant="white" />
 
-                    <Group mt="xl">{icons}</Group>
-                </div>
-                <div className={classes.form}>
-                    <TextInput
-                        label="Email"
-                        placeholder="your@email.com"
-                        required
-                        classNames={{ input: classes.input, label: classes.inputLabel }}
-                    />
-                    <TextInput
-                        label="Как вас зовут?"
-                        placeholder="John Doe"
-                        mt="md"
-                        classNames={{ input: classes.input, label: classes.inputLabel }}
-                    />
-                    <Textarea
-                        required
-                        label="Ваше сообщение"
-                        placeholder="You are the best!"
-                        minRows={4}
-                        mt="md"
-                        classNames={{ input: classes.input, label: classes.inputLabel }}
-                    />
+                        <Group mt="xl">{icons}</Group>
+                    </div>
+                    <div className={classes.form}>
+                        <TextInput
+                            label="Email"
+                            placeholder="your@email.com"
+                            required
+                            classNames={{ input: classes.input, label: classes.inputLabel }}
+                        />
+                        <TextInput
+                            label="Как вас зовут?"
+                            placeholder="John Doe"
+                            mt="md"
+                            classNames={{ input: classes.input, label: classes.inputLabel }}
+                        />
+                        <Textarea
+                            required
+                            label="Ваше сообщение"
+                            placeholder="You are the best!"
+                            minRows={4}
+                            mt="md"
+                            classNames={{ input: classes.input, label: classes.inputLabel }}
+                        />
 
-                    <Group position="right" mt="md">
-                        <Button className={classes.control}>Отправить сообщение</Button>
-                    </Group>
-                </div>
-            </SimpleGrid>
+                        <Group position="right" mt="md">
+                            <Button className={classes.control}>Отправить сообщение</Button>
+                        </Group>
+                    </div>
+                </SimpleGrid>
+            </Container>
         </div>
     );
 }

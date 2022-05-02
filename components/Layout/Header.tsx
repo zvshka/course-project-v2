@@ -1,16 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
     Anchor,
-    Avatar,
-    Burger, Button,
+    Avatar, Box,
+    Burger, Collapse,
     Container,
     createStyles,
+    Divider,
     Group,
     Header,
     Image,
-    Menu, Paper, Stack,
+    Menu,
+    Paper,
     Text,
-    Title, Transition, UnstyledButton,
+    Title,
+    Transition,
+    UnstyledButton,
     useMantineTheme
 } from '@mantine/core';
 import {useBooleanToggle} from '@mantine/hooks';
@@ -152,7 +156,9 @@ const useStyles = createStyles((theme) => ({
     },
 
     link: {
-        display: 'block',
+        // display: 'block',
+        display: "flex",
+        justifyContent: "center",
         lineHeight: 1,
         padding: '8px 12px',
         borderRadius: theme.radius.sm,
@@ -167,7 +173,7 @@ const useStyles = createStyles((theme) => ({
 
         [theme.fn.smallerThan('sm')]: {
             borderRadius: 0,
-            padding: theme.spacing.md,
+            padding: theme.spacing.md / 2,
         },
     },
 
@@ -182,8 +188,20 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
+const MobileLink = ({theme, children, color = null, link = "/"}) => {
+    const {classes} = useStyles()
+    return <Link href={link}>
+        <UnstyledButton component={"a"} className={classes.link} sx={{width: "100%", color}}>
+            <Group position={"center"} spacing={theme.spacing.sm / 4}>
+                {children}
+            </Group>
+        </UnstyledButton>
+    </Link>
+}
+
 export function DoubleHeader() {
     const [opened, toggleOpened] = useBooleanToggle(false);
+    const [userMenuOpened, toggleUserMenu] = useBooleanToggle(false)
     const {classes, cx} = useStyles();
     const router = useRouter()
     const userQuery = useUser()
@@ -220,10 +238,12 @@ export function DoubleHeader() {
     return (
         <Header height={HEADER_HEIGHT}>
             <Container className={classes.inner}>
-                <Group>
-                    <Image alt={"Waffle Logo"} src={'/food-waffles.svg'} height={32}/>
-                    <Title order={3}>Fantastic Waffle</Title>
-                </Group>
+                <Link href={"/"} passHref>
+                    <Group>
+                        <Image alt={"Waffle Logo"} src={'/food-waffles.svg'} height={32}/>
+                        <Title order={3}>Fantastic Waffle</Title>
+                    </Group>
+                </Link>
                 <div className={classes.links}>
                     <Group position="right">
                         {!userQuery.isSuccess && <>
@@ -277,55 +297,61 @@ export function DoubleHeader() {
                     size="sm"
                 />
 
-                <Transition transition="pop-top-right" duration={200} mounted={opened}>
-                    {(styles) => (
+                <Transition transition="slide-down" duration={200} mounted={opened}>
+                    {(styles) => <>
                         <Paper className={classes.dropdown} withBorder style={styles}>
-                            {/*{items}*/}
-                            <a
-                                href={"#"}
-                                className={cx(classes.link, { [classes.linkActive]: "2" === "1" })}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    // setActive(link.link);
-                                    toggleOpened(false);
-                                }}
-                            >
-                                Hello world
-                            </a>
-                            {/*<Group spacing={7}>*/}
-                            {/*    <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"*/}
-                            {/*            size={26}/>*/}
-                            {/*    <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>*/}
-                            {/*        {userQuery.data.username}*/}
-                            {/*    </Text>*/}
-                            {/*</Group>*/}
+                            {userQuery.isSuccess ? <>
+                                <Group spacing={7} className={classes.link} position={"center"} onClick={() => toggleUserMenu()}>
+                                    <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"
+                                            size={26}/>
+                                    <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>
+                                        {userQuery.data.username}
+                                    </Text>
+                                </Group>
+                                <Collapse in={userMenuOpened}>
+                                    <Box>
+                                        {userQuery.data.role === "ADMIN" && <>
+                                            <MobileLink theme={theme} link={"/admin/users"}>
+                                                <Users size={18}/>
+                                                <Text>Пользователи</Text>
+                                            </MobileLink>
+                                            <MobileLink theme={theme} link={"/lessons/create"}>
+                                                <Pencil size={18}/>
+                                                <Text>Создать урок</Text>
+                                            </MobileLink>
+                                        </>}
+                                        <MobileLink theme={theme} link={"/account"}>
+                                            <Settings size={18}/>
+                                            <Text>Настройки аккаунта</Text>
+                                        </MobileLink>
+                                        <MobileLink theme={theme} color={"red"}>
+                                            <Logout size={14}/>
+                                            <Text>Выйти</Text>
+                                        </MobileLink>
+                                    </Box>
+                                </Collapse>
+                            </> : <>
+                                <MobileLink theme={theme} link={"/auth/login"}>
+                                    <Text>Вход</Text>
+                                </MobileLink>
+                                <MobileLink theme={theme} link={"/auth/register"}>
+                                    <Text>Регистрация</Text>
+                                </MobileLink>
+                            </>}
+                            <Divider/>
+                            <MobileLink theme={theme}>
+                                <Text>Главная</Text>
+                            </MobileLink>
+                            <MobileLink theme={theme} link={"/courses"}>
+                                <Text>Курсы</Text>
+                            </MobileLink>
+                            <MobileLink theme={theme} link={"/about"}>
+                                <Text>О проекте</Text>
+                            </MobileLink>
                         </Paper>
-                    )}
+                    </>}
                 </Transition>
             </Container>
-            {/*<Paper sx={{visibility: opened ? "visible" : "hidden", zIndex: 100, position: "absolute", width: "100%"}} mt={theme.spacing.sm / 8}>*/}
-            {/*    {!userQuery.isSuccess && <Group direction={"column"} align={"center"} spacing={theme.spacing.xl / 4}>*/}
-            {/*        <Anchor>Войти</Anchor>*/}
-            {/*        <Anchor>Регистрация</Anchor>*/}
-            {/*    </Group>}*/}
-            {/*    {userQuery.isSuccess && <Group direction={"column"} align={"center"} spacing={theme.spacing.xl / 4}>*/}
-            {/*        <Group spacing={7}>*/}
-            {/*            <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"*/}
-            {/*                    size={26}/>*/}
-            {/*            <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>*/}
-            {/*                {userQuery.data.username}*/}
-            {/*            </Text>*/}
-            {/*        </Group>*/}
-            {/*        /!*{userQuery.data.role === "ADMIN" && <>*!/*/}
-            {/*        /!*    <Menu.Label>Админситратор</Menu.Label>*!/*/}
-            {/*        /!*    {adminItems}*!/*/}
-            {/*        /!*</>}*!/*/}
-            {/*        /!*<Menu.Label>Настройки</Menu.Label>*!/*/}
-            {/*        /!*<Menu.Item component={NextLink} href="/account" icon={<Settings size={14}/>}>Настройки*!/*/}
-            {/*        /!*    аккаунта</Menu.Item>*!/*/}
-            {/*        <UnstyledButton onClick={handleLogout} leftIcon={<Logout size={14}/>}>Выйти</UnstyledButton>*/}
-            {/*    </Group>}*/}
-            {/*</Paper>*/}
         </Header>
     );
 }

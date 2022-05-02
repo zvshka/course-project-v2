@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStyles, Overlay, Container, Title, Button, Text } from '@mantine/core';
+import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
     hero: {
@@ -78,9 +79,11 @@ export function HeroContentLeft() {
                     Полностью бесплатный проект, созданный в образовательных целях, поможет понять, что найти свое место также легко, как испечь вафли
                 </Text>
 
-                <Button variant="gradient" size="xl" radius="xl" className={classes.control}>
-                    Начать
-                </Button>
+                <Link href={"/courses"}>
+                    <Button component={"a"} variant="gradient" size="xl" radius="xl" className={classes.control}>
+                        Начать
+                    </Button>
+                </Link>
             </Container>
         </div>
     );
