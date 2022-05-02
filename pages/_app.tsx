@@ -34,10 +34,8 @@ function MyApp({Component, pageProps}) {
         };
         getCsrfToken();
     }, []);
-    const router = useRouter()
     const withoutLayout = Component.withoutLayout || false
     const noContainer = Component.noContainer || false
-    console.log(Component.noContainer)
     return <>
         <Head>
             <title>Fantastic Waffle</title>

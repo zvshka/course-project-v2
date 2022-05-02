@@ -9,7 +9,7 @@ export default function Home() {
         <>
             <HeroContentLeft/>
             <Container size={"xl"} sx={{backgroundColor: "white"}} px={0}>
-                <FeaturesGrid description={"Каждому под силу программирование, нужно лишь постараться и приложить немного услий"} title={"Программирование - это лекго как вафли"}/>
+                <FeaturesGrid description={"Каждому под силу программирование, нужно лишь постараться и приложить немного усилий"} title={"Программирование - это легко как вафли"}/>
                 <ContactUs/>
                 <FaqWithBg/>
             </Container>

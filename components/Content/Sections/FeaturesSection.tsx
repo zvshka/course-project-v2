@@ -6,7 +6,7 @@ import {
     Container,
     SimpleGrid,
     useMantineTheme,
-    createStyles,
+    createStyles, MediaQuery,
 } from '@mantine/core';
 import {Code, Cookie, CurrencyRubel, Icon as TablerIcon, Message, Prison, Speedboat, User} from 'tabler-icons-react';
 
@@ -43,18 +43,18 @@ const useStyles = createStyles((theme) => ({
         marginBottom: theme.spacing.md,
         textAlign: 'center',
 
-        [theme.fn.smallerThan('sm')]: {
+        [theme.fn.smallerThan('xs')]: {
             fontSize: 28,
-            textAlign: 'left',
+            // textAlign: 'left',
         },
     },
 
     description: {
         textAlign: 'center',
 
-        [theme.fn.smallerThan('sm')]: {
-            textAlign: 'left',
-        },
+        // [theme.fn.smallerThan('sm')]: {
+        //     textAlign: 'left',
+        // },
     },
 }));
 
@@ -67,34 +67,35 @@ interface FeaturesGridProps {
 export function FeaturesGrid({ title, description, data }: FeaturesGridProps) {
     const { classes } = useStyles();
     const theme = useMantineTheme();
-    const features = data?.map((feature, index) => <Feature {...feature} key={index} />);
 
     return (
-        <Container className={classes.wrapper}>
-            <Title className={classes.title}>{title}</Title>
+        // <MediaQuery styles={{textAlign: "center"}} smallerThan="lg">
+            <Container className={classes.wrapper}>
+                <Title className={classes.title}>{title}</Title>
 
-            <Container size={560} p={0}>
-                <Text size="sm" className={classes.description}>
-                    {description}
-                </Text>
+                <Container size={560} p={0}>
+                    <Text size="sm" className={classes.description}>
+                        {description}
+                    </Text>
+                </Container>
+
+                <SimpleGrid
+                    mt={60}
+                    cols={3}
+                    spacing={theme.spacing.xl * 2}
+                    breakpoints={[
+                        { maxWidth: 980, cols: 2, spacing: 'xl' },
+                        { maxWidth: 755, cols: 1, spacing: 'xl' },
+                    ]}
+                >
+                    <Feature icon={Cookie} title={"Максимальное удобство"} description={"Курсы разделены на этапы, а этапы на уроки"}/>
+                    <Feature icon={Speedboat} title={"Великолепная оптимизация"} description={"Все курсы загружаются практически моментально"}/>
+                    <Feature icon={CurrencyRubel} title={"Не нужно платить ни копейки"} description={"Все курсы сделаны на добровольной основе, с вас никгода и никто не попросит оплаты"}/>
+                    <Feature icon={Message} title={"Постоянная поддержака"} description={"Вы можете связаться с разработчиком практически в любое время"}/>
+                    <Feature icon={User} title={"Полная безопасность"} description={"Все ваши данные надежны защищены и мы не собираем ничего о вас ( честно :D )"}/>
+                    <Feature icon={Code} title={"Открытый исходный код"} description={"Вы можете помочь проекту в любое время, код всегда открыт"}/>
+                </SimpleGrid>
             </Container>
-
-            <SimpleGrid
-                mt={60}
-                cols={3}
-                spacing={theme.spacing.xl * 2}
-                breakpoints={[
-                    { maxWidth: 980, cols: 2, spacing: 'xl' },
-                    { maxWidth: 755, cols: 1, spacing: 'xl' },
-                ]}
-            >
-                <Feature icon={Cookie} title={"Максимальное удобство"} description={"Курсы разделены на этапы, а этапы на уроки"}/>
-                <Feature icon={Speedboat} title={"Великолепная оптимизация"} description={"Все курсы загружаются практически моментально"}/>
-                <Feature icon={CurrencyRubel} title={"Не нужно платить ни копейки"} description={"Все курсы сделаны на добровольной основе, с вас никгода и никто не попросит оплаты"}/>
-                <Feature icon={Message} title={"Постоянная поддержака"} description={"Вы можете связаться с разработчиком практически в любое время"}/>
-                <Feature icon={User} title={"Полная безопасность"} description={"Все ваши данные надежны защищены и мы не собираем ничего о вас ( честно :D )"}/>
-                <Feature icon={Code} title={"Открытый исходный код"} description={"Вы можете помочь проекту в любое время, код всегда открыт"}/>
-            </SimpleGrid>
-        </Container>
+        // </MediaQuery>
     );
 }

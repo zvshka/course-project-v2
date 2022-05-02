@@ -2,15 +2,15 @@ import React, {useState} from 'react';
 import {
     Anchor,
     Avatar,
-    Burger,
+    Burger, Button,
     Container,
     createStyles,
     Group,
     Header,
     Image,
-    Menu,
+    Menu, Paper, Stack,
     Text,
-    Title,
+    Title, Transition, UnstyledButton,
     useMantineTheme
 } from '@mantine/core';
 import {useBooleanToggle} from '@mantine/hooks';
@@ -134,6 +134,52 @@ const useStyles = createStyles((theme) => ({
     userActive: {
         backgroundColor: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 7 : 5],
     },
+
+    dropdown: {
+        position: 'absolute',
+        top: HEADER_HEIGHT,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
+        borderTopWidth: 0,
+        overflow: 'hidden',
+
+        [theme.fn.largerThan('sm')]: {
+            display: 'none',
+        },
+    },
+
+    link: {
+        display: 'block',
+        lineHeight: 1,
+        padding: '8px 12px',
+        borderRadius: theme.radius.sm,
+        textDecoration: 'none',
+        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+        fontSize: theme.fontSizes.sm,
+        fontWeight: 500,
+
+        '&:hover': {
+            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+        },
+
+        [theme.fn.smallerThan('sm')]: {
+            borderRadius: 0,
+            padding: theme.spacing.md,
+        },
+    },
+
+    linkActive: {
+        '&, &:hover': {
+            backgroundColor:
+                theme.colorScheme === 'dark'
+                    ? theme.fn.rgba(theme.colors[theme.primaryColor][9], 0.25)
+                    : theme.colors[theme.primaryColor][0],
+            color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 3 : 7],
+        },
+    },
 }));
 
 export function DoubleHeader() {
@@ -143,7 +189,6 @@ export function DoubleHeader() {
     const userQuery = useUser()
     const theme = useMantineTheme()
     const queryClient = useQueryClient()
-    const [_, setUserMenuOpened] = useState(false);
 
     const handleLogout = (e) => {
         axios.post("/api/auth/logout").then(res => {
@@ -177,7 +222,7 @@ export function DoubleHeader() {
             <Container className={classes.inner}>
                 <Group>
                     <Image alt={"Waffle Logo"} src={'/food-waffles.svg'} height={32}/>
-                    <Title order={2}>Fantastic Waffle</Title>
+                    <Title order={3}>Fantastic Waffle</Title>
                 </Group>
                 <div className={classes.links}>
                     <Group position="right">
@@ -199,8 +244,6 @@ export function DoubleHeader() {
                                 placement="end"
                                 transition="pop-top-right"
                                 className={classes.userMenu}
-                                onClose={() => setUserMenuOpened(false)}
-                                onOpen={() => setUserMenuOpened(true)}
                                 control={
                                     <Group spacing={7}>
                                         <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"
@@ -208,7 +251,6 @@ export function DoubleHeader() {
                                         <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>
                                             {userQuery.data.username}
                                         </Text>
-                                        {/*<ChevronDown size={12}/>*/}
                                     </Group>
                                 }
                             >
@@ -227,13 +269,63 @@ export function DoubleHeader() {
                         {mainItems}
                     </Group>
                 </div>
+
                 <Burger
                     opened={opened}
                     onClick={() => toggleOpened()}
                     className={classes.burger}
                     size="sm"
                 />
+
+                <Transition transition="pop-top-right" duration={200} mounted={opened}>
+                    {(styles) => (
+                        <Paper className={classes.dropdown} withBorder style={styles}>
+                            {/*{items}*/}
+                            <a
+                                href={"#"}
+                                className={cx(classes.link, { [classes.linkActive]: "2" === "1" })}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    // setActive(link.link);
+                                    toggleOpened(false);
+                                }}
+                            >
+                                Hello world
+                            </a>
+                            {/*<Group spacing={7}>*/}
+                            {/*    <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"*/}
+                            {/*            size={26}/>*/}
+                            {/*    <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>*/}
+                            {/*        {userQuery.data.username}*/}
+                            {/*    </Text>*/}
+                            {/*</Group>*/}
+                        </Paper>
+                    )}
+                </Transition>
             </Container>
+            {/*<Paper sx={{visibility: opened ? "visible" : "hidden", zIndex: 100, position: "absolute", width: "100%"}} mt={theme.spacing.sm / 8}>*/}
+            {/*    {!userQuery.isSuccess && <Group direction={"column"} align={"center"} spacing={theme.spacing.xl / 4}>*/}
+            {/*        <Anchor>Войти</Anchor>*/}
+            {/*        <Anchor>Регистрация</Anchor>*/}
+            {/*    </Group>}*/}
+            {/*    {userQuery.isSuccess && <Group direction={"column"} align={"center"} spacing={theme.spacing.xl / 4}>*/}
+            {/*        <Group spacing={7}>*/}
+            {/*            <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"*/}
+            {/*                    size={26}/>*/}
+            {/*            <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>*/}
+            {/*                {userQuery.data.username}*/}
+            {/*            </Text>*/}
+            {/*        </Group>*/}
+            {/*        /!*{userQuery.data.role === "ADMIN" && <>*!/*/}
+            {/*        /!*    <Menu.Label>Админситратор</Menu.Label>*!/*/}
+            {/*        /!*    {adminItems}*!/*/}
+            {/*        /!*</>}*!/*/}
+            {/*        /!*<Menu.Label>Настройки</Menu.Label>*!/*/}
+            {/*        /!*<Menu.Item component={NextLink} href="/account" icon={<Settings size={14}/>}>Настройки*!/*/}
+            {/*        /!*    аккаунта</Menu.Item>*!/*/}
+            {/*        <UnstyledButton onClick={handleLogout} leftIcon={<Logout size={14}/>}>Выйти</UnstyledButton>*/}
+            {/*    </Group>}*/}
+            {/*</Paper>*/}
         </Header>
     );
 }

@@ -75,7 +75,7 @@ export function HeroContentLeft() {
             <Container className={classes.container}>
                 <Title className={classes.title}>Проект, помогающий вступить в IT</Title>
                 <Text className={classes.description} size="xl" mt="xl">
-                    Полностью бесплатный проект, созданный для обучщающий целей, поможет понять найти свое место также легко, как испечь вафли
+                    Полностью бесплатный проект, созданный в образовательных целях, поможет понять, что найти свое место также легко, как испечь вафли
                 </Text>
 
                 <Button variant="gradient" size="xl" radius="xl" className={classes.control}>
