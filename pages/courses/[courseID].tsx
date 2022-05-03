@@ -1,4 +1,4 @@
-import {Button, Group, Paper, Title} from "@mantine/core";
+import {Button, Group, Menu, Paper, Text, Title, useMantineTheme} from "@mantine/core";
 import useCourse from "@hooks/useCourse";
 import {useRouter} from "next/router";
 import {useModals} from "@mantine/modals";
@@ -9,12 +9,26 @@ import {CheckIcon} from "@modulz/radix-icons";
 import {useNotifications} from "@mantine/notifications";
 import {useQueryClient} from "react-query";
 import useUser from "@hooks/useUser";
-import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {
+    closestCenter,
+    DndContext,
+    KeyboardSensor,
+    MouseSensor,
+    PointerSensor, TouchSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
 import {SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {Stage} from "@components/Content/Stage";
 import axios from "axios";
+import Link from "next/link";
+import {
+    restrictToVerticalAxis,
+    restrictToWindowEdges,
+} from '@dnd-kit/modifiers';
 
 export default function CoursePage() {
+    const theme = useMantineTheme()
     const userQuery = useUser()
     const router = useRouter()
     const modals = useModals()
@@ -31,8 +45,15 @@ export default function CoursePage() {
     }, [courseQuery.data, courseQuery.isSuccess])
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
+        useSensor(MouseSensor, {
+            activationConstraint: null,
+        }),
+        useSensor(TouchSensor, {
+            activationConstraint: null,
+        }),
         useSensor(KeyboardSensor, {
+            // Disable smooth scrolling in Cypress automated tests
+            // scrollBehavior: 'Cypress' in window ? 'auto' : undefined,
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
@@ -75,25 +96,41 @@ export default function CoursePage() {
     }
 
     return <>
-        <Paper shadow={'lg'} px={'sm'} py={'sm'}>
+        <Paper shadow={'lg'} p={'sm'} mb={"md"}>
             <Group position={"apart"}>
-                <Title order={3}>
-                    Страница курса
-                </Title>
-                {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Group>
-                    <Button onClick={openCreatingModal}>
+                <Group grow>
+                    <Link href={"/courses"} passHref>
+                        <Button component={"a"}>
+                            Назад к курсам
+                        </Button>
+                    </Link>
+                </Group>
+                <Menu>
+                    <Menu.Label>Административное меню</Menu.Label>
+                    <Menu.Item onClick={openCreatingModal}>
                         Создать этап
-                    </Button>
-                    <Button onClick={handleToggle}>
+                    </Menu.Item>
+                    <Menu.Item onClick={handleToggle}>
                         {draggable ? "Сохранить порядок" : "Изменить порядок"}
-                    </Button>
-                </Group>}
+                    </Menu.Item>
+                </Menu>
+            </Group>
+        </Paper>
+        <Paper shadow={'lg'} p={'sm'}>
+            <Group spacing={0} direction={"column"}>
+                <Title order={3}>
+                    {courseQuery?.data?.title}
+                </Title>
+                <Text size={"lg"} sx={{textAlign: "justify"}}>
+                    {courseQuery?.data?.description}
+                </Text>
             </Group>
         </Paper>
         <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
         >
             <SortableContext
                 items={stages}

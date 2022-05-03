@@ -17,7 +17,10 @@ const useStyles = createStyles((theme, _, getRef) => ({
         '&:before': {
             content: `''`,
             display: "block",
-            paddingTop: "50%"
+            paddingTop: "50%",
+            [theme.fn.smallerThan("sm")] : {
+                paddingTop: "30%"
+            }
         }
     },
     boxContent: {
@@ -98,7 +101,7 @@ export function Lesson({lesson, isAdmin}) {
                 <Text sx={{fontWeight: 600}}>
                     {lesson.title}
                 </Text>
-                <Text sx={{color: theme.colors.gray[7], fontSize: theme.fontSizes.sm}}>
+                <Text sx={{color: theme.colors.gray[9], fontSize: theme.fontSizes.sm}}>
                     {lesson.description}
                 </Text>
             </Box>

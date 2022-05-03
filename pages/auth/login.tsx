@@ -19,6 +19,8 @@ import axios from "axios";
 import {useEffect} from "react";
 import {useNotifications} from "@mantine/notifications";
 import Register from "./register";
+import {useModals} from "@mantine/modals";
+import ForgotPasswordForm from "@components/Content/Forms/ForgotPasswordForm";
 
 const useStyles = createStyles((theme) => ({
     loginButton: {
@@ -98,6 +100,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function Login() {
     const router = useRouter()
+    const modals = useModals()
     const {classes, theme} = useStyles()
     const notifications = useNotifications()
 
@@ -140,6 +143,13 @@ export default function Login() {
                 email: true,
                 password: "Не правильный email или пароль"
             })
+        })
+    }
+
+    const openForgotPassword = () => {
+        modals.openModal({
+            title: "Восстановление пароля",
+            children: <ForgotPasswordForm/>
         })
     }
 
@@ -190,6 +200,11 @@ export default function Login() {
                     <Button type="submit" className={classes.loginButton}>
                         Войти
                     </Button>
+                    <Group position={"center"} mt={"md"}>
+                        <Button onClick={openForgotPassword}>
+                            Забыли пароль?
+                        </Button>
+                    </Group>
                 </Paper>
             </Group>
         </form>

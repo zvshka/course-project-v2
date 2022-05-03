@@ -141,12 +141,17 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                 </>}
             </Group>
             <Collapse in={collapse} transitionDuration={300}>
-                <Box className={classes.contentInner}>
-                    <SimpleGrid cols={4}>
-                        {stage.lessons.map((lesson, index) => <Lesson isAdmin={isAdmin} lesson={lesson}
-                                                                      key={lesson.id}/>)}
+                {!draggable && <Box className={classes.contentInner}>
+                    <SimpleGrid breakpoints={[{
+                        maxWidth: "sm",
+                        cols: 1
+                    }]} cols={5}>
+                        {stage.lessons.map((lesson, index) =>
+                            <Lesson isAdmin={isAdmin}
+                                    lesson={lesson}
+                                    key={lesson.id}/>)}
                     </SimpleGrid>
-                </Box>
+                </Box>}
             </Collapse>
         </Box>
     </>

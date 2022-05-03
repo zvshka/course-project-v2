@@ -10,6 +10,7 @@ import useCourse from "@hooks/useCourse";
 import useCourses from "@hooks/useCourses";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {useListState} from "@mantine/hooks";
 
 const Editor = dynamic(() => import("@components/Content/Editor"), {
     ssr: false
@@ -60,15 +61,23 @@ export default function LessonCreation() {
     }
 
     const coursesQuery = useCourses()
-    const [courses, setCourses] = useState([])
+    const [courses, coursesHandlers] = useListState([])
     useEffect(() => {
         if (coursesQuery.hasNextPage) {
             coursesQuery.fetchNextPage()
         }
     }, [coursesQuery.hasNextPage])
+
     useEffect(() => {
         if (coursesQuery.isSuccess && coursesQuery.data) {
-            setCourses(coursesQuery.data.pages.map((course => ({label: course.title, value: course.id}))))
+            for (let page of coursesQuery.data.pages) {
+                const mapped = page.courses.map((course => ({label: course.title, value: course.id})))
+                // coursesHandlers.append(mapped)
+                for (let course of mapped) {
+                    coursesHandlers.append(course)
+                }
+            }
+            console.log(courses)
         }
     }, [coursesQuery.isSuccess, coursesQuery.data])
 

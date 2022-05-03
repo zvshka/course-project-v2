@@ -7,7 +7,6 @@ import {NotificationsProvider} from "@mantine/notifications";
 import {ModalsProvider} from "@mantine/modals";
 import Head from "next/head";
 import {Shell} from "@components/Layout/Shell";
-import {useRouter} from "next/router";
 import {useEffect} from "react";
 import axios from "axios";
 

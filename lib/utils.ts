@@ -4,10 +4,13 @@ import {NextApiRequest, NextApiResponse} from "next";
 import cookieParse from "cookie-parser"
 import {CookieSerializeOptions, serialize} from 'cookie'
 import csrf from "csurf";
+import nodemailer from "nodemailer"
 
 const csrfProtection = csrf({
     cookie: true
 });
+
+export const transporter = (config) => nodemailer.createTransport(config);
 
 export const apiRouter = () => nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
