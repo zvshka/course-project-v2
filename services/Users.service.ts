@@ -58,6 +58,12 @@ class UsersService {
         })
     }
 
+    async findOneByEmailCode(code) {
+        return await prisma.user.findUnique({
+            where: {email_verification_code: code}
+        })
+    }
+
     async findOneByPasswordCode(code: any) {
         return await prisma.user.findUnique({
             where: {password_reset_code: code}

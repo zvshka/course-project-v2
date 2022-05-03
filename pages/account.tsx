@@ -7,6 +7,7 @@ import {useForm} from "@mantine/form";
 import {useEffect} from "react";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {BrandGithub, DeviceFloppy, LockOpen, Pencil} from "tabler-icons-react";
+import {useNotifications} from "@mantine/notifications";
 
 const handleLink = () => {
     window.location.href = "/api/auth/github?callbackUrl=" + window.location.href
@@ -27,6 +28,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function Account() {
     const {classes} = useStyles()
+    const notifications = useNotifications()
     const userQuery = useUser()
     const queryClient = useQueryClient()
     const [editable, toggleEditable] = useToggle(false, [true, false])
@@ -115,16 +117,50 @@ export default function Account() {
         }
     }
 
+    const handleResetPassword = () => {
+        axios.post("/api/auth/forgot", {
+            email: userQuery?.data?.email
+        }).then(res => {
+            notifications.showNotification({
+                color: "green",
+                title: "Успех",
+                message: res.data.message
+            })
+        }).catch(e => {
+            notifications.showNotification({
+                color: "red",
+                title: "Ошибка",
+                message: "Во время отправки запроса произошла ошибка"
+            })
+        })
+    }
+
+    const sendVerification = () => {
+        axios.post("/api/auth/confirm").then(res => {
+            notifications.showNotification({
+                color: "green",
+                title: "Успех",
+                message: res.data.message
+            })
+        }).catch(e => {
+            notifications.showNotification({
+                color: "red",
+                title: "Ошибка",
+                message: "Во время отправки запроса произошла ошибка"
+            })
+        })
+    }
+
     return (
         <>
-            <Paper shadow={'lg'} px={'sm'} py={'sm'}>
+            <Paper shadow={'lg'} p={"sm"}>
                 <Group position={"apart"}>
                     <Title order={3}>
                         Ваш профиль
                     </Title>
                 </Group>
             </Paper>
-            <Paper p={'lg'} mt={"md"}>
+            <Paper mt={"md"} p={"sm"}>
                 {userQuery.isSuccess ? <>
                     <Container size={"xs"} sx={{
                         display: "flex",
@@ -171,7 +207,7 @@ export default function Account() {
                                    readOnly
                                    value={userQuery.data.email || ""}/>
                         <Group grow my={"md"} className={classes.buttonsGroup}>
-                            <Button>Подтвердить Email</Button>
+                            <Button onClick={sendVerification}>Подтвердить Email</Button>
                             <Button color={"dark"}
                                     onClick={handleGithubButtonClick}
                                     leftIcon={<BrandGithub size={18}/>}>
@@ -185,7 +221,7 @@ export default function Account() {
                                     onClick={handleToggle}>
                                 {editable ? "Сохранить данные" : "Изменить данные"}
                             </Button>
-                            <Button leftIcon={<LockOpen size={18}/>}>
+                            <Button onClick={handleResetPassword} leftIcon={<LockOpen size={18}/>}>
                                 Изменить пароль
                             </Button>
                         </Group>

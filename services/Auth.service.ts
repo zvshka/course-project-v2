@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import {signToken, transporter} from "@lib/utils";
 import nodemailer from "nodemailer";
 import UsersService from "@services/Users.service";
+import cuid from "cuid";
 
 
 class AuthService {
@@ -91,6 +92,62 @@ class AuthService {
         // Preview only available when sending through an Ethereal account
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
+        return true
+    }
+
+    async sendVerification(id) {
+        const candidate = await UsersService.findOneById(id)
+        if (!candidate) return false
+        const {email_verification_code} = await prisma.user.update({
+            where: {id},
+            data: {
+                email_verification_code: cuid()
+            }
+        })
+
+        let testAccount = await nodemailer.createTestAccount();
+
+        // create reusable transporter object using the default SMTP transport
+        const config = {
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: testAccount.user, // generated ethereal user
+                pass: testAccount.pass, // generated ethereal password
+            },
+        };
+
+        const emailSender = transporter(config)
+
+        let info = await emailSender.sendMail({
+            from: '"Fred Foo 👻" <foo@example.com>', // sender address
+            to: candidate.email, // list of receivers
+            subject: "Подтверждение Email", // Subject line
+            html: `<h3>Подтверждение Email</h3><p>Если вы не запрашивали - игнорируйте письмо</p><a href='${process.env.BASE_URL}/api/auth/confirm?code=${email_verification_code}'>Сссылка для подтверждения</a>`,
+        });
+
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+        return true
+
+    }
+
+    async confirmEmail(code) {
+        const candidate = await UsersService.findOneByEmailCode(code)
+        if (!candidate) return false
+        await prisma.user.update({
+            where: {
+                id: candidate.id
+            },
+            data: {
+                email_verified: new Date
+            }
+        })
         return true
     }
 }
