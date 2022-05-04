@@ -14,7 +14,7 @@ import {
     DndContext,
     KeyboardSensor,
     MouseSensor,
-    PointerSensor, TouchSensor,
+    TouchSensor,
     useSensor,
     useSensors
 } from "@dnd-kit/core";
@@ -22,10 +22,7 @@ import {SortableContext, sortableKeyboardCoordinates, verticalListSortingStrateg
 import {Stage} from "@components/Content/Stage";
 import axios from "axios";
 import Link from "next/link";
-import {
-    restrictToVerticalAxis,
-    restrictToWindowEdges,
-} from '@dnd-kit/modifiers';
+import {restrictToVerticalAxis, restrictToWindowEdges,} from '@dnd-kit/modifiers';
 
 export default function CoursePage() {
     const theme = useMantineTheme()
@@ -38,6 +35,18 @@ export default function CoursePage() {
 
     const courseQuery = useCourse(router.query.courseID)
     const [stages, stagesHandlers] = useListState([])
+
+    useEffect(() => {
+        if (userQuery.isSuccess && userQuery.data) {
+            if (router.query.courseID) {
+                if (userQuery.data.visited_courses.some(c => c.courseId === router.query.courseID)) return
+                axios.post("/api/users/visit", {
+                    courseId: router.query.courseID
+                })
+            }
+        }
+    }, [userQuery.isSuccess, userQuery.data])
+
     useEffect(() => {
         if (courseQuery.isSuccess && courseQuery.data) {
             stagesHandlers.setState(courseQuery.data.stages)

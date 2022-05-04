@@ -13,6 +13,7 @@ class UsersService {
         const userData = await prisma.user.findUnique({
             where: {id},
             include: {
+                active_courses: true,
                 github: {
                     select: {
                         id: true,
@@ -22,7 +23,7 @@ class UsersService {
                         avatar_url: true,
                         name: true
                     }
-                }
+                },
             }
         })
         if (userData) {
@@ -67,6 +68,28 @@ class UsersService {
     async findOneByPasswordCode(code: any) {
         return await prisma.user.findUnique({
             where: {password_reset_code: code}
+        })
+    }
+
+    async visitCourse(userId, courseId: any) {
+        return await prisma.user.update({
+            where: {id: userId},
+            data: {
+                active_courses: {
+                    connectOrCreate: {
+                        where: {
+                            userId_courseId: {
+                                userId,
+                                courseId
+                            }
+                        },
+                        create: {
+                            courseId,
+                            visit_date: new Date
+                        },
+                    }
+                }
+            }
         })
     }
 }

@@ -10,14 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model VisitedCourses {
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
+
+  visit_date DateTime
+
+  @@id([userId, courseId])
+}
+
 model Course {
   id String @id @default(cuid())
 
-  title       String
-  description String
-  iconURL     String?
-  badges      Badge[]
-  stages      Stage[]
+  title          String
+  description    String
+  iconURL        String?
+  badges         Badge[]
+  stages         Stage[]
+
+  visited_users VisitedCourses[]
 }
 
 model Badge {
@@ -59,7 +72,7 @@ model User {
   email_verified DateTime?
 
   email_verification_code String? @unique
-  password_reset_code String? @unique
+  password_reset_code     String? @unique
 
   username String @unique
   password String
@@ -70,17 +83,19 @@ model User {
   avatarURL String?
   role      Role?   @default(USER)
 
-  github Github?
+  github         Github?
+
+  active_courses VisitedCourses[]
 }
 
 model Github {
-  id String @id @default(cuid())
-  accountId Int @unique
+  id        String @id @default(cuid())
+  accountId Int    @unique
 
-  login String?
-  email String?
+  login      String?
+  email      String?
   avatar_url String?
-  name String?
+  name       String?
 
   access_token   String
   access_expires Int
