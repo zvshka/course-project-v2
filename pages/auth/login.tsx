@@ -137,8 +137,8 @@ export default function Login() {
                 password: "Не правильный email или пароль"
             }))
             // localStorage.setItem("accessToken", res.data.accessToken)
-            router.push(router.query.callbackUrl ? router.query.callbackUrl as string : "/")
-        }).catch(e => {
+            router.push(router.query.callbackUrl ? router.query.callbackUrl as string : "/").catch(e => console.log(e))
+        }).catch(() => {
             form.setErrors({
                 email: true,
                 password: "Не правильный email или пароль"

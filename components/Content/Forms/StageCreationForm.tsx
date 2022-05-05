@@ -38,9 +38,10 @@ export default function StageCreationForm({courseId, stage = null}) {
                 color: "green",
                 icon: <CheckIcon/>
             })
-            queryClient.invalidateQueries(['course', courseId])
+            queryClient.invalidateQueries(['course', courseId]).catch(e => console.log(e))
             stage ? modals.closeAll() : form.reset()
         }).catch(e => {
+            console.log(e)
             setLoading(false)
             notifications.showNotification({
                 title: "Ошибка",

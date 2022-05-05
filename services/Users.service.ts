@@ -1,5 +1,6 @@
 import prisma from "@lib/prisma";
 import cuid from "cuid"
+import UserUpdateDto from "@services/DTO/UserUpdate.dto";
 
 class UsersService {
     async getAllUsers() {
@@ -9,7 +10,7 @@ class UsersService {
         })
     }
 
-    async getUserActiveCourses(id) {
+    async getUserActiveCourses(id: string) {
         return await prisma.course.findMany({
             where: {
                 visited_users: {
@@ -24,7 +25,7 @@ class UsersService {
         })
     }
 
-    async findOneById(id) {
+    async findOneById(id:string) {
         const userData = await prisma.user.findUnique({
             where: {id},
             include: {
@@ -47,22 +48,13 @@ class UsersService {
         return userData
     }
 
-    async findOneByEmail(email) {
+    async findOneByEmail(email: string) {
         return await prisma.user.findUnique({
             where: {email}
         })
     }
 
-    async createPasswordResetCode(id) {
-        return await prisma.user.update({
-            where: {id},
-            data: {
-                password_reset_code: cuid()
-            }
-        })
-    }
-
-    async updateOneById(id: string, updateDTO: any) {
+    async updateOneById(id: string, updateDTO: UserUpdateDto) {
         return await prisma.user.update({
             where: {id},
             data: {

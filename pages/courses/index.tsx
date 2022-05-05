@@ -16,7 +16,7 @@ export default function Courses() {
 
     useEffect(() => {
         if (inView && coursesQuery.hasNextPage) {
-            coursesQuery.fetchNextPage()
+            coursesQuery.fetchNextPage().catch(e => console.log(e))
         }
     }, [coursesQuery, inView])
 

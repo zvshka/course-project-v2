@@ -1,5 +1,5 @@
 import {apiRouter, setCookie, signToken, verifyToken} from "@lib/utils";
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
 import UsersService from "@services/Users.service";
 import OAuthService from "@services/OAuth.service";
 

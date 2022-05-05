@@ -1,6 +1,6 @@
 import {HeroContentLeft} from "@components/Content/Sections/HeroSection";
 import {FeaturesGrid} from "@components/Content/Sections/FeaturesSection";
-import {Box, Container} from "@mantine/core";
+import {Box} from "@mantine/core";
 import {ContactUs} from "@components/Content/Sections/ContactSection";
 import {FaqWithBg} from "@components/Content/Sections/FAQ";
 

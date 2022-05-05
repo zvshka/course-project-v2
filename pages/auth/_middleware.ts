@@ -1,6 +1,6 @@
-import {NextFetchEvent, NextRequest, NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 
-export default async function AuthMiddleware(req: NextRequest, ev: NextFetchEvent) {
+export default async function AuthMiddleware(req: NextRequest) {
     if (req.url.includes("reset")) return NextResponse.next()
     const data = await fetch(process.env.BASE_URL + "/api/auth/aboutMe", {
         headers: {

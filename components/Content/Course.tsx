@@ -71,8 +71,9 @@ export function Course({course, isAdmin = false}) {
                     color: "green",
                     icon: <CheckIcon/>
                 })
-                queryClient.invalidateQueries("infinite_courses")
+                queryClient.invalidateQueries("infinite_courses").catch(e => console.log(e))
             }).catch(e => {
+                console.log(e)
                 notifications.showNotification({
                     title: "Ошибка",
                     message: "При удалении этапа произошла ошибка",

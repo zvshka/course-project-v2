@@ -10,7 +10,7 @@ apiRoute.post(AuthGuard(), async (req, res) => {
 })
 
 apiRoute.get(async (req, res) => {
-    await AuthService.confirmEmail(req.query.code)
+    await AuthService.confirmEmail(req.query.code as string)
     res.redirect("/")
 })
 

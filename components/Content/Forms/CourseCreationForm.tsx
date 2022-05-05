@@ -75,7 +75,7 @@ export function CourseCreationForm({course = null}) {
                 icon: <CheckIcon/>
             })
             setCourseId(res.data.courseId)
-            queryClient.invalidateQueries("courses")
+            queryClient.invalidateQueries("courses").catch(e => console.log(e))
             if (course) {
                 modals.closeAll()
             } else {
@@ -113,9 +113,10 @@ export function CourseCreationForm({course = null}) {
                 color: "green",
                 icon: <CheckIcon/>
             })
-            queryClient.invalidateQueries("badges")
+            queryClient.invalidateQueries("badges").catch(e => console.log(e))
             form.setFieldValue('badges', [...form.values.badges, res.data.id])
         }).catch(e => {
+            console.log(e)
             notifications.showNotification({
                 title: "Ошибка",
                 message: "При создании категории произошла ошибка",
@@ -205,7 +206,7 @@ export function CourseCreationForm({course = null}) {
                     <Button type="submit" sx={{backgroundColor: '#228be6 !important'}} disabled>Перейти к
                         курсу</Button> :
                     <Link href={`/courses/${courseId}`} passHref>
-                        <Button component="a" onClick={(e) => {
+                        <Button component="a" onClick={() => {
                             modals.closeAll()
                         }}>Перейти к курсу</Button>
                     </Link>}

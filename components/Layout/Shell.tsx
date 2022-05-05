@@ -1,4 +1,4 @@
-import {AppShell, createStyles} from "@mantine/core";
+import {AppShell} from "@mantine/core";
 import {DoubleHeader} from "@components/Layout/Header";
 import {FooterSocial} from "@components/Layout/Footer";
 

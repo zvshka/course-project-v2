@@ -88,8 +88,8 @@ export default function Account() {
             firstname: values.firstname,
             avatarURL
         })
-            .then(res => {
-                queryClient.invalidateQueries("user")
+            .then(() => {
+                queryClient.invalidateQueries("user").catch(e => console.log(e))
             })
             .catch(e => {
                 console.error(e)
@@ -116,8 +116,8 @@ export default function Account() {
     }
 
     const handleUnlink = () => {
-        axios.get("/api/auth/github/unlink").then(res => {
-            queryClient.invalidateQueries("user")
+        axios.get("/api/auth/github/unlink").then(() => {
+            queryClient.invalidateQueries("user").catch(e => console.log(e))
         })
     }
 
@@ -141,7 +141,7 @@ export default function Account() {
                 title: "Успех",
                 message: res.data.message
             })
-        }).catch(e => {
+        }).catch(() => {
             notifications.showNotification({
                 color: "red",
                 title: "Ошибка",
@@ -157,7 +157,7 @@ export default function Account() {
                 title: "Успех",
                 message: res.data.message
             })
-        }).catch(e => {
+        }).catch(() => {
             notifications.showNotification({
                 color: "red",
                 title: "Ошибка",
@@ -202,7 +202,7 @@ export default function Account() {
                                       maxSize={3 * 1024 ** 2}
                                       accept={IMAGE_MIME_TYPE}
                             >
-                                {(status) => <Avatar alt={"User Avatar"} size={224} src={form.values.avatar.data}/>}
+                                {() => <Avatar alt={"User Avatar"} size={224} src={form.values.avatar.data}/>}
                             </Dropzone>
                             <Text weight={700} size={"lg"}>{userQuery.data.username}</Text>
                             <Text>{userQuery.data.role}</Text>

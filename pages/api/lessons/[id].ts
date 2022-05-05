@@ -5,7 +5,7 @@ import {AuthGuard} from "@lib/AuthGuard";
 const apiRoute = apiRouter()
 
 apiRoute.get(async (req, res) => {
-    const data = await LessonsService.findOneById(req.query.id)
+    const data = await LessonsService.findOneById(req.query.id as string)
     return res.status(200).json(data)
 })
 
@@ -15,7 +15,7 @@ apiRoute.patch(AuthGuard({isAdmin: true}), async (req, res) => {
 })
 
 apiRoute.delete(AuthGuard({isAdmin: true}), async (req, res) => {
-    await LessonsService.deleteOneById(req.query.id)
+    await LessonsService.deleteOneById(req.query.id as string)
     res.status(200).json({message: "Урок успешно удален"})
 })
 

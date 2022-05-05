@@ -1,11 +1,6 @@
 import prisma from "@lib/prisma";
-
-interface CourseDTO {
-    title: string,
-    description: string,
-    iconURL: string,
-    badges: string[]
-}
+import CourseDto from "@services/DTO/Course.dto";
+import CourseUpdateDto from "@services/DTO/CourseUpdate.dto";
 
 class CoursesService {
     async getAll() {
@@ -45,7 +40,7 @@ class CoursesService {
         return {courses, hasNextPage, nextPage: hasNextPage ? Number(query.page) + 1 : null}
     }
 
-    async create(courseDTO: CourseDTO) {
+    async create(courseDTO: CourseDto) {
         return await prisma.course.create({
             data: {
                 title: courseDTO.title,
@@ -58,11 +53,9 @@ class CoursesService {
         })
     }
 
-    async findOneById(id) {
+    async findOneById(id: string) {
         return await prisma.course.findUnique({
-            where: {
-                id
-            },
+            where: {id},
             include: {
                 stages: {
                     include: {
@@ -73,7 +66,7 @@ class CoursesService {
         })
     }
 
-    async deleteOneById(id) {
+    async deleteOneById(id: string) {
         return await prisma.course.delete({
             where: {
                 id
@@ -81,9 +74,8 @@ class CoursesService {
         })
     }
 
-    async updateOneById(id: string, courseDTO: any) {
+    async updateOneById(id: string, courseDTO: CourseUpdateDto) {
         const candidate = await this.findOneById(id)
-        console.log(courseDTO)
         return await prisma.course.update({
             where: {id},
             data: {
@@ -97,8 +89,7 @@ class CoursesService {
         })
     }
 
-    async visitCourse(userId: any, courseId: any) {
-        console.log(userId, courseId)
+    async visitCourse(userId: string, courseId: string) {
         return await prisma.course.update({
             where: {id: courseId},
             data: {

@@ -1,17 +1,15 @@
 import prisma from "@lib/prisma";
 
 class OAuthService {
-    async findOneById(id) {
+    async findOneById(id: string) {
         return await prisma.github.findUnique({
             where: {id}
         })
     }
 
-    async findOneByAccountId(id) {
+    async findOneByAccountId(accountId: number) {
         return await prisma.github.findUnique({
-            where: {
-                accountId: id
-            }
+            where: {accountId}
         })
     }
 

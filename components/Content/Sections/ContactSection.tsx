@@ -85,7 +85,7 @@ export function ContactUs() {
     const { classes } = useStyles();
     const notifications = useNotifications()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = () => {
         notifications.showNotification({
             title: "Спасибо!",
             message: "Ваше обращение успешно отправлено, с вами обязательно свяжутся когда-нибудь)))",

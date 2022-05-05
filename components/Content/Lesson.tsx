@@ -70,7 +70,7 @@ export function Lesson({lesson, isAdmin}) {
                     color: "green",
                     icon: <CheckIcon/>
                 })
-                queryClient.invalidateQueries(['course', router.query.courseID])
+                queryClient.invalidateQueries(['course', router.query.courseID]).catch(e => console.log(e))
             }).catch(e => {
                 console.log(e)
                 notifications.showNotification({
@@ -91,7 +91,7 @@ export function Lesson({lesson, isAdmin}) {
                         e.preventDefault()
                         e.stopPropagation()
                     }}>
-                        <Link href={"/lessons/" + lesson.id + '/edit'}>
+                        <Link passHref href={"/lessons/" + lesson.id + '/edit'}>
                             <Menu.Item component={"a"} icon={<Pencil size={14}/>}>Изменить</Menu.Item>
                         </Link>
                         <Menu.Item onClick={openDeletionModal} icon={<TrashX size={14}/>}

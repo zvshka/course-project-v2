@@ -6,9 +6,9 @@ import {
     Container,
     SimpleGrid,
     useMantineTheme,
-    createStyles, MediaQuery,
+    createStyles,
 } from '@mantine/core';
-import {Code, Cookie, CurrencyRubel, Icon as TablerIcon, Message, Prison, Speedboat, User} from 'tabler-icons-react';
+import {Code, Cookie, CurrencyRubel, Icon as TablerIcon, Message, Speedboat, User} from 'tabler-icons-react';
 
 interface FeatureProps {
     icon: TablerIcon;
@@ -61,10 +61,9 @@ const useStyles = createStyles((theme) => ({
 interface FeaturesGridProps {
     title: React.ReactNode;
     description: React.ReactNode;
-    data?: FeatureProps[];
 }
 
-export function FeaturesGrid({ title, description, data }: FeaturesGridProps) {
+export function FeaturesGrid({ title, description }: FeaturesGridProps) {
     const { classes } = useStyles();
     const theme = useMantineTheme();
 

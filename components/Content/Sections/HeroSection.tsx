@@ -79,7 +79,7 @@ export function HeroContentLeft() {
                     Полностью бесплатный проект, созданный в образовательных целях, поможет понять, что найти свое место также легко, как испечь вафли
                 </Text>
 
-                <Link href={"/courses"}>
+                <Link passHref href={"/courses"}>
                     <Button component={"a"} variant="gradient" size="xl" radius="xl" className={classes.control}>
                         Начать
                     </Button>

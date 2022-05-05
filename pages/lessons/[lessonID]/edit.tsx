@@ -27,16 +27,18 @@ export default function LessonEdit() {
     })
 
     useEffect(() => {
-        if (lessonQuery.isSuccess && lessonQuery.data !== "") {
-            form.setFieldValue('title', lessonQuery.data.title)
-            form.setFieldValue('description', lessonQuery.data.description)
-            form.setFieldValue('text', lessonQuery.data.text)
+        if (lessonQuery.isSuccess && lessonQuery.data) {
+            form.setValues({
+                title: lessonQuery.data.title,
+                description: lessonQuery.data.description,
+                text: lessonQuery.data.text
+            })
         }
-        if (lessonQuery.isSuccess && lessonQuery.data === "") router.push("/")
+        if (lessonQuery.isSuccess && lessonQuery.data) router.push("/").catch(e => console.log(e))
     }, [lessonQuery.isSuccess, lessonQuery.data])
 
     const handleSubmit = (values: typeof form.values) => {
-        axios.patch("/api/lessons/" + lessonID, values).then(r => {
+        axios.patch("/api/lessons/" + lessonID, values).then(() => {
         })
     }
 

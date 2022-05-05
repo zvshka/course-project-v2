@@ -18,43 +18,11 @@ import {
     TextInput,
     UnstyledButton
 } from "@mantine/core";
-import {CheckIcon, Cross1Icon} from "@modulz/radix-icons";
 import axios from "axios";
 import {BrandGithub} from "tabler-icons-react";
 import Cookies from 'js-cookie'
 import useGithub from "@hooks/useGithub";
-
-function PasswordRequirement({meets, label}: { meets: boolean; label: string }) {
-    return (
-        <Text
-            color={meets ? 'teal' : 'red'}
-            sx={{display: 'flex', alignItems: 'center'}}
-            mt={7}
-            size="sm"
-        >
-            {meets ? <CheckIcon/> : <Cross1Icon/>} <Box ml={10}>{label}</Box>
-        </Text>
-    );
-}
-
-const requirements = [
-    {re: /\d/, label: 'Содержит числа'},
-    {re: /[a-z]/, label: 'Содержит символ нижнего регистра'},
-    {re: /[A-Z]/, label: 'Содержит символ верхнего регистра'},
-    {re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Содержит спец. символ'},
-];
-
-function getStrength(password: string) {
-    let multiplier = password.length > 5 ? 0 : 1;
-
-    requirements.forEach((requirement) => {
-        if (!requirement.re.test(password)) {
-            multiplier += 1;
-        }
-    });
-
-    return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
-}
+import PasswordRequirement, {getStrength, requirements} from "@components/Content/PasswordRequirement";
 
 const useStyles = createStyles((theme) => ({
     registerButton: {
@@ -194,8 +162,8 @@ export default function Register() {
                 confirmPassword: "Что-то пошло не так, попробуй еще раз позже"
             }))
             // localStorage.setItem("accessToken", res.data.accessToken)
-            router.push(router.query.callbackUrl ? router.query.callbackUrl as string : "/")
-        }).catch(e => {
+            router.push(router.query.callbackUrl ? router.query.callbackUrl as string : "/").catch(e => console.log(e))
+        }).catch(() => {
             form.setErrors({
                 username: true,
                 email: true,
@@ -220,7 +188,8 @@ export default function Register() {
                         </Link>
                     </Text>
 
-                    <UnstyledButton className={classes.gitButton} onClick={() => handleLink()} disabled={githubQuery.isLoading || githubQuery.isSuccess && githubQuery.data}>
+                    <UnstyledButton className={classes.gitButton} onClick={() => handleLink()}
+                                    disabled={githubQuery.isLoading || githubQuery.isSuccess && githubQuery.data}>
                         <Group>
                             <BrandGithub size={24}/>
                             <Text className={classes.gitButtonText}>Зарегистрироваться с Github</Text>

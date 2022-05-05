@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import jose from "jose"
 import nextConnect from "next-connect";
 import {NextApiRequest, NextApiResponse} from "next";
 import cookieParse from "cookie-parser"

@@ -99,6 +99,7 @@ export function FaqWithBg() {
                     message: res.data.message
                 })
             }).catch(e => {
+                console.log(e)
                 notifications.showNotification({
                     color: "red",
                     title: "Ошибка",
@@ -106,7 +107,7 @@ export function FaqWithBg() {
                 })
             })
         } else {
-            router.push("/auth/forgot")
+            router.push("/auth/forgot").catch(e => console.log(e))
         }
     }
     return (

@@ -1,61 +1,20 @@
-import Link from "next/link";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useRouter} from "next/router";
 import {useForm} from "@mantine/form";
 import {
-    Anchor,
     Box,
     Button,
     createStyles,
-    Divider,
     Group,
     Paper,
     PasswordInput,
     Popover,
     Progress,
-    Space,
-    Text,
-    TextInput,
-    UnstyledButton
+    Text
 } from "@mantine/core";
-import {CheckIcon, Cross1Icon} from "@modulz/radix-icons";
 import axios from "axios";
-import {BrandGithub} from "tabler-icons-react";
-import Cookies from 'js-cookie'
-import useGithub from "@hooks/useGithub";
 import {useNotifications} from "@mantine/notifications";
-
-function PasswordRequirement({meets, label}: { meets: boolean; label: string }) {
-    return (
-        <Text
-            color={meets ? 'teal' : 'red'}
-            sx={{display: 'flex', alignItems: 'center'}}
-            mt={7}
-            size="sm"
-        >
-            {meets ? <CheckIcon/> : <Cross1Icon/>} <Box ml={10}>{label}</Box>
-        </Text>
-    );
-}
-
-const requirements = [
-    {re: /\d/, label: 'Содержит числа'},
-    {re: /[a-z]/, label: 'Содержит символ нижнего регистра'},
-    {re: /[A-Z]/, label: 'Содержит символ верхнего регистра'},
-    {re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Содержит спец. символ'},
-];
-
-function getStrength(password: string) {
-    let multiplier = password.length > 5 ? 0 : 1;
-
-    requirements.forEach((requirement) => {
-        if (!requirement.re.test(password)) {
-            multiplier += 1;
-        }
-    });
-
-    return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
-}
+import PasswordRequirement, {getStrength, requirements} from "@components/Content/PasswordRequirement";
 
 const useStyles = createStyles((theme) => ({
     registerButton: {
@@ -99,10 +58,7 @@ const useStyles = createStyles((theme) => ({
     },
 }))
 
-const handleLink = () => {
-    window.location.href = "/api/auth/github?callbackUrl=" + window.location.href
-    return
-}
+
 
 export default function Register() {
     const router = useRouter()
@@ -136,13 +92,13 @@ export default function Register() {
         axios.post("/api/auth/reset", {
             code: router.query.code,
             password: values.password,
-        }).then(res => {
+        }).then(() => {
             notifications.showNotification({
                 title: "Успех",
                 message: "Пароль успешно сменен, теперь вы можете войти"
             })
-            router.push("/auth/login")
-        }).catch(e => {
+            router.push("/auth/login").catch(e => console.log(e))
+        }).catch(() => {
             form.setErrors({
                 username: true,
                 email: true,

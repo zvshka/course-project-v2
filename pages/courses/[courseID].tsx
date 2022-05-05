@@ -25,7 +25,7 @@ import Link from "next/link";
 import {restrictToVerticalAxis, restrictToWindowEdges,} from '@dnd-kit/modifiers';
 
 export default function CoursePage() {
-    const theme = useMantineTheme()
+    useMantineTheme();
     const userQuery = useUser()
     const router = useRouter()
     const modals = useModals()
@@ -86,7 +86,7 @@ export default function CoursePage() {
                 color: "green",
                 icon: <CheckIcon/>
             })
-            queryClient.invalidateQueries(['course', router.query.courseID])
+            queryClient.invalidateQueries(['course', router.query.courseID]).catch(e => console.log(e))
         }).catch(_ => {
             notifications.showNotification({
                 title: "Ошибка",

@@ -1,4 +1,3 @@
-import {Shell} from "@components/Layout/Shell";
 import {Box, Button, Group, Paper, Text, Title, useMantineTheme} from "@mantine/core";
 import parser from "html-react-parser";
 import {useRouter} from "next/router";
@@ -34,7 +33,7 @@ export default function LessonPage() {
                         Назад к курсу
                     </Button>
                 </Link>}
-                {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Link href={'/lessons/' + router.query.lessonID + '/edit'}>
+                {userQuery.isSuccess && userQuery.data.role === "ADMIN" && <Link passHref href={'/lessons/' + router.query.lessonID + '/edit'}>
                     <Button component={'a'}>
                         Редактировать урок
                     </Button>

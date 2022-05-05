@@ -1,7 +1,8 @@
 import prisma from "@lib/prisma";
+import BadgeDto from "@services/DTO/Badge.dto";
 
 class BadgesService {
-    async create(badgeDTO) {
+    async create(badgeDTO: BadgeDto) {
         return await prisma.badge.create({
             data: badgeDTO
         })

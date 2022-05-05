@@ -1,4 +1,3 @@
-import {Shell} from "@components/Layout/Shell";
 import {
     ActionIcon,
     Anchor,

@@ -7,7 +7,7 @@ const apiRoute = apiRouter()
 apiRoute.get(async (req, res) => {
     const id = req.query.id
     if (!req.query.id) return res.status(400).json({error: "Не найден id"})
-    const course = await CoursesService.findOneById(id)
+    const course = await CoursesService.findOneById(id as string)
     res.status(200).json(course)
 })
 
@@ -21,7 +21,7 @@ apiRoute.patch(AuthGuard({isAdmin: true}), async (req, res) => {
 apiRoute.delete(AuthGuard({isAdmin: true}), async (req, res) => {
     const id = req.query.id
     if (!req.query.id) return res.status(400).json({error: "Не найден id"})
-    await CoursesService.deleteOneById(id)
+    await CoursesService.deleteOneById(id as string)
     res.status(200).json({message: "Курс успешно удален"})
 })
 

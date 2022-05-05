@@ -191,7 +191,7 @@ const useStyles = createStyles((theme) => ({
 
 const MobileLink = ({theme, children, color = null, link = "/"}) => {
     const {classes} = useStyles()
-    return <Link href={link}>
+    return <Link passHref href={link}>
         <UnstyledButton component={"a"} className={classes.link} sx={{width: "100%", color}}>
             <Group position={"center"} spacing={theme.spacing.sm / 4}>
                 {children}
@@ -209,10 +209,10 @@ export function DoubleHeader() {
     const theme = useMantineTheme()
     const queryClient = useQueryClient()
 
-    const handleLogout = (e) => {
-        axios.post("/api/auth/logout").then(res => {
+    const handleLogout = () => {
+        axios.post("/api/auth/logout").then(() => {
             localStorage.removeItem("accessToken")
-            queryClient.invalidateQueries("user")
+            queryClient.invalidateQueries("user").catch(e => console.log(e))
         })
     }
 

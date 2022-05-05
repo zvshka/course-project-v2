@@ -65,7 +65,7 @@ class AuthService {
         return {accessToken}
     }
 
-    async resetPassword({code, password}) {
+    async resetPassword({code, password}: {code: string, password: string}) {
         const candidate = await UsersService.findOneByPasswordCode(code)
         if (!candidate) throw new Error("Не верный код")
         const hashPassword = await bcrypt.hash(password, 10)
@@ -79,11 +79,16 @@ class AuthService {
         return
     }
 
-    async forgotPassword(email) {
+    async forgotPassword(email: string) {
 
         const candidate = await UsersService.findOneByEmail(email)
         if (!candidate) return true
-        const {password_reset_code} = await UsersService.createPasswordResetCode(candidate.id)
+        const {password_reset_code} = await prisma.user.update({
+            where: {id: candidate.id},
+            data: {
+                password_reset_code: cuid()
+            }
+        })
 
         await emailSender.sendMail({
             from: '"Fred Foo 👻" <foo@example.com>', // sender address
@@ -95,7 +100,7 @@ class AuthService {
         return true
     }
 
-    async sendVerification(id) {
+    async sendVerification(id: string) {
         const candidate = await UsersService.findOneById(id)
         if (!candidate) return false
         const {email_verification_code} = await prisma.user.update({
@@ -116,7 +121,7 @@ class AuthService {
 
     }
 
-    async confirmEmail(code) {
+    async confirmEmail(code: string) {
         const candidate = await UsersService.findOneByEmailCode(code)
         if (!candidate) return false
         await prisma.user.update({

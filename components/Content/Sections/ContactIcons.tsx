@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStyles, ThemeIcon, Text, Group, SimpleGrid, Box } from '@mantine/core';
-import { Sun, Phone, MapPin, At } from 'tabler-icons-react';
+import { Sun, Phone, At } from 'tabler-icons-react';
 
 type ContactIconVariant = 'white' | 'gradient';
 

@@ -9,7 +9,6 @@ import {CheckIcon} from "@modulz/radix-icons";
 import {useQueryClient} from "react-query";
 import {useToggle} from "@mantine/hooks";
 import StageCreationForm from "@components/Content/Forms/StageCreationForm";
-import {useRouter} from "next/router";
 import Link from "next/link";
 import axios from "axios";
 
@@ -75,8 +74,9 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                     color: "green",
                     icon: <CheckIcon/>
                 })
-                queryClient.invalidateQueries(['course', stage.courseId])
+                queryClient.invalidateQueries(['course', stage.courseId]).catch(e => console.log(e))
             }).catch(e => {
+                console.log(e)
                 notifications.showNotification({
                     title: "Ошибка",
                     message: "При удалении этапа произошла ошибка",
@@ -109,7 +109,7 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
              style={style}
              {...attributes}
              className={classes.item}
-             onClick={(e) => toggleCollapse()}>
+             onClick={() => toggleCollapse()}>
             <Group position={"apart"} className={classes.control}>
                 <Group>
                     {draggable && <div {...listeners} className={classes.dragHandle}>
@@ -144,7 +144,7 @@ export const Stage = ({stage, draggable, isAdmin = false}) => {
                         maxWidth: "sm",
                         cols: 1
                     }]} cols={5}>
-                        {stage.lessons.map((lesson, index) =>
+                        {stage.lessons.map((lesson) =>
                             <Lesson isAdmin={isAdmin}
                                     lesson={lesson}
                                     key={lesson.id}/>)}

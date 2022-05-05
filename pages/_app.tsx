@@ -31,7 +31,7 @@ function MyApp({Component, pageProps}) {
             axios.defaults.headers.patch['X-CSRF-Token'] = data.csrfToken;
             axios.defaults.headers.delete['X-CSRF-Token'] = data.csrfToken;
         };
-        getCsrfToken();
+        getCsrfToken().catch(e => console.log(e));
     }, []);
     const withoutLayout = Component.withoutLayout || false
     const noContainer = Component.noContainer || false

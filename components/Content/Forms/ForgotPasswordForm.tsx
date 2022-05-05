@@ -26,6 +26,7 @@ export default function ForgotPasswordForm() {
             })
             modals.closeAll()
         }).catch(e => {
+            console.log(e)
             notifications.showNotification({
                 color: "red",
                 title: "Ошибка",

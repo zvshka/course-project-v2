@@ -1,7 +1,9 @@
 import prisma from "@lib/prisma";
+import LessonDto from "@services/DTO/Lesson.dto";
+import LessonUpdateDto from "@services/DTO/LessonUpdate.dto";
 
 class LessonsService {
-    async create(lessonDTO) {
+    async create(lessonDTO: LessonDto) {
         const last = await prisma.lesson.findFirst({
             where: {
                 stageId: lessonDTO.stageId
@@ -13,13 +15,16 @@ class LessonsService {
 
         return await prisma.lesson.create({
             data: {
-                ...lessonDTO,
+                text: lessonDTO.text,
+                title: lessonDTO.title,
+                description: lessonDTO.description,
+                stageId: lessonDTO.stageId,
                 position: last?.position + 1 || 1
             }
         })
     }
 
-    async findOneById(id) {
+    async findOneById(id: string) {
         return await prisma.lesson.findUnique({
             where: {id},
             include: {
@@ -32,16 +37,16 @@ class LessonsService {
         })
     }
 
-    async deleteOneById(id) {
+    async deleteOneById(id: string) {
         return await prisma.lesson.delete({
             where: {id}
         })
     }
 
-    async updateOneById(id: string, body: any) {
+    async updateOneById(id: string, lessonUpdateDTO: LessonUpdateDto) {
         return await prisma.lesson.update({
             where: {id},
-            data: body
+            data: lessonUpdateDTO
         })
     }
 }

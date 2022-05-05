@@ -1,5 +1,4 @@
 import {apiRouter} from "@lib/utils";
-import UsersService from "@services/Users.service";
 import {AuthGuard} from "@lib/AuthGuard";
 import OAuthService from "@services/OAuth.service";
 
