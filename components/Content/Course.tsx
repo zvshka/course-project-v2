@@ -71,7 +71,7 @@ export function Course({course, isAdmin = false}) {
                     color: "green",
                     icon: <CheckIcon/>
                 })
-                queryClient.invalidateQueries("courses")
+                queryClient.invalidateQueries("infinite_courses")
             }).catch(e => {
                 notifications.showNotification({
                     title: "Ошибка",
