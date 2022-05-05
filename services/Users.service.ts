@@ -21,17 +21,6 @@ class UsersService {
             include: {
                 badges: true
             }
-            // select: {
-            //     active_courses: {
-            //         include: {
-            //             course: {
-            //                 include: {
-            //                     badges: true
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
         })
     }
 
@@ -52,7 +41,7 @@ class UsersService {
             }
         })
         if (userData) {
-            const {password, ...user} = userData
+            const {password, email_verification_code, password_reset_code, ...user} = userData
             return user
         }
         return userData

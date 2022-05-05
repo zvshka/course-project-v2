@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import jose from "jose"
 import nextConnect from "next-connect";
 import {NextApiRequest, NextApiResponse} from "next";
 import cookieParse from "cookie-parser"
@@ -38,11 +39,6 @@ export const setCookie = (
     }
 
     res.setHeader('Set-Cookie', serialize(name, stringValue, {path: "/", ...options}))
-}
-
-export const withCallback = (url) => {
-    window.location.href = url + "?callbackUrl=" + window.location.href
-    return
 }
 
 export const signToken = (data: { id: string, role: string }) => {

@@ -3,10 +3,7 @@ import useInfiniteCourses from "@hooks/useInfiniteCourses";
 import {Button, Group, Paper, SimpleGrid, Title} from "@mantine/core";
 import {useModals} from "@mantine/modals";
 import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
-// import useBadges from "@hooks/useBadges";
 import {useEffect} from "react";
-// import {useListState} from "@mantine/hooks";
-// import {useQueryClient} from "react-query";
 import {CoursesPage} from "@components/Content/CoursesPage";
 import {useInView} from 'react-intersection-observer'
 
@@ -14,30 +11,14 @@ export default function Courses() {
     const {ref, inView} = useInView()
 
     const modals = useModals()
-    // const queryClient = useQueryClient()
     const userQuery = useUser()
-    // const badgesQuery = useBadges()
-    // const [badges, setBadges] = useState([])
-    //
-    // const [title, setTitle] = useState("")
-    // const [selectedBadges, badgesHandlers] = useListState([])
-
     const coursesQuery = useInfiniteCourses()
-
-    // useEffect(() => {
-    //     if (badgesQuery.isSuccess && badgesQuery.data) {
-    //         setBadges(badgesQuery.data.map(badge => ({
-    //             value: badge.id,
-    //             label: badge.label
-    //         })))
-    //     }
-    // }, [badgesQuery.data, badgesQuery.isSuccess])
 
     useEffect(() => {
         if (inView && coursesQuery.hasNextPage) {
             coursesQuery.fetchNextPage()
         }
-    }, [inView])
+    }, [coursesQuery, inView])
 
     const openCreatingModal = () => {
         modals.openModal({

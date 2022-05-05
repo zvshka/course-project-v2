@@ -2,7 +2,7 @@ import UsersService from "@services/Users.service";
 import {verifyToken} from "@lib/utils";
 import {NextApiRequest, NextApiResponse} from "next";
 
-export const AuthGuard = ({isAdmin } = {isAdmin: false}) => async (req: NextApiRequest & {user: any}, res: NextApiResponse, next) => {
+export const AuthGuard = ({isAdmin} = {isAdmin: false}) => async (req: NextApiRequest & { user: any }, res: NextApiResponse, next) => {
     let access_token;
     if (req.headers.authorization) {
         const [type, token] = req.headers.authorization.split(" ")

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Title, Text, Button, Container, Group } from '@mantine/core';
+import {Button, Container, createStyles, Group, Text, Title} from '@mantine/core';
 import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
@@ -7,11 +7,6 @@ const useStyles = createStyles((theme) => ({
         paddingTop: 80,
         paddingBottom: 80,
         minHeight: "100vh",
-        // alignContent: "center",
-        // alignItems: "center",
-        // justifyContent: "center",
-        // display: "flex",
-        // flexDirection: "column"
     },
 
     label: {
@@ -47,23 +42,24 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function NotFoundTitle() {
-    const { classes } = useStyles();
+    const {classes} = useStyles();
 
     return (
         <Container className={classes.root}>
             <div className={classes.label}>404</div>
-            <Title className={classes.title}>You have found a secret place.</Title>
+            <Title className={classes.title}>Вы нашли секретное место.</Title>
             <Text color="dimmed" size="lg" align="center" className={classes.description}>
-                Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has
-                been moved to another URL.
+                К сожалению, это всего лишь страница ошибки 404. Может быть вы не так написали адрес, или страница была
+                удалена/перемещена на другой URL.
             </Text>
             <Group position="center">
-                <Link href={"/"}>
+                <Link href={"/"} passHref>
                     <Button component={"a"} variant="subtle" size="md">
-                        Take me back to home page
+                        Верните меня назад
                     </Button>
                 </Link>
             </Group>
         </Container>
     );
 }
+NotFoundTitle.withoutLayout = true

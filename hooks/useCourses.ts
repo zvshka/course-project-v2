@@ -1,5 +1,7 @@
 import {useQuery} from "react-query";
 import axios from "axios";
+import {Course} from "types/Course";
+
 
 export default function useCourses() {
     // Queries
@@ -12,7 +14,7 @@ export default function useCourses() {
     //     }
     // })
 
-    return useQuery('courses', () =>
+    return useQuery<Course[], Error>('courses', () =>
         axios(`/api/courses`).then(res =>
             res.data
         )

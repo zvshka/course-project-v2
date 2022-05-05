@@ -33,7 +33,7 @@ export default function CoursePage() {
     const queryClient = useQueryClient()
     const [draggable, toggleDragging] = useToggle(false, [true, false])
 
-    const courseQuery = useCourse(router.query.courseID)
+    const courseQuery = useCourse(router.query.courseID as string)
     const [stages, stagesHandlers] = useListState([])
 
     useEffect(() => {

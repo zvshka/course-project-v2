@@ -18,7 +18,6 @@ import {BrandGithub} from "tabler-icons-react";
 import axios from "axios";
 import {useEffect} from "react";
 import {useNotifications} from "@mantine/notifications";
-import Register from "./register";
 import {useModals} from "@mantine/modals";
 import ForgotPasswordForm from "@components/Content/Forms/ForgotPasswordForm";
 
@@ -115,6 +114,7 @@ export default function Login() {
         },
     });
 
+
     useEffect(() => {
         if (router.query.error) {
             notifications.showNotification({
@@ -123,7 +123,7 @@ export default function Login() {
                 color: "red"
             })
         }
-    }, [])
+    }, [router.query.error])
 
     const handleSubmit = (values: typeof form.values) => {
         form.clearErrors()

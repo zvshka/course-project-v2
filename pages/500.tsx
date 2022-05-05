@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStyles, Title, Text, Button, Container, Group } from '@mantine/core';
+import {useRouter} from "next/router";
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -44,19 +45,19 @@ const useStyles = createStyles((theme) => ({
 
 export default function ServerError() {
     const { classes } = useStyles();
+    const router = useRouter()
 
     return (
         <div className={classes.root}>
             <Container>
                 <div className={classes.label}>500</div>
-                <Title className={classes.title}>Something bad just happened...</Title>
+                <Title className={classes.title}>Случилось что то плохое...</Title>
                 <Text size="lg" align="center" className={classes.description}>
-                    Our servers could not handle your request. Don&apos;t worry, our development team was
-                    already notified. Try refreshing the page.
+                    Сервер не может обработать запрос. Не беспокойтесь, разработчик уже вкурсе проблемы. Попробуйте перезагрузить страницу.
                 </Text>
                 <Group position="center">
-                    <Button variant="white" size="md">
-                        Refresh the page
+                    <Button variant="white" size="md" onClick={() => router.reload()}>
+                        Обновить страницу
                     </Button>
                 </Group>
             </Container>

@@ -223,7 +223,7 @@ export default function Account() {
                                    value={userQuery.data.email || ""}/>
                         <Group grow my={"md"} className={classes.buttonsGroup}>
                             <Button onClick={sendVerification}
-                                    disabled={userQuery?.data?.email_verified}>{userQuery?.data?.email_verified ? "Email Подтвержден" : "Подтвердить Email"}</Button>
+                                    disabled={!!userQuery?.data?.email_verified}>{userQuery?.data?.email_verified ? "Email Подтвержден" : "Подтвердить Email"}</Button>
                             <Button color={"dark"}
                                     onClick={handleGithubButtonClick}
                                     leftIcon={<BrandGithub size={18}/>}>

@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import {signToken, transporter} from "@lib/utils";
 import UsersService from "@services/Users.service";
 import cuid from "cuid";
+import RegisterDto from "@services/DTO/Register.dto";
+import LoginDto from "@services/DTO/Login.dto";
 
 const config = {
     host: "smtp.localhost",
@@ -18,14 +20,14 @@ const emailSender = transporter(config)
 
 class AuthService {
 
-    async register(registerDTO) {
+    async register(registerDTO: RegisterDto) {
         const {email, username, password} = registerDTO
         const candidate = await prisma.user.findMany({
             where: {
                 OR: [{username}, {email}]
             }
         })
-        if (candidate.length > 0) throw new Error("Email or username already in use")
+        if (candidate.length > 0) throw new Error("Email или имя пользователя уже используются")
         const hashPassword = await bcrypt.hash(password, 10)
         const github = registerDTO.github ? {
             connect: {
@@ -51,14 +53,14 @@ class AuthService {
         return {accessToken}
     }
 
-    async login(loginDTO) {
+    async login(loginDTO: LoginDto) {
         const {email, password} = loginDTO
         const candidate = await prisma.user.findUnique({
             where: {email}
         })
-        if (!candidate) throw new Error("No user with that email")
+        if (!candidate) throw new Error("Неверный Email и/или пароль")
         const passwordEquals = await bcrypt.compare(password, candidate.password)
-        if (!passwordEquals) throw new Error("Passwords did not match")
+        if (!passwordEquals) throw new Error("Неверный Email и/или пароль")
         const accessToken = signToken({id: candidate.id, role: candidate.role})
         return {accessToken}
     }

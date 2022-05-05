@@ -1,7 +1,6 @@
 import {Box, Button, Group, Paper, Select, TextInput, Title, useMantineTheme} from "@mantine/core";
 import parser from "html-react-parser";
 import {useNotifications} from "@mantine/notifications";
-import {useQueryClient} from "react-query";
 import {useForm} from "@mantine/form";
 import {CheckIcon} from "@modulz/radix-icons";
 import dynamic from "next/dynamic";
@@ -9,7 +8,6 @@ import {useRouter} from "next/router";
 import useCourse from "@hooks/useCourse";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useListState} from "@mantine/hooks";
 import useCourses from "@hooks/useCourses";
 
 const Editor = dynamic(() => import("@components/Content/Editor"), {
@@ -21,7 +19,6 @@ export default function LessonCreation() {
     const {courseId, stageId} = router.query
     const theme = useMantineTheme()
     const notifications = useNotifications()
-    const queryClient = useQueryClient()
     const [course, setCourse] = useState("")
 
     useEffect(() => {
@@ -61,20 +58,12 @@ export default function LessonCreation() {
     }
 
     const coursesQuery = useCourses()
-    const [courses, coursesHandlers] = useListState([])
+    const [courses, setCourses] = useState([])
 
     useEffect(() => {
         if (coursesQuery.isSuccess && coursesQuery.data) {
-            // for (let page of coursesQuery.data.pages) {
-            //     const mapped = page.courses.map((course => ({label: course.title, value: course.id})))
-            //     // coursesHandlers.append(mapped)
-            //     for (let course of mapped) {
-            //         coursesHandlers.append(course)
-            //     }
-            // }
             const mapped = coursesQuery.data.map((course => ({label: course.title, value: course.id})))
-            coursesHandlers.setState(mapped)
-            console.log(courses)
+            setCourses(mapped)
         }
     }, [coursesQuery.isSuccess, coursesQuery.data])
 
@@ -87,7 +76,6 @@ export default function LessonCreation() {
             setStages([])
         }
     }, [courseQuery.isSuccess, courseQuery.data])
-    // const lessonQuery = useLesson(lessonId)
 
     return <>
         <form onSubmit={form.onSubmit(handleSubmit)}>
