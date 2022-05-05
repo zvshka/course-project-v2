@@ -39,10 +39,9 @@ export default function CoursePage() {
     useEffect(() => {
         if (userQuery.isSuccess && userQuery.data) {
             if (router.query.courseID) {
-                if (userQuery.data.visited_courses.some(c => c.courseId === router.query.courseID)) return
-                axios.post("/api/users/visit", {
+                axios.post("/api/courses/visit", {
                     courseId: router.query.courseID
-                })
+                }).catch(console.log)
             }
         }
     }, [userQuery.isSuccess, userQuery.data])
@@ -114,7 +113,7 @@ export default function CoursePage() {
                         </Button>
                     </Link>
                 </Group>
-                <Menu>
+                {userQuery.isSuccess && userQuery.data && userQuery.data.role === "ADMIN" && <Menu>
                     <Menu.Label>Административное меню</Menu.Label>
                     <Menu.Item onClick={openCreatingModal}>
                         Создать этап
@@ -122,7 +121,7 @@ export default function CoursePage() {
                     <Menu.Item onClick={handleToggle}>
                         {draggable ? "Сохранить порядок" : "Изменить порядок"}
                     </Menu.Item>
-                </Menu>
+                </Menu>}
             </Group>
         </Paper>
         <Paper shadow={'lg'} p={'sm'}>

@@ -1,10 +1,10 @@
 import useUser from "@hooks/useUser";
-import useCourses from "@hooks/useCourses";
+import useInfiniteCourses from "@hooks/useInfiniteCourses";
 import {Button, Group, Paper, SimpleGrid, Title} from "@mantine/core";
 import {useModals} from "@mantine/modals";
 import {CourseCreationForm} from "@components/Content/Forms/CourseCreationForm";
 // import useBadges from "@hooks/useBadges";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 // import {useListState} from "@mantine/hooks";
 // import {useQueryClient} from "react-query";
 import {CoursesPage} from "@components/Content/CoursesPage";
@@ -22,7 +22,7 @@ export default function Courses() {
     // const [title, setTitle] = useState("")
     // const [selectedBadges, badgesHandlers] = useListState([])
 
-    const coursesQuery = useCourses()
+    const coursesQuery = useInfiniteCourses()
 
     // useEffect(() => {
     //     if (badgesQuery.isSuccess && badgesQuery.data) {
@@ -83,8 +83,8 @@ export default function Courses() {
             ))}
         </SimpleGrid>
         <span style={{visibility: 'hidden'}} ref={ref}>
-                    intersection observer marker
-                </span>
+            intersection observer marker
+        </span>
         {/*</Grid.Col>*/}
         {/*</Grid>*/}
     </>

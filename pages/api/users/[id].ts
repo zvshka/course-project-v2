@@ -5,8 +5,7 @@ import UsersService from "@services/Users.service";
 const apiRoute = apiRouter()
 
 apiRoute.patch(AuthGuard(), async (req, res) => {
-    const {id} = req.query
-    await UsersService.updateOneById(id as string, req.body)
+    await UsersService.updateOneById(req.query.id as string, req.body)
     res.status(200).json({message: "Данные успешно обновлены"})
 })
 

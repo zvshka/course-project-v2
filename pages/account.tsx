@@ -1,4 +1,16 @@
-import {Avatar, Box, Button, Container, createStyles, Group, Paper, Text, TextInput, Title} from "@mantine/core";
+import {
+    Avatar,
+    Box,
+    Button,
+    Container,
+    createStyles,
+    Group,
+    Paper,
+    SimpleGrid,
+    Text,
+    TextInput,
+    Title
+} from "@mantine/core";
 import useUser from "@hooks/useUser";
 import axios from "axios";
 import {useQueryClient} from "react-query";
@@ -8,6 +20,8 @@ import {useEffect} from "react";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {BrandGithub, DeviceFloppy, LockOpen, Pencil} from "tabler-icons-react";
 import {useNotifications} from "@mantine/notifications";
+import useUserCourses from "@hooks/useUserCourses";
+import {CoursesPage} from "@components/Content/CoursesPage";
 
 const handleLink = () => {
     window.location.href = "/api/auth/github?callbackUrl=" + window.location.href
@@ -30,6 +44,7 @@ export default function Account() {
     const {classes} = useStyles()
     const notifications = useNotifications()
     const userQuery = useUser()
+    const userCoursesQuery = useUserCourses()
     const queryClient = useQueryClient()
     const [editable, toggleEditable] = useToggle(false, [true, false])
     const form = useForm({
@@ -207,7 +222,8 @@ export default function Account() {
                                    readOnly
                                    value={userQuery.data.email || ""}/>
                         <Group grow my={"md"} className={classes.buttonsGroup}>
-                            <Button onClick={sendVerification}>Подтвердить Email</Button>
+                            <Button onClick={sendVerification}
+                                    disabled={userQuery?.data?.email_verified}>{userQuery?.data?.email_verified ? "Email Подтвержден" : "Подтвердить Email"}</Button>
                             <Button color={"dark"}
                                     onClick={handleGithubButtonClick}
                                     leftIcon={<BrandGithub size={18}/>}>
@@ -230,6 +246,24 @@ export default function Account() {
                     <Text>Это мог бы быть ваш профиль, но вы не авторизованы...</Text>
                 </>}
             </Paper>
+            {userQuery.isSuccess && <>
+                <Paper shadow={'lg'} p={"sm"} mt={"md"}>
+                    <Group position={"apart"}>
+                        <Title order={3}>
+                            Посещенные курсы
+                        </Title>
+                    </Group>
+                </Paper>
+                {/*<Paper shadow={'lg'} p={"sm"} mt={"md"}>*/}
+                    <SimpleGrid cols={1} mt={"md"}
+                                breakpoints={[{minWidth: 'lg', cols: 4},
+                                    {minWidth: 'xs', cols: 3}]}>
+                        {userCoursesQuery.isSuccess && userCoursesQuery.data &&
+                            <CoursesPage courses={userCoursesQuery.data}
+                                         isAdmin={false}/>}
+                    </SimpleGrid>
+                {/*</Paper>*/}
+            </>}
         </>
     )
 }

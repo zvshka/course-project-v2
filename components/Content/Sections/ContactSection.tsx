@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { BrandTwitter, BrandYoutube, BrandInstagram } from 'tabler-icons-react';
 import { ContactIconsList } from './ContactIcons';
+import {useNotifications} from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -82,6 +83,15 @@ const social = [BrandTwitter, BrandYoutube, BrandInstagram];
 
 export function ContactUs() {
     const { classes } = useStyles();
+    const notifications = useNotifications()
+
+    const handleSubmit = (e) => {
+        notifications.showNotification({
+            title: "Спасибо!",
+            message: "Ваше обращение успешно отправлено, с вами обязательно свяжутся когда-нибудь)))",
+            color: "green"
+        })
+    }
 
     const icons = social.map((Icon, index) => (
         <ActionIcon key={index} size={28} className={classes.social} variant="transparent">
@@ -126,7 +136,7 @@ export function ContactUs() {
                         />
 
                         <Group position="right" mt="md">
-                            <Button className={classes.control}>Отправить сообщение</Button>
+                            <Button onClick={handleSubmit} className={classes.control}>Отправить сообщение</Button>
                         </Group>
                     </div>
                 </SimpleGrid>

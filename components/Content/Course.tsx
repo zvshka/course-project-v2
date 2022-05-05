@@ -42,6 +42,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function Course({course, isAdmin = false}) {
+    // console.log(course)
     const {classes} = useStyles();
     const modals = useModals()
     const notifications = useNotifications()
@@ -101,7 +102,8 @@ export function Course({course, isAdmin = false}) {
         <Card component={'a'} withBorder radius="md" p="md" className={classes.card}>
             <Card.Section sx={{position: "relative"}}>
                 <Group className={classes.buttons}>
-                    {isAdmin && <Menu onClick={(e) => {
+                    {isAdmin && <Menu
+                        onClick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
                     }}>

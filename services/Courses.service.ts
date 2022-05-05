@@ -8,7 +8,15 @@ interface CourseDTO {
 }
 
 class CoursesService {
-    async getAll(query) {
+    async getAll() {
+        return await prisma.course.findMany({
+            include: {
+                badges: true
+            }
+        })
+    }
+
+    async getPage(query) {
         const badges = query.badges ? query.badges.split(",").filter(b => b.length > 0) : []
         const badgesFilter = badges.length > 0 ? {
             badges: {
@@ -22,7 +30,7 @@ class CoursesService {
 
         const courses = await prisma.course.findMany({
             take: 9,
-            skip: Number(query.page) * 9,
+            skip: (isNaN(Number(query.page)) ? 1 : Number(query.page)) * 9,
             where: {
                 title: {
                     contains: query.title
@@ -84,6 +92,29 @@ class CoursesService {
                 iconURL: courseDTO.iconURL || candidate.iconURL,
                 badges: {
                     set: [...courseDTO.badges.map(badge => ({id: badge}))]
+                }
+            }
+        })
+    }
+
+    async visitCourse(userId: any, courseId: any) {
+        console.log(userId, courseId)
+        return await prisma.course.update({
+            where: {id: courseId},
+            data: {
+                visited_users: {
+                    connectOrCreate: {
+                        where: {
+                            userId_courseId: {
+                                userId,
+                                courseId
+                            }
+                        },
+                        create: {
+                            userId,
+                            visit_date: new Date
+                        }
+                    }
                 }
             }
         })

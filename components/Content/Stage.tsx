@@ -53,13 +53,11 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export const Stage = ({stage, draggable, isAdmin = false}) => {
-    const router = useRouter()
     const {classes} = useStyles()
     const modals = useModals()
     const notifications = useNotifications()
     const queryClient = useQueryClient()
     const [collapse, toggleCollapse] = useToggle(false, [true, false])
-    const [drawer, toggleDrawer] = useToggle(false, [true, false])
     const openConfirmModal = () => modals.openConfirmModal({
         title: 'Пожалуйста, подтвердите удаление',
         children: (

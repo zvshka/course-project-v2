@@ -157,6 +157,7 @@ const useStyles = createStyles((theme) => ({
 
     link: {
         // display: 'block',
+        cursor: "pointer",
         display: "flex",
         justifyContent: "center",
         lineHeight: 1,
@@ -239,7 +240,7 @@ export function DoubleHeader() {
         <Header height={HEADER_HEIGHT}>
             <Container className={classes.inner}>
                 <Link href={"/"} passHref>
-                    <Group>
+                    <Group sx={{cursor: "pointer"}}>
                         <Image alt={"Waffle Logo"} src={'/food-waffles.svg'} height={32}/>
                         <Title order={3}>Fantastic Waffle</Title>
                     </Group>
@@ -265,7 +266,7 @@ export function DoubleHeader() {
                                 transition="pop-top-right"
                                 className={classes.userMenu}
                                 control={
-                                    <Group spacing={7}>
+                                    <Group spacing={7} sx={{cursor: "pointer"}}>
                                         <Avatar src={userQuery.data.avatarURL} alt={userQuery.data.username} radius="xl"
                                                 size={26}/>
                                         <Text weight={500} sx={{lineHeight: 1, color: theme.black}}>

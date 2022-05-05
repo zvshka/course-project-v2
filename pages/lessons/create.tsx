@@ -7,10 +7,10 @@ import {CheckIcon} from "@modulz/radix-icons";
 import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
 import useCourse from "@hooks/useCourse";
-import useCourses from "@hooks/useCourses";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useListState} from "@mantine/hooks";
+import useCourses from "@hooks/useCourses";
 
 const Editor = dynamic(() => import("@components/Content/Editor"), {
     ssr: false
@@ -62,21 +62,18 @@ export default function LessonCreation() {
 
     const coursesQuery = useCourses()
     const [courses, coursesHandlers] = useListState([])
-    useEffect(() => {
-        if (coursesQuery.hasNextPage) {
-            coursesQuery.fetchNextPage()
-        }
-    }, [coursesQuery.hasNextPage])
 
     useEffect(() => {
         if (coursesQuery.isSuccess && coursesQuery.data) {
-            for (let page of coursesQuery.data.pages) {
-                const mapped = page.courses.map((course => ({label: course.title, value: course.id})))
-                // coursesHandlers.append(mapped)
-                for (let course of mapped) {
-                    coursesHandlers.append(course)
-                }
-            }
+            // for (let page of coursesQuery.data.pages) {
+            //     const mapped = page.courses.map((course => ({label: course.title, value: course.id})))
+            //     // coursesHandlers.append(mapped)
+            //     for (let course of mapped) {
+            //         coursesHandlers.append(course)
+            //     }
+            // }
+            const mapped = coursesQuery.data.map((course => ({label: course.title, value: course.id})))
+            coursesHandlers.setState(mapped)
             console.log(courses)
         }
     }, [coursesQuery.isSuccess, coursesQuery.data])

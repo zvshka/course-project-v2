@@ -1,6 +1,11 @@
 import React from 'react';
-import {Accordion, Box, Button, Container, createStyles, ThemeIcon, Title} from '@mantine/core';
+import {Accordion, Anchor, Box, Button, Container, createStyles, ThemeIcon, Title} from '@mantine/core';
 import {Plus} from 'tabler-icons-react';
+import Link from "next/link";
+import useUser from "@hooks/useUser";
+import {useRouter} from "next/router";
+import axios from "axios";
+import {useNotifications} from "@mantine/notifications";
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('control');
@@ -80,6 +85,30 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 export function FaqWithBg() {
     const {classes, cx} = useStyles();
+    const userQuery = useUser()
+    const router = useRouter()
+    const notifications = useNotifications()
+    const handleReset = () => {
+        if (userQuery.isSuccess && userQuery.data) {
+            axios.post("/api/auth/forgot", {
+                email: userQuery?.data?.email
+            }).then(res => {
+                notifications.showNotification({
+                    color: "green",
+                    title: "Успех",
+                    message: res.data.message
+                })
+            }).catch(e => {
+                notifications.showNotification({
+                    color: "red",
+                    title: "Ошибка",
+                    message: "Во время отправки запроса произошла ошибка"
+                })
+            })
+        } else {
+            router.push("/auth/forgot")
+        }
+    }
     return (
         <Box className={classes.wrapper} pb={"xl"}>
             <Container size="sm">
@@ -105,7 +134,7 @@ export function FaqWithBg() {
                 >
                     <Accordion.Item label="Как я могу сбросить свой пароль?">
                         Сменить пароль можно при входе, в вашем профиле или нажав на эту кнопку
-                        <Button className={cx(classes.gradient, classes.button)}>Сбросить пароль</Button>
+                        <Button onClick={handleReset} className={cx(classes.gradient, classes.button)}>Сбросить пароль</Button>
                     </Accordion.Item>
                     <Accordion.Item label="Можно ли создать больше одного аккаунта?">
                         Пока вы не делаете ничего такого, что может навредить сайту - можно
@@ -114,7 +143,7 @@ export function FaqWithBg() {
                     {/*    {placeholder}*/}
                     {/*</Accordion.Item>*/}
                     <Accordion.Item label="Как я могу поддержать проект?">
-                        Вся информация на странице О проекте
+                        Вся информация на странице <Link href={"/about"} passHref><Anchor>О проекте</Anchor></Link>
                     </Accordion.Item>
                     <Accordion.Item label="С какими платежными системами вы работаете?">
                         Мы принимаем добровольно отправленные средства через сторонний сервис, с этим вопросом вас стоит

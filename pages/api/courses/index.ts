@@ -5,7 +5,12 @@ import {AuthGuard} from "@lib/AuthGuard";
 const apiRoute = apiRouter()
 
 apiRoute.get(async (req, res) => {
-    const courses = await CoursesService.getAll(req.query)
+    let courses;
+    if (req.query.page) {
+        courses = await CoursesService.getPage(req.query)
+    } else {
+        courses = await CoursesService.getAll()
+    }
     res.status(200).json(courses)
 })
 

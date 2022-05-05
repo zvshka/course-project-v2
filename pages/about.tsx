@@ -21,10 +21,11 @@ export default function About() {
             <Group position={"center"} direction={"column"} spacing={0} sx={{textAlign: "center"}}>
                 <Text size={"lg"}>Данный сайт был сделан в качестве практического/курсового задания, темой которых
                     было:</Text>
-                <Title order={2}>&quot;Сайт с курсами программирования&quot;</Title>
+                <Title order={2}>&quot;Сайт с курсами обучения программированию&quot;</Title>
             </Group>
             <Space m={"xl"}/>
             <Text size={"lg"}>При реализации были использованы следующие технологии:</Text>
+            <Space m={"xl"}/>
             <List withPadding>
                 <List.Item icon={<BrandGithub/>}><Anchor
                     href={"https://github.com/zvshka/course-project-v2"}>Github</Anchor> - весь исходный проект хранится
