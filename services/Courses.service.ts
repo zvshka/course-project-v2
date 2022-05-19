@@ -1,6 +1,7 @@
 import prisma from "@lib/prisma";
 import CourseDto from "@services/DTO/Course.dto";
 import CourseUpdateDto from "@services/DTO/CourseUpdate.dto";
+import UsersService from "@services/Users.service";
 
 class CoursesService {
     async getAll() {
@@ -67,6 +68,8 @@ class CoursesService {
     }
 
     async deleteOneById(id: string) {
+        const candidate = await this.findOneById(id)
+        if (!candidate) throw new Error("Не найден курс с таким id")
         return await prisma.course.delete({
             where: {
                 id
@@ -76,12 +79,13 @@ class CoursesService {
 
     async updateOneById(id: string, courseDTO: CourseUpdateDto) {
         const candidate = await this.findOneById(id)
+        if (!candidate) throw new Error("Курс с таким id не найден")
         return await prisma.course.update({
             where: {id},
             data: {
                 title: courseDTO.title,
                 description: courseDTO.description,
-                iconURL: courseDTO.iconURL || candidate.iconURL,
+                iconURL: courseDTO.iconURL,
                 badges: {
                     set: [...courseDTO.badges.map(badge => ({id: badge}))]
                 }
@@ -90,6 +94,9 @@ class CoursesService {
     }
 
     async visitCourse(userId: string, courseId: string) {
+        const userCandidate = await UsersService.findOneById(userId)
+        const courseCandidate = await this.findOneById(courseId)
+        if (!userCandidate || !courseCandidate) throw new Error("Не найден курс или пользователь")
         return await prisma.course.update({
             where: {id: courseId},
             data: {
